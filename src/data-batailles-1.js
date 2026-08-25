@@ -1,0 +1,608 @@
+/* ============================================================
+   BATAILLES — 58 à 54 av. J.-C.
+   opts[].scopes : '*' ou liste parmi soldat|sousoff|centurion|superieur
+   ============================================================ */
+
+const BATAILLES = {};
+
+BATAILLES.bibracte = {
+  nom:'Bibracte', lieu:'Pente au-dessus de la plaine éduenne', date:'Été 58 av. J.-C.',
+  ennemi:'Helvètes, Boïens et Tulinges — 90 000 combattants', dc:52, issue:'victoire',
+  intro:`Quatre légions en triple ligne à mi-pente ; les deux légions neuves et les auxiliaires au sommet, à garder les bagages. Les chevaux sont partis. Les Helvètes montent en phalange, boucliers imbriqués.`,
+  phases:[
+  { titre:'Le pilum',
+    texte:`Ils arrivent à quarante pas. L’ordre court le long du rang : <span class="lat">pila</span> prêts. Le trait romain a une hampe de fer doux qui plie à l’impact — il ne se renvoie pas, et il condamne le bouclier qu’il traverse.`,
+    vue:{ soldat:'Tu vois trois rangs de boucliers gaulois et la buée de leur souffle.', sousoff:'Ta centurie est en deuxième ligne du rang. Les hommes serrent trop.', centurion:'Ta cohorte tient le centre-droit. La pente joue pour nous.', superieur:'Toute la première ligne est engagée. La deuxième attend à cinquante pas.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Lancer au commandement, à courte portée', note:'Vingt pas plus près, deux fois plus mortel. Et rien entre eux et toi si le rang flanche.',
+      test:{attr:'disciplina', unit:'cohaesio', dc:0}, risque:'moyen',
+      succes:{ txt:'La volée part à vingt-cinq pas. La phalange s’ouvre comme un fruit : les boucliers percés se collent deux à deux, les Helvètes les jettent et se battent à découvert.', eff:{disciplina:2,fama:2,unit:{cohaesio:4}}, perf:2 },
+      echec:{ txt:'Deux hommes lancent trop tôt, le reste suit en désordre. La volée s’éparpille et la phalange arrive presque intacte sur les boucliers.', eff:{unit:{cohaesio:-5}}, pertes:6, perf:-1 } },
+    { id:'b', scopes:['*'], txt:'Lancer tôt, sûrement, garder le rang',
+      test:{attr:'disciplina', dc:-15}, risque:'faible',
+      succes:{ txt:'Volée propre à soixante pas. Moins d’effet, mais le rang n’a pas bougé d’un pouce et le second pilum reste en main.', eff:{disciplina:1,unit:{cohaesio:2}}, perf:1 },
+      echec:{ txt:'Les traits tombent court. On perd la volée pour rien et il faut recevoir la charge au gladius.', eff:{}, pertes:4, perf:0 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Décaler la cohorte pour prendre la phalange en écharpe', note:'Manœuvrer sous une charge est ce qui distingue une légion d’une foule armée.',
+      req:{scientia:40}, test:{attr:'scientia', unit:'experientia', dc:10}, risque:'élevé',
+      crit:{ txt:'Tu fais glisser la cohorte de vingt pas sur la droite pendant qu’ils montent. La volée les prend de biais, sur le flanc non couvert. Un légat te montre du doigt à César.', eff:{scientia:3,auctoritas:3,fama:6,favor:{caesar:6}}, perf:7 },
+      succes:{ txt:'Le décalage se fait, moins net que voulu, mais les traits portent de biais et la phalange s’ouvre.', eff:{scientia:2,fama:3}, perf:4 },
+      echec:{ txt:'La manœuvre prend un temps de trop. La cohorte est encore en déplacement quand ils arrivent : on reçoit la charge en marchant.', eff:{auctoritas:-2,unit:{cohaesio:-8}}, pertes:12, blessure:.2, perf:-3 } }
+    ]},
+  { titre:'Le corps à corps',
+    texte:`Les Helvètes reculent pas à pas vers une hauteur, à un mille. On les suit. C’est là que les Boïens et les Tulinges, quinze mille hommes restés en arrière, apparaissent sur notre flanc droit découvert.`,
+    vue:{ soldat:'Tu entends une clameur sur la droite, tu ne vois rien.', sousoff:'Le flanc droit de la centurie n’est plus appuyé sur rien.', centurion:'Une masse d’hommes descend sur le flanc, sans ordre mais nombreuse.', superieur:'César fait faire demi-tour à la troisième ligne. Il n’y a pas de réserve derrière.' },
+    opts:[
+    { id:'a', scopes:['soldat','sousoff'], txt:'Faire face à droite avec les hommes autour de toi',
+      test:{attr:'virtus', unit:'cohaesio', dc:5}, risque:'moyen',
+      succes:{ txt:'Une vingtaine d’hommes pivotent avec toi. Le petit front improvisé tient assez longtemps pour que la troisième ligne arrive.', eff:{virtus:3,auctoritas:2,fama:4}, pertes:8, perf:3 },
+      echec:{ txt:'Tu pivotes ; peu te suivent. On te bouscule, tu perds ton bouclier et l’on te ramasse dix pas en arrière.', eff:{virtus:1,valetudo:-14}, blessure:.35, pertes:10, perf:-1 } },
+    { id:'b', scopes:['soldat','sousoff'], txt:'Rester dans le rang et pousser en avant',
+      test:{attr:'disciplina', dc:-10}, risque:'faible',
+      succes:{ txt:'Tu tiens ta place. Le front avant continue de gagner du terrain pendant que d’autres s’occupent du flanc.', eff:{disciplina:2}, pertes:5, perf:1 },
+      echec:{ txt:'Le rang avance et le flanc s’effondre derrière : tu te retrouves à te battre des deux côtés à la fois.', eff:{valetudo:-10,unit:{cohaesio:-6}}, pertes:12, blessure:.2, perf:-1 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Retourner la troisième ligne contre les Boïens', note:'Ce que César ordonne au même instant. Le faire avant l’ordre, c’est du mérite ou de l’insubordination selon l’issue.',
+      test:{attr:'auctoritas', unit:'experientia', dc:5}, risque:'moyen',
+      crit:{ txt:'Tes cohortes font demi-tour, marchent au flanc et l’arrêtent net. L’armée combat désormais sur deux fronts sans qu’un seul rang ait cédé — cas d’école dont on parlera longtemps.', eff:{auctoritas:4,scientia:3,fama:8,favor:{caesar:8,labienus:4}}, pertes:9, perf:7 },
+      succes:{ txt:'La manœuvre se fait, un peu tard. Le flanc est bouché ; le prix en est correct.', eff:{auctoritas:2,fama:4}, pertes:12, perf:3 },
+      echec:{ txt:'Le demi-tour se fait en désordre, deux centuries se prennent les enseignes. Les Boïens entrent dans l’intervalle avant qu’on les rejette.', eff:{auctoritas:-3,unit:{cohaesio:-10}}, pertes:20, blessure:.25, perf:-2 } },
+    { id:'d', scopes:['centurion','superieur'], txt:'Refuser le flanc en échelon, sans faire demi-tour', req:{scientia:55},
+      test:{attr:'scientia', unit:'cohaesio', dc:0}, risque:'moyen',
+      succes:{ txt:'Tu fais reculer les centuries de droite en escalier, chacune couvrant la précédente. Le flanc devient une ligne, sans rupture ni panique.', eff:{scientia:4,auctoritas:3,fama:5}, pertes:7, perf:5 },
+      echec:{ txt:'L’échelon se comprend mal. Deux centuries reculent, la troisième pas : le trou est exactement là où il ne fallait pas.', eff:{unit:{cohaesio:-9}}, pertes:16, blessure:.2, perf:-2 } }
+    ]},
+  { titre:'Les chariots',
+    texte:`Le combat a duré de la septième heure jusqu’au soir sans qu’un seul Helvète ne montre le dos. La nuit tombée, ils se replient sur leur laager : des milliers de chariots rangés en muraille, où les femmes et les enfants tendent des javelots par-dessous.`,
+    vue:{ soldat:'Tu ne sens plus tes bras. On te tend une outre d’eau tiède.', sousoff:'Les enseignes sont regroupées. Il manque un homme sur dix.', centurion:'La cohorte peut encore donner une heure, pas deux.', superieur:'On peut forcer les chariots cette nuit, ou attendre le jour et la reddition.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Forcer le laager dans la nuit',
+      test:{attr:'virtus', unit:'fatigatio', dc:15, inv:true}, risque:'élevé',
+      succes:{ txt:'On arrache les chariots à la main sous les javelots. Le camp est pris avant l’aube, avec ce que cela suppose. Le butin est réel.', eff:{virtus:3,fama:4,peculium:180}, pertes:14, blessure:.25, perf:4 },
+      echec:{ txt:'On se prend les pieds dans les timons, dans le noir, sous les traits lancés à bout portant par des gens qui n’ont plus rien à perdre. On décroche au matin.', eff:{valetudo:-12,unit:{cohaesio:-6}}, pertes:18, blessure:.35, perf:-2 } },
+    { id:'b', scopes:['*'], txt:'Investir le laager et attendre le jour',
+      test:{attr:'disciplina', dc:-20}, risque:'faible',
+      succes:{ txt:'On dort en armes, à cent pas. Au matin, ce qui reste se rend : cent dix mille survivants sur trois cent soixante-huit mille partis. On les renvoie reconstruire leurs villages, pour qu’aucun Germain ne prenne la place vide.', eff:{disciplina:2,peculium:70}, pertes:2, perf:1 },
+      echec:{ txt:'Six mille Verbigènes s’échappent vers le Rhin dans la nuit sous ton secteur. On les rattrapera, mais ton nom a été cité dans le rapport.', eff:{fama:-4,favor:{caesar:-4}}, pertes:2, perf:-1 } },
+    { id:'c', scopes:['superieur'], txt:'Poster des piquets sur les routes du nord', note:'Prévoir la fuite plutôt que la combattre.', req:{scientia:45},
+      test:{attr:'scientia', dc:-5}, risque:'faible',
+      succes:{ txt:'Tes piquets cueillent les Verbigènes qui tentent de gagner le Rhin. César apprend qu’un officier avait prévu ce qu’il n’avait pas ordonné.', eff:{scientia:3,fama:6,favor:{caesar:7}}, perf:4 },
+      echec:{ txt:'Les piquets sont trop clairsemés, la nuit trop noire. La bande passe entre deux postes.', eff:{fama:-2}, perf:-1 } }
+    ]}
+  ]};
+
+BATAILLES.arioviste = {
+  nom:'Arioviste', lieu:'Plaine d’Alsace, près du Rhin', date:'Septembre 58 av. J.-C.',
+  ennemi:'Suèves, Harudes, Marcomans — 120 000 Germains', dc:56, issue:'victoire',
+  intro:`Ils rangent leurs peuples chacun à part, et cernent l’arrière de leur ligne de chariots où les femmes crient de ne pas les laisser prendre. Les prêtresses ont tiré les sorts : les Germains ne doivent pas vaincre avant la nouvelle lune. César a décidé d’attaquer aujourd’hui.`,
+  phases:[
+  { titre:'La charge à la course',
+    texte:`Ils chargent si vite qu’il n’y a pas de place pour lancer les <span class="lat">pila</span>. Les traits restent en main ; on jette les hampes et l’on tire le glaive dans le même mouvement. Certains Germains sautent sur la muraille de boucliers et frappent d’en haut.`,
+    vue:{ soldat:'Un homme énorme, torse nu, atterrit sur les boucliers devant toi.', sousoff:'Ta centurie recule d’un pas sous le choc. Un pas seulement.', centurion:'Le choc est frontal partout. L’aile gauche germanique est la plus faible.', superieur:'César commande en personne l’aile droite, face au point faible ennemi.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Jeter le pilum et prendre le glaive immédiatement',
+      test:{attr:'virtus', unit:'experientia', dc:0}, risque:'moyen',
+      succes:{ txt:'Tu es au glaive avant qu’il t’atteigne. C’est une arme de vingt pouces faite pour la pointe, dans la presse, à hauteur de ventre. Elle fait son travail.', eff:{virtus:3,unit:{cohaesio:2}}, pertes:7, perf:2 },
+      echec:{ txt:'Le pilum s’emmêle, tu le lâches mal, et tu prends un coup de bouclier qui te met à genoux. On te relève.', eff:{valetudo:-13}, blessure:.25, pertes:9, perf:-1 } },
+    { id:'b', scopes:['soldat','sousoff'], txt:'Reculer d’un pas pour laisser retomber ceux qui sautent',
+      req:{scientia:35}, test:{attr:'scientia', dc:-10}, risque:'faible',
+      succes:{ txt:'Le rang s’ouvre d’un pas, le Germain tombe dans le vide entre les boucliers, et trois pointes le trouvent avant qu’il touche terre. Un vieux te tape sur le casque en riant.', eff:{scientia:2,virtus:2,fama:2}, pertes:4, perf:2 },
+      echec:{ txt:'Le pas en arrière se transmet mal ; c’est un début de recul, et il faut deux minutes atroces pour le rattraper.', eff:{unit:{cohaesio:-7}}, pertes:11, perf:-1 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Porter l’effort sur leur aile gauche, la plus mince',
+      test:{attr:'auctoritas', unit:'cohaesio', dc:5}, risque:'moyen',
+      succes:{ txt:'Tu pousses là où c’est mou. L’aile gauche germanique se replie sur ses chariots et la ligne entière commence à se tordre.', eff:{auctoritas:3,scientia:2,fama:5,favor:{caesar:5}}, pertes:9, perf:3 },
+      echec:{ txt:'L’effort s’enlise ; ta cohorte est en pointe et prend des coups des deux côtés.', eff:{unit:{cohaesio:-8}}, pertes:16, blessure:.25, perf:-2 } }
+    ]},
+  { titre:'L’aile droite en péril',
+    texte:`Notre gauche a enfoncé la leur. Mais leur droite, plus dense, écrase la nôtre. Publius Crassus, qui commande la cavalerie et voit mieux le champ que ceux qui sont dedans, engage de sa propre initiative la troisième ligne.`,
+    vue:{ soldat:'On te pousse dans le dos. Le rang derrière toi avance sans qu’on ait donné d’ordre.', sousoff:'La troisième ligne monte. Il faut leur ouvrir un passage sans rompre.', centurion:'Trois cohortes de réserve arrivent au pas de course sur ton secteur.', superieur:'Crassus a engagé la réserve sans ordre. C’est la bonne décision et une faute de discipline.' },
+    opts:[
+    { id:'a', scopes:['soldat','sousoff','centurion'], txt:'Ouvrir les intervalles pour laisser passer la réserve',
+      test:{attr:'disciplina', unit:'experientia', dc:10}, risque:'moyen',
+      succes:{ txt:'Les centuries s’écartent en quinconce, la réserve passe au travers et prend le combat. Les hommes fatigués s’asseyent littéralement sur place.', eff:{disciplina:3,auctoritas:2,fama:4}, pertes:6, perf:3 },
+      echec:{ txt:'L’ouverture se fait mal, la réserve butte sur les rangs fatigués, et pendant un moment il y a deux lignes romaines emmêlées sous les coups.', eff:{unit:{cohaesio:-9}}, pertes:15, blessure:.2, perf:-2 } },
+    { id:'b', scopes:['*'], txt:'Tenir sans bouger et laisser la réserve contourner',
+      test:{attr:'virtus', unit:'fides', dc:5}, risque:'moyen',
+      succes:{ txt:'On tient. C’est tout ce qu’on fait et c’est tout ce qu’il fallait faire.', eff:{virtus:2,unit:{fides:3}}, pertes:11, perf:2 },
+      echec:{ txt:'Tenir sans reculer coûte cher quand on est le moins nombreux. Le rang s’éclaircit autour de toi.', eff:{valetudo:-12}, pertes:19, blessure:.3, perf:0 } },
+    { id:'c', scopes:['superieur'], txt:'Couvrir Crassus dans ton rapport au proconsul',
+      test:{attr:'ingenium', dc:0}, risque:'faible',
+      succes:{ txt:'Tu écris que la réserve a été engagée « conformément à l’intention manifestée ». Crassus le sait. Sa maison est l’une des plus riches de Rome.', eff:{ingenium:3,favor:{crassus:20,caesar:2}}, perf:1 },
+      echec:{ txt:'La formule est trop transparente. César relève le mot en souriant, et Crassus comprend qu’on l’a fait passer pour un enfant.', eff:{favor:{crassus:-6},fama:-2}, perf:0 } }
+    ]},
+  { titre:'Jusqu’au Rhin',
+    texte:`Ils cassent et fuient vers le fleuve, à cinq milles. Arioviste trouve une barque et passe. Ses deux femmes et une de ses filles meurent dans la fuite. La cavalerie fait le reste du travail.`,
+    vue:{ soldat:'Tu cours, casque à la main, sans savoir depuis combien de temps.', sousoff:'La moitié des hommes ne peut plus courir. L’autre moitié ne veut plus s’arrêter.', centurion:'Poursuivre disloque la cohorte. S’arrêter laisse partir des milliers.', superieur:'Cinq milles de poursuite dispersent une armée. Le Rhin est loin.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Poursuivre jusqu’au fleuve, sans regarder derrière',
+      test:{attr:'disciplina', unit:'fatigatio', dc:15, inv:true}, risque:'moyen',
+      succes:{ txt:'Vous atteignez la rive. Ce qui se passe entre l’eau et le rang, on n’en parle pas au camp. Le butin, si.', eff:{virtus:2,peculium:260,fama:3}, pertes:4, perf:2 },
+      echec:{ txt:'Les hommes s’éparpillent sur cinq milles. Trois de tes gens ne rentreront jamais : ni morts au champ, ni vivants.', eff:{unit:{cohaesio:-10},fama:-3}, pertes:8, perf:-2 } },
+    { id:'b', scopes:['*'], txt:'Rassembler ton monde et rentrer en ordre',
+      test:{attr:'auctoritas', dc:-10}, risque:'faible',
+      succes:{ txt:'Tu ramènes tes hommes complets, en rang, avec leurs armes. Moins de butin. Les vétérans remarquent.', eff:{auctoritas:3,disciplina:2,unit:{cohaesio:5,fides:3}}, perf:2 },
+      echec:{ txt:'Personne ne t’écoute : la poursuite est une ivresse. Tu ramasses tes hommes un par un jusqu’à la nuit.', eff:{auctoritas:-2}, perf:-1 } }
+    ]}
+  ]};
+
+BATAILLES.sabis = {
+  nom:'La Sambre', lieu:'Sabis, chez les Nerviens', date:'Été 57 av. J.-C.',
+  ennemi:'Nerviens, Atrébates, Viromandues — 60 000', dc:64, issue:'victoire au prix fort',
+  intro:`Le pire jour de la guerre des Gaules. L’armée est surprise sac à terre, en train de bâtir le camp. Il n’y a ni ligne, ni ordre général, ni temps pour en donner : chaque homme se range à l’enseigne qu’il voit et chaque centurion décide seul.`,
+  phases:[
+  { titre:'Sac à terre',
+    texte:`Ils sortent du bois en courant, franchissent la rivière et remontent la pente d’une seule traite. Les hommes n’ont ni casque lacé ni housse ôtée du bouclier. Il n’y a pas de mot d’ordre : César fait sonner, dresser l’étendard rouge, et court d’un point à l’autre en parlant à qui il croise.`,
+    vue:{ soldat:'Ton casque est sur ton sac, à trente pas, avec le sac de quelqu’un d’autre par-dessus.', sousoff:'Tes hommes sont éparpillés sur trois cents pas de chantier.', centurion:'Aucun ordre ne viendra. C’est toi qui commandes, maintenant, et pour de bon.', superieur:'Deux légions sont coupées. On ne voit rien de l’aile gauche.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Prendre les armes et se ranger à la première enseigne venue', note:'La règle est de rejoindre sa propre centurie. La règle vaut moins qu’une minute.',
+      test:{attr:'disciplina', dc:0}, risque:'moyen',
+      succes:{ txt:'Tu te ranges sous une enseigne qui n’est pas la tienne, avec des hommes que tu ne connais pas, et le front existe. C’est exactement ce que la légion sait faire et que rien d’autre au monde ne sait faire.', eff:{disciplina:3,virtus:2,unit:{cohaesio:3}}, pertes:8, perf:3 },
+      echec:{ txt:'Tu cherches ta propre enseigne. Le temps de la trouver, la ligne s’est formée sans toi et tu la rejoins en courant, sous les traits.', eff:{valetudo:-12}, pertes:12, blessure:.25, perf:-1 } },
+    { id:'b', scopes:['*'], txt:'Perdre trente secondes à lacer casque et découvrir le bouclier',
+      test:{attr:'scientia', dc:-15}, risque:'faible',
+      succes:{ txt:'Trente secondes. Tu arrives au rang équipé comme il faut, quand la moitié se bat tête nue. Cela se paiera à la troisième heure de combat.', eff:{scientia:1,valetudo:5}, pertes:6, perf:1 },
+      echec:{ txt:'Les trente secondes en deviennent cent. Quand tu arrives, le rang est déjà en train de plier là où tu aurais dû être.', eff:{fama:-3,unit:{cohaesio:-5}}, pertes:11, perf:-1 } },
+    { id:'c', scopes:['sousoff','centurion','superieur'], txt:'Rameuter à la voix tout ce qui passe, sans regarder l’unité',
+      test:{attr:'auctoritas', dc:5}, risque:'moyen',
+      crit:{ txt:'Ta voix porte au-dessus du bruit. Cent, cent cinquante hommes de quatre centuries différentes se rangent sur toi. Il y a désormais un front là où il n’y avait qu’un chantier.', eff:{auctoritas:5,fama:8,unit:{cohaesio:6,fides:5},favor:{caesar:6}}, pertes:7, perf:7 },
+      succes:{ txt:'Tu rassembles une soixantaine d’hommes et tu bouches un intervalle. Personne ne saura jamais ce que cela a évité.', eff:{auctoritas:3,fama:4}, pertes:9, perf:3 },
+      echec:{ txt:'Tu cries dans un vacarme où l’on ne s’entend pas à cinq pas. Tu finis par te battre seul avec trois hommes, dos à un chariot.', eff:{valetudo:-16}, pertes:14, blessure:.35, perf:-2 } }
+    ]},
+  { titre:'La Douzième meurt',
+    texte:`Sur l’aile gauche, la XII a tous ses centurions à terre, son porte-aigle de la quatrième cohorte tué, l’enseigne perdue, le primipile Sextius Baculus percu de coups au point de ne plus tenir debout. Les rangs se sont tassés les uns dans les autres : les hommes ne peuvent plus lever le bras.`,
+    vue:{ soldat:'Devant toi, un rang de dos. Personne ne frappe plus, la presse est trop forte.', sousoff:'L’enseigne de la centurie voisine est à terre. Personne ne la relève.', centurion:'La XII est un bloc compressé qui ne combat plus. Elle va se faire égorger sur place.', superieur:'César a pris un bouclier à un homme du dernier rang et est entré dans la ligne à pied.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Aller chercher l’enseigne tombée',
+      test:{attr:'virtus', dc:15}, risque:'très élevé',
+      crit:{ txt:'Tu la relèves et tu la portes en avant de trois pas. Trois pas, et deux cents hommes qui se croyaient morts se remettent à frapper. On te fera raconter cela pendant vingt ans.', eff:{virtus:6,fama:14,auctoritas:4,favor:{caesar:12}}, pertes:12, blessure:.4, perf:11 },
+      succes:{ txt:'Tu la relèves. Un coup t’ouvre l’épaule au passage, mais l’enseigne est debout et la centurie se reforme autour.', eff:{virtus:4,fama:9,favor:{caesar:6}}, pertes:14, blessure:.55, perf:9 },
+      echec:{ txt:'Tu n’arrives pas jusqu’à elle. On te ramène par le baudrier, saignant, et l’enseigne reste dans la boue jusqu’au soir.', eff:{valetudo:-25,fama:1}, blessure:.8, mort:.06, pertes:14, perf:-1 } },
+    { id:'b', scopes:['*'], txt:'Élargir les rangs pour qu’on puisse frapper', note:'La compression tue plus sûrement que l’ennemi. Desserrer sous le choc demande des nerfs.',
+      req:{scientia:45}, test:{attr:'scientia', unit:'experientia', dc:5}, risque:'élevé',
+      crit:{ txt:'Tu fais ouvrir les rangs et retirer les enseignes en arrière pour donner de l’air. Les hommes retrouvent la place de leur bras droit. C’est précisément ce que César ordonne à l’autre bout de la ligne, au même instant.', eff:{scientia:5,auctoritas:4,fama:10,favor:{caesar:10}}, pertes:8, perf:9 },
+      succes:{ txt:'Le desserrement se fait partiellement. Assez pour que les premiers rangs puissent de nouveau porter la pointe.', eff:{scientia:3,fama:5}, pertes:11, perf:5 },
+      echec:{ txt:'Ouvrir sous la pression se lit comme un recul. Deux centuries décrochent avant que tu ne rattrapes le mouvement.', eff:{auctoritas:-3,unit:{cohaesio:-12}}, pertes:20, blessure:.3, perf:-3 } },
+    { id:'c', scopes:['*'], txt:'Tenir le rang et frapper ce qui vient',
+      test:{attr:'virtus', unit:'fides', dc:0}, risque:'moyen',
+      succes:{ txt:'Tu tiens ta place dans la presse et tu frappes dans les intervalles. Rien d’héroïque : la ligne existe encore à la fin de l’heure grâce à trois cents hommes qui ont fait exactement cela.', eff:{virtus:2,disciplina:3,unit:{fides:3}}, pertes:13, blessure:.2, perf:2 },
+      echec:{ txt:'La presse te porte, te tourne, te sépare. Tu passes un quart d’heure à te battre sans savoir dans quel sens est ton armée.', eff:{valetudo:-18}, pertes:17, blessure:.4, perf:-2 } }
+    ]},
+  { titre:'La Dixième revient',
+    texte:`De l’autre côté du champ, la X et la IX ont enfoncé les Atrébates et poussé jusqu’au camp ennemi. Labienus, de là-haut, voit ce qui se passe en bas et renvoie la Dixième au pas de course, sans en avoir reçu l’ordre.`,
+    vue:{ soldat:'Une clameur derrière les Nerviens. Ils commencent à regarder par-dessus leur épaule.', sousoff:'Des enseignes romaines descendent la pente, de l’autre côté de l’ennemi.', centurion:'La X arrive à revers. C’est fini pour eux — s’ils le comprennent.', superieur:'Deux légions de vétérans à revers, et les Nerviens qui refusent de rompre.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Contre-attaquer immédiatement pendant qu’ils regardent derrière',
+      test:{attr:'virtus', unit:'fatigatio', dc:10, inv:true}, risque:'élevé',
+      succes:{ txt:'Le moment se saisit ou se perd. Vous reprenez cent pas d’un coup et la ligne nervienne se replie sur ses propres morts, qu’elle empile pour s’en faire un rempart.', eff:{virtus:4,fama:6,unit:{cohaesio:5}}, pertes:10, perf:7 },
+      echec:{ txt:'Les hommes n’en peuvent plus. L’élan retombe au bout de vingt pas et il faut regagner le rang sous les traits.', eff:{unit:{fatigatio:15}}, pertes:15, blessure:.25, perf:-1 } },
+    { id:'b', scopes:['*'], txt:'Reformer d’abord, avancer ensuite',
+      test:{attr:'disciplina', dc:-5}, risque:'faible',
+      succes:{ txt:'Tu remets tes gens en rang, tu comptes, tu répares, et tu avances proprement dix minutes plus tard. Moins de gloire, moins de veuves.', eff:{disciplina:3,unit:{cohaesio:6}}, pertes:6, perf:2 },
+      echec:{ txt:'Le temps de reformer, l’occasion est passée et les Nerviens se sont réorganisés sur leur tas de morts.', eff:{}, pertes:11, perf:0 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Envoyer relever les blessés de la Douzième d’abord', note:'Aucun avantage tactique. Six cents hommes vivront.',
+      test:{attr:'auctoritas', dc:-5}, risque:'faible',
+      succes:{ txt:'Tu détaches deux centuries pour tirer les blessés de la presse pendant que le reste avance. La XII s’en souviendra ; le rapport de bataille, non.', eff:{auctoritas:2,unit:{fides:9},fama:5}, pertes:8, perf:2 },
+      echec:{ txt:'Les hommes détachés se font accrocher en pleine relève et il faut aller les chercher à leur tour.', eff:{unit:{fides:4}}, pertes:14, blessure:.2, perf:-1 } }
+    ]},
+  { titre:'Le dernier carré',
+    texte:`Sur soixante mille Nerviens en armes, il en restera cinq cents. Leurs vieillards viennent supplier César dans le marais où ils se sont réfugiés. Il leur rend leurs terres et leurs villes, et défend aux peuples voisins de les toucher.`,
+    vue:{ soldat:'Ils meurent debout, sur un talus de leurs morts, en renvoyant nos propres traits.', sousoff:'Il n’y a plus rien à gagner ici que des blessures.', centurion:'On peut les achever ou attendre. Aucune des deux ne coûte la bataille.', superieur:'C’est une extermination. Elle est décidée ailleurs qu’ici.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Achever le carré',
+      test:{attr:'virtus', dc:0}, risque:'moyen',
+      succes:{ txt:'C’est fait avant la nuit. Personne ne chante en rentrant.', eff:{virtus:2,peculium:150}, pertes:9, blessure:.2, perf:1 },
+      echec:{ txt:'Des hommes déjà morts vendent leur peau plus cher qu’on ne le croyait. Tu perds des gens pour rien.', eff:{unit:{fides:-4}}, pertes:15, blessure:.3, perf:-1 } },
+    { id:'b', scopes:['*'], txt:'Les tenir à distance et attendre les ordres',
+      test:{attr:'disciplina', dc:-15}, risque:'faible',
+      succes:{ txt:'Tu formes un cordon et tu attends. Le soir, les vieillards sortent du marais avec des rameaux. Tes hommes sont tous vivants.', eff:{disciplina:2,unit:{fides:5}}, pertes:2, perf:2 },
+      echec:{ txt:'Une centurie perd patience et charge sans ordre. Tu la ramènes avec quatre morts et une réputation d’officier qui ne tient pas ses hommes.', eff:{auctoritas:-3,fama:-3}, pertes:7, perf:-1 } }
+    ]}
+  ]};
+
+BATAILLES.venetes = {
+  nom:'Les faux de marine', lieu:'Golfe du Morbihan', date:'Été 56 av. J.-C.',
+  ennemi:'220 vaisseaux vénètes à coque de chêne', dc:54, issue:'victoire',
+  intro:`Leurs navires sont plus hauts que les nôtres, en chêne, chevillés au fer, à voiles de cuir. L’éperon romain ne peut rien contre eux, et le trait tombe d’en bas. Décimus Brutus a fait forger des faux emmanchées sur de longues perches, pour couper les drisses.`,
+  phases:[
+  { titre:'Couper la drisse',
+    texte:`Le principe est simple et le faire l’est moins : approcher, accrocher le cordage qui tient la vergue, souquer, et le mât se dégarnit d’un coup. Un navire vénète sans voile est un rocher. On l’aborde alors à deux ou trois.`,
+    vue:{ soldat:'Tu tiens la perche. Tu n’as jamais tenu de perche.', sousoff:'Une douzaine d’hommes de ta centurie sont sur ce pont, tous malades.', centurion:'Trois navires sous ta responsabilité. Tu n’es pas marin.', superieur:'Le vent tombe. Sans vent, leur flotte entière est immobile.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Manœuvrer à la perche et couper',
+      test:{attr:'disciplina', unit:'experientia', dc:0}, risque:'moyen',
+      succes:{ txt:'La faux mord, on souque à six, la vergue tombe avec la voile de cuir. Le navire devient un ponton et l’on monte dedans.', eff:{disciplina:2,fama:3,peculium:120}, pertes:5, perf:2 },
+      echec:{ txt:'La perche ripe, un homme passe par-dessus bord avec sa cotte de mailles. On ne le revoit pas.', eff:{unit:{cohaesio:-4}}, pertes:8, blessure:.2, perf:-1 } },
+    { id:'b', scopes:['*'], txt:'Aborder de force sans couper la voile',
+      test:{attr:'virtus', dc:15}, risque:'élevé',
+      succes:{ txt:'Tu montes à la corde sous les traits, en tenue de combat, sur un pont plus haut d’un homme. Ceux qui te suivent ne l’oublieront pas.', eff:{virtus:4,fama:5,peculium:180}, pertes:12, blessure:.3, perf:5 },
+      echec:{ txt:'On est repoussé du bastingage. Deux hommes tombent entre les coques.', eff:{valetudo:-14}, pertes:16, blessure:.4, perf:-2 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Attendre la bascule du vent avant d’engager', req:{scientia:50},
+      test:{attr:'scientia', dc:-5}, risque:'faible',
+      succes:{ txt:'Tu lis le calme qui vient et tu retiens tes navires vingt minutes. Le vent tombe : deux cent vingt vaisseaux vénètes s’immobilisent devant nous. On les prend un par un jusqu’au soir, sous les yeux de toute l’armée massée sur les falaises.', eff:{scientia:4,auctoritas:3,fama:8,favor:{caesar:8,brutus:5},peculium:300}, pertes:3, perf:5 },
+      echec:{ txt:'Tu attends un vent qui ne tourne pas assez vite. Deux de tes navires prennent la mer sans appui et il faut aller les dégager.', eff:{fama:-3}, pertes:9, perf:-1 } }
+    ]},
+  { titre:'Le sort des Vénètes',
+    texte:`La flotte prise, la nation vénète se rend tout entière. César décide de faire un exemple, parce qu’ils ont saisi des ambassadeurs. Il fait exécuter tout le sénat vénète et vendre le reste comme esclaves.`,
+    vue:{ soldat:'On te met en faction devant un enclos plein de gens.', sousoff:'Ta centurie garde les captifs jusqu’à la vente.', centurion:'On te demande de fournir des hommes pour l’exécution du sénat.', superieur:'Tu sièges au conseil où la décision se prend.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Exécuter les ordres sans commentaire',
+      test:{attr:'disciplina', dc:-20}, risque:'faible',
+      succes:{ txt:'C’est fait. Le butin est distribué. Le camp n’en parle pas et n’en parlera plus.', eff:{disciplina:2,peculium:200}, perf:1 },
+      echec:{ txt:'Un homme de ton unité refuse et il faut le faire battre devant les autres. Personne ne t’en veut. Personne ne te regarde non plus.', eff:{unit:{fides:-6},peculium:200}, perf:0 } },
+    { id:'b', scopes:['sousoff','centurion','superieur'], txt:'Faire retirer les enfants du lot avant la vente', note:'Cela ne les sauve pas. Cela les sépare autrement.',
+      test:{attr:'ingenium', dc:5}, risque:'faible',
+      succes:{ txt:'Tu obtiens du questeur qu’on les vende à part, aux domaines et non aux mines. C’est une différence de dix ans d’espérance de vie, et personne au camp ne comprend pourquoi tu t’en soucies.', eff:{ingenium:2,unit:{fides:6},fama:2,peculium:120}, perf:1 },
+      echec:{ txt:'Le questeur t’envoie promener : le lot est adjugé en bloc, c’est le prix qui compte. Tu perds ton temps et un peu de ta crédibilité.', eff:{fama:-2,peculium:200}, perf:0 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Objecter au conseil que l’exemple armera la Gaule contre nous',
+      test:{attr:'scientia', dc:20}, risque:'élevé',
+      succes:{ txt:'Tu dis, calmement, qu’un peuple massacré fait dix peuples décidés. César t’écoute jusqu’au bout, ne change rien, et retient ton nom. Les officiers qui pensent avant de parler sont rares.', eff:{scientia:3,auctoritas:3,favor:{caesar:6},fama:4}, perf:5 },
+      echec:{ txt:'Tu passes pour un homme au cœur tendre devant vingt officiers. Le mot circulera plus vite que tu ne le voudrais.', eff:{fama:-6,auctoritas:-2}, perf:-2 } }
+    ]}
+  ]};
+
+BATAILLES.britannia = {
+  nom:'Au-delà de la Tamise', lieu:'Territoire des Trinovantes, Bretagne', date:'Été 54 av. J.-C.',
+  ennemi:'Cassivellaunos — 4 000 chars de guerre', dc:57, issue:'victoire sans conquête',
+  intro:`Le char breton n’est pas une machine de choc : il court le long du front en jetant des traits, le guerrier saute à terre pour combattre, le conducteur se tient à portée pour le reprendre. Cela combine la vitesse du cavalier et la fermeté du fantassin, et nos hommes n’ont jamais vu cela.`,
+  phases:[
+  { titre:'Le gué de la Tamise',
+    texte:`Un seul gué praticable, et à peine. La rive d’en face est plantée de pieux aiguisés, et il y en a d’autres sous l’eau, invisibles. Les Bretons attendent en masse derrière.`,
+    vue:{ soldat:'L’eau te monte au menton. Tu tiens ton bouclier au-dessus de ta tête.', sousoff:'Tes hommes passent par quatre. Le courant en emporte un sur vingt.', centurion:'Il faut passer vite ou pas du tout.', superieur:'La cavalerie peut passer en tête et rompre les pieux.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Passer le premier',
+      test:{attr:'virtus', dc:10}, risque:'élevé',
+      succes:{ txt:'Tu entres dans l’eau devant tout le monde. Ce genre de chose ne se discute pas : les autres suivent parce que quelqu’un est devant.', eff:{virtus:4,auctoritas:3,fama:6}, pertes:8, blessure:.25, perf:5 },
+      echec:{ txt:'Un pieu submergé t’ouvre la cuisse au milieu du gué. On te tire par les bras jusqu’à l’autre rive.', eff:{valetudo:-20}, blessure:.6, pertes:10, perf:0 } },
+    { id:'b', scopes:['*'], txt:'Passer serré, boucliers joints au-dessus de l’eau',
+      test:{attr:'disciplina', unit:'cohaesio', dc:0}, risque:'moyen',
+      succes:{ txt:'La colonne passe en bloc, boucliers levés, sans un homme perdu au courant. Les Bretons abandonnent la rive devant une masse qui ne s’effrite pas.', eff:{disciplina:3,unit:{cohaesio:5}}, pertes:4, perf:3 },
+      echec:{ txt:'La colonne s’étire, deux hommes lâchent pied, la panique gagne le milieu du gué. On repasse et l’on recommence une heure plus tard.', eff:{unit:{cohaesio:-8}}, pertes:9, perf:-2 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Faire sonder et arracher les pieux avant tout passage', req:{scientia:45},
+      test:{attr:'scientia', dc:-5}, risque:'faible',
+      succes:{ txt:'Une heure de perdue, des sondeurs à la perche, et un gué propre. La légion passe sans une jambe percée. C’est le genre de décision dont personne ne parle et que tout le monde utilise.', eff:{scientia:3,unit:{fides:6}}, pertes:1, perf:3 },
+      echec:{ txt:'Le sondage prend trois heures et les Bretons en profitent pour ramener du monde. On passe quand même, plus tard, plus cher.', eff:{fama:-2}, pertes:8, perf:-1 } }
+    ]},
+  { titre:'Les chars',
+    texte:`Ils harcèlent la colonne de marche pendant des jours. Ils ne livrent jamais bataille rangée : ils frappent les fourrageurs, coupent les traînards, disparaissent dans les bois où notre cavalerie ne peut suivre.`,
+    vue:{ soldat:'Tu passes tes journées à fourrager en armes.', sousoff:'On te confie la garde des fourrageurs de trois centuries.', centurion:'Tes détachements rentrent toujours incomplets.', superieur:'Il faut choisir entre nourrir l’armée et la garder groupée.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Fourrager en formation serrée, quitte à rapporter moins',
+      test:{attr:'disciplina', dc:-5}, risque:'faible',
+      succes:{ txt:'On rentre tous les soirs avec tout le monde et la moitié du grain nécessaire. La faim est moins mortelle que les chars.', eff:{disciplina:2,unit:{fides:4,fatigatio:8}}, pertes:2, perf:2 },
+      echec:{ txt:'La formation est si lente qu’on rentre à la nuit, sans grain, et qu’on se fait accrocher quand même.', eff:{unit:{fatigatio:14}}, pertes:6, perf:-1 } },
+    { id:'b', scopes:['*'], txt:'Tendre une embuscade aux embusqueurs',
+      test:{attr:'scientia', unit:'experientia', dc:10}, risque:'élevé',
+      succes:{ txt:'Tu laisses un détachement bien visible et bien lent, et tu couches deux centuries dans le fossé de la haie. Les chars entrent dedans. On en prend neuf avec les attelages.', eff:{scientia:4,virtus:2,fama:7,peculium:200,favor:{caesar:5}}, pertes:5, perf:7 },
+      echec:{ txt:'Ils ne mordent pas — ou plutôt, ils mordent ailleurs, et c’est ton détachement-appât qui prend tout.', eff:{fama:-4,unit:{fides:-5}}, pertes:14, blessure:.3, perf:-3 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Traiter avec les Trinovantes contre Cassivellaunos',
+      test:{attr:'ingenium', dc:10}, risque:'moyen',
+      succes:{ txt:'Les Trinovantes haïssent Cassivellaunos, qui a tué leur roi. Ils livrent du blé, des otages, et l’emplacement de son oppidum. La guerre change de nature en une conversation.', eff:{ingenium:4,scientia:2,fama:6,favor:{caesar:7}}, perf:5 },
+      echec:{ txt:'Ils promettent tout et ne livrent rien, sinon un guide qui mène la colonne dans un marais.', eff:{ingenium:1,unit:{fatigatio:12}}, pertes:4, perf:-2 } }
+    ]},
+  { titre:'Le retour',
+    texte:`L’oppidum de Cassivellaunos est pris, ses alliés du Kent battus devant le camp naval. Il demande la paix. César fixe un tribut que personne ne paiera jamais, prend des otages, et rembarque avant l’équinoxe — la Gaule bouge derrière lui.`,
+    vue:{ soldat:'On ne rapporte rien : pas d’or, pas d’argent, des esclaves maigres.', sousoff:'Les hommes murmurent sur le butin.', centurion:'Deux campagnes, deux traversées, aucune province.', superieur:'Rome décrétera vingt jours de supplications. Le camp fait ses comptes.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Dire aux hommes ce qu’ils ont fait, et pas ce qu’ils n’ont pas gagné',
+      test:{attr:'auctoritas', dc:0}, risque:'faible',
+      succes:{ txt:'Tu leur dis qu’aucune armée du monde n’a passé cet Océan, que leurs petits-fils le raconteront, et que le blé, lui, est en Gaule. Ils rient. Cela suffit.', eff:{auctoritas:3,unit:{fides:7,cohaesio:3}}, perf:2 },
+      echec:{ txt:'Le discours tombe à plat sur des hommes qui veulent de l’argent. Tu récoltes un silence poli.', eff:{unit:{fides:-3}}, perf:-1 } },
+    { id:'b', scopes:['*'], txt:'Payer une tournée sur ta propre bourse',
+      test:{attr:'ingenium', dc:-15}, risque:'faible',
+      succes:{ txt:'Deux amphores et une nuit. Les hommes savent d’où vient le vin.', eff:{unit:{fides:8},peculium:-140,fama:2}, perf:2 },
+      echec:{ txt:'La tournée dégénère, deux hommes se battent, et c’est toi qu’on interroge le lendemain.', eff:{peculium:-140,fama:-3}, perf:-1 } }
+    ]}
+  ]};
+
+BATAILLES.atuatuca = {
+  nom:'Le camp de Cicéron', lieu:'Chez les Nerviens, camp d’hiver de Q. Cicero', date:'Hiver 54 av. J.-C.',
+  ennemi:'Éburons et Nerviens — 60 000, après le désastre de Sabinus', dc:66, issue:'survie',
+  intro:`Quinze cohortes sont mortes dans le défilé d’Ambiorix parce que Sabinus a cru à la parole d’un Gaulois. Ici, dans le camp de Quintus Cicéron, on a refusé de parlementer. Le rempart est assiégé depuis sept jours. Les Gaulois, qui nous ont regardés bâtir pendant six ans, savent maintenant faire des tours de siège et des mines.`,
+  phases:[
+  { titre:'La parole d’Ambiorix',
+    texte:`Les envoyés gaulois viennent au pied du rempart : ils jurent que toute la Gaule s’est levée, que les Germains ont passé le Rhin, que le camp de Sabinus est tombé — et c’est vrai. Ils offrent le passage libre vers les quartiers les plus proches.`,
+    vue:{ soldat:'Les hommes écoutent en silence sur le rempart.', sousoff:'Deux de tes hommes disent tout haut qu’il faut sortir.', centurion:'Le conseil des centurions est convoqué sous la tente du légat.', superieur:'Cicéron est malade et hésitant. La décision se prend entre officiers.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Refuser tout parlementaire tant qu’ils sont en armes', note:'Ce que Cicéron a répondu, mot pour mot. Ce qui a sauvé le camp.',
+      test:{attr:'disciplina', dc:-5}, risque:'faible',
+      succes:{ txt:'« Le peuple romain n’a pas coutume de recevoir de conditions d’un ennemi en armes. » On répète la phrase le long du rempart et l’on cesse d’écouter.', eff:{disciplina:3,auctoritas:2,unit:{cohaesio:5}}, perf:3 },
+      echec:{ txt:'Tu tiens bon, mais quelques hommes ont eu le temps d’entendre trop de choses. L’idée de sortir circule dans le camp comme une fièvre.', eff:{unit:{cohaesio:-4}}, perf:0 } },
+    { id:'b', scopes:['sousoff','centurion','superieur'], txt:'Faire descendre les hommes du rempart pendant les pourparlers',
+      test:{attr:'scientia', dc:0}, risque:'faible',
+      succes:{ txt:'Tu comprends que le parlementaire est une reconnaissance déguisée : ils comptent nos têtes pour évaluer nos effectifs. Tu fais garnir le rempart deux fois plus, avec les valets casqués. Ils repartent avec un mauvais chiffre.', eff:{scientia:4,ingenium:3,fama:5}, perf:4 },
+      echec:{ txt:'Le mouvement se voit. Ils comptent quand même, et ils comptent juste.', eff:{}, perf:-1 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Soutenir au conseil qu’il faut sortir vers le camp le plus proche',
+      test:{attr:'ingenium', dc:30}, risque:'très élevé',
+      succes:{ txt:'Tu défends la sortie avec méthode et l’on te répond que Sabinus a tenu le même raisonnement, et que Sabinus est mort. On ne sort pas. Ton honnêteté à envisager l’option est notée ; ta conclusion, non.', eff:{ingenium:2,fama:-2}, perf:0 },
+      echec:{ txt:'On te rappelle sèchement ce qu’il est advenu de quinze cohortes qui ont fait confiance à ce même Ambiorix. Le silence qui suit est très long.', eff:{fama:-8,auctoritas:-4,favor:{cicero:-10}}, perf:-4 } }
+    ]},
+  { titre:'Pullo et Vorenus',
+    texte:`Deux centurions de la première cohorte, Titus Pullo et Lucius Vorenus, se disputent depuis des années le premier rang. Aujourd’hui, Pullo sort du rempart en criant à Vorenus qu’il n’a plus d’excuse pour douter de sa valeur. Vorenus le suit, parce qu’il ne peut pas faire autrement.`,
+    vue:{ soldat:'Tout le camp est monté sur le rempart pour regarder.', sousoff:'Deux centurions seuls contre une ligne gauloise. C’est absurde, et personne ne détourne les yeux.', centurion:'Tu connais les deux. Tu sais exactement pourquoi ils font cela.', superieur:'Deux officiers de la première cohorte hors du rempart. Si tu les perds, tu perds plus que deux hommes.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Les couvrir avec tout ce qui peut tirer du rempart',
+      test:{attr:'auctoritas', dc:5}, risque:'moyen',
+      succes:{ txt:'Frondeurs, archers, tout ce qui a un bras. Pullo est cloué au sol par un trait dans le baudrier, Vorenus revient le chercher, tombe, et Pullo relevé le tire à son tour. Ils rentrent tous les deux, sous une pluie de traits qui vient de tes hommes.', eff:{auctoritas:3,fama:7,unit:{fides:8,cohaesio:5}}, perf:5 },
+      echec:{ txt:'La couverture est trop lâche. Ils rentrent quand même, plus par miracle que par toi, et l’un des deux saigne beaucoup.', eff:{fama:1}, perf:0 } },
+    { id:'b', scopes:['*'], txt:'Sortir les chercher',
+      test:{attr:'virtus', dc:20}, risque:'très élevé',
+      crit:{ txt:'Tu franchis le rempart avec une poignée d’hommes et tu ramènes les deux centurions par le col, sous les yeux du camp entier et de la moitié de la Gaule. Il n’y a pas d’autre monnaie que celle-là dans une légion.', eff:{virtus:6,fama:16,auctoritas:5,favor:{caesar:8,cicero:10}}, blessure:.4, pertes:10, perf:11 },
+      succes:{ txt:'Tu sors, tu accroches Vorenus par le baudrier et vous refluez ensemble vers la porte. On te recoud l’avant-bras le soir même.', eff:{virtus:4,fama:10,favor:{cicero:8}}, blessure:.6, pertes:12, perf:9 },
+      echec:{ txt:'Tu sors et tu ne vas pas loin. Ce sont eux qui te ramènent, ce qui est exactement l’inverse de ce que tu voulais, et tout le camp l’a vu.', eff:{valetudo:-24,fama:-5}, blessure:.75, mort:.08, pertes:14, perf:-3 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Interdire la sortie et les faire rentrer sous peine de sanction',
+      test:{attr:'auctoritas', dc:15}, risque:'moyen',
+      succes:{ txt:'Tu les rappelles au nom du légat, devant tout le camp. Ils obéissent en te haïssant. Deux centurions vivants valent mieux qu’une légende, et tu es le seul à le penser aujourd’hui.', eff:{auctoritas:5,disciplina:3,fama:-4,unit:{cohaesio:4}}, perf:3 },
+      echec:{ txt:'Ils font semblant de ne pas entendre. Tu as donné un ordre devant six mille hommes et il n’a pas été exécuté.', eff:{auctoritas:-6,fama:-5}, perf:-2 } }
+    ]},
+  { titre:'Le message',
+    texte:`Il faut prévenir César, à cent milles. Tous les messagers envoyés ont été pris et torturés en vue du rempart. Un cavalier nervien à notre solde propose d’essayer, avec la lettre roulée dans la courroie de son javelot.`,
+    vue:{ soldat:'On demande des volontaires. Personne ne se presse.', sousoff:'Tu connais le Gaulois. Il est vénal, ce qui est plutôt rassurant.', centurion:'Il faut aussi écrire la lettre, et en grec, pour qu’elle ne serve pas à l’ennemi si elle est prise.', superieur:'Tout dépend de ce billet et de la chance d’un homme.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Payer le Nervien sur ta propre bourse et le lâcher de nuit',
+      test:{attr:'ingenium', dc:0}, risque:'moyen',
+      succes:{ txt:'Il passe. Le javelot arrivera fiché dans une tour du camp de César, où il restera deux jours avant qu’on le remarque. Mais il arrivera.', eff:{ingenium:3,fama:6,favor:{caesar:8,cicero:8},peculium:-200}, perf:5 },
+      echec:{ txt:'Il prend l’argent et disparaît vers l’ouest. Un autre partira demain.', eff:{peculium:-200,ingenium:1}, perf:-1 } },
+    { id:'b', scopes:['*'], txt:'Sortir toi-même de nuit avec la lettre',
+      test:{attr:'virtus', unit:'fatigatio', dc:25, inv:true}, risque:'très élevé',
+      succes:{ txt:'Trois nuits à travers les Ardennes, dans un manteau gaulois, en évitant les feux. Quand tu arrives, César lit la lettre debout et fait sonner le départ dans l’heure.', eff:{virtus:5,scientia:3,fama:14,favor:{caesar:16}}, valetudoEff:-20, blessure:.3, perf:12 },
+      echec:{ txt:'Tu es repéré au deuxième jour et tu passes une semaine à ramper vers le camp le plus proche, sans lettre et sans bottes.', eff:{valetudo:-26,fama:-3}, blessure:.5, mort:.07, perf:-2 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Écrire la lettre en caractères grecs',
+      test:{attr:'scientia', dc:-10}, risque:'faible',
+      succes:{ txt:'Latin transcrit en lettres grecques : illisible pour un Gaulois qui lit le latin, immédiat pour un Romain lettré. La précaution paraît mineure jusqu’au jour où elle ne l’est plus.', eff:{scientia:3,ingenium:2,favor:{cicero:6}}, perf:2 },
+      echec:{ txt:'Ton grec est approximatif. César mettra une heure à déchiffrer une phrase de dix mots, en jurant.', eff:{fama:-2}, perf:0 } }
+    ]},
+  { titre:'La fumée à l’horizon',
+    texte:`Au neuvième jour, une fumée au sud. César arrive avec sept mille hommes contre soixante mille, et il campe petit, exprès, en faisant l’effrayé : rempart bas, portes étroites, allées et venues affolées. Les Gaulois lèvent le siège pour venir cueillir cette proie.`,
+    vue:{ soldat:'Le siège s’arrête d’un coup. Le camp gaulois se vide vers le sud.', sousoff:'Il reste de quoi tenir deux jours dans les greniers.', centurion:'Il faut décider si l’on sort pour appuyer, ou si l’on garde le camp.', superieur:'César a besoin qu’on sorte au bon moment, et pas avant.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Sortir immédiatement pour prendre les assiégeants à revers',
+      test:{attr:'virtus', unit:'fatigatio', dc:20, inv:true}, risque:'élevé',
+      succes:{ txt:'Vous sortez sur des jambes de sept jours de siège et vous les prenez entre deux feux. Le camp de Cicéron, où neuf hommes sur dix sont blessés, achève une armée.', eff:{virtus:4,fama:8,unit:{cohaesio:6}}, pertes:11, blessure:.25, perf:7 },
+      echec:{ txt:'La sortie part trop tôt, sur des hommes épuisés, et il faut rentrer précipitamment en abandonnant des blessés dehors.', eff:{unit:{fides:-6},fama:-4}, pertes:16, blessure:.3, perf:-3 } },
+    { id:'b', scopes:['*'], txt:'Tenir le camp et attendre le signal',
+      test:{attr:'disciplina', dc:-10}, risque:'faible',
+      succes:{ txt:'Vous attendez le cornet. Quand il sonne, la sortie est nette, groupée, et arrive exactement où il faut. César passera dans le camp, tente par tente, remercier les hommes un par un.', eff:{disciplina:3,favor:{caesar:8,cicero:6},unit:{cohaesio:5},fama:5}, pertes:5, perf:4 },
+      echec:{ txt:'Le signal est mal entendu et la sortie part avec vingt minutes de retard, quand tout est déjà joué.', eff:{fama:-3}, pertes:4, perf:-1 } }
+    ]}
+  ]};
+
+BATAILLES.avaricum = {
+  nom:'Avaricum', lieu:'Oppidum des Bituriges', date:'Printemps 52 av. J.-C.',
+  ennemi:'40 000 Bituriges derrière un mur gaulois', dc:60, issue:'prise et massacre',
+  intro:`Le <span class="lat">murus gallicus</span> : poutres croisées, pierres, terre, cloué de longues fiches de fer. Le bélier ne l’ébranle pas, le feu ne prend pas sur la pierre, la pierre ne se descelle pas à cause du bois. Il n’y a qu’une réponse : une terrasse de vingt-cinq pieds de haut et trois cents de large, en vingt-cinq jours, sous la pluie, à la ration réduite.`,
+  phases:[
+  { titre:'Vingt-cinq jours de terrasse',
+    texte:`Les légions travaillent par relèves nuit et jour. Les Bituriges creusent des galeries sous la terrasse pour la vider par en dessous, jettent de la poix et du suif enflammés, sortent en sorties nocturnes. Le blé manque : les Boïens et les Éduens ne livrent rien.`,
+    vue:{ soldat:'Tu portes des fascines depuis trois semaines. Tu n’as pas mangé de pain depuis dix jours.', sousoff:'Tes hommes tiennent debout par habitude. Ils ne se plaignent pas, et c’est mauvais signe.', centurion:'Tu peux exiger le double de travail, ou ménager tes hommes pour l’assaut.', superieur:'César a proposé de lever le siège. Les légions ont supplié qu’on n’en fasse rien.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Pousser le travail sans relâche',
+      test:{attr:'disciplina', unit:'fatigatio', dc:15, inv:true}, risque:'moyen',
+      succes:{ txt:'La terrasse monte de dix pieds en trois jours. Les hommes dorment sur le chantier, en armes, et il faut les enjamber pour circuler.', eff:{disciplina:3,fama:4,unit:{experientia:5,fatigatio:20}}, perf:3 },
+      echec:{ txt:'Trois hommes s’effondrent sous les fascines. Un quatrième ne se relève pas. Le travail ralentit de toute façon.', eff:{unit:{fides:-7,fatigatio:22}}, pertes:4, perf:-2 } },
+    { id:'b', scopes:['*'], txt:'Aller chercher du grain dans la campagne brûlée',
+      test:{attr:'scientia', dc:5}, risque:'élevé',
+      succes:{ txt:'Tu trouves des silos enterrés que les Bituriges avaient oubliés, ou négligés. Deux jours de blé pour la légion, et un nom que les hommes retiennent.', eff:{scientia:3,fama:6,unit:{fides:9,fatigatio:-8}}, perf:7 },
+      echec:{ txt:'Rien. Quarante milles de cendres, deux hommes perdus à la cavalerie gauloise, et le retour à vide devant des gens qui espéraient.', eff:{unit:{fides:-5,fatigatio:12}}, pertes:5, perf:-2 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Contre-miner leurs galeries', req:{scientia:50},
+      test:{attr:'scientia', unit:'experientia', dc:10}, risque:'élevé',
+      succes:{ txt:'Tu fais creuser à leur rencontre et l’on se bat sous terre, à la lampe, au couteau, dans un boyau où deux hommes ne passent pas de front. La terrasse cesse de s’affaisser.', eff:{scientia:5,virtus:3,fama:7,favor:{caesar:6}}, pertes:8, blessure:.3, perf:9 },
+      echec:{ txt:'Ta galerie croise la leur au mauvais endroit. Six hommes sont pris dans un éboulement et l’on ne dégage que trois corps.', eff:{unit:{fides:-8}}, pertes:9, perf:-3 } }
+    ]},
+  { titre:'La nuit du feu',
+    texte:`Vers minuit, une fumée sort de la terrasse : ils l’ont minée et enflammée par-dessous. Au même instant, ils sortent des deux portes et montent aux tours. Un Gaulois, debout devant la porte, reçoit les boules de suif que la foule lui passe et les jette au feu. Un trait le tue. Un autre prend sa place sur son corps. Puis un autre.`,
+    vue:{ soldat:'La terrasse brûle sous tes pieds.', sousoff:'La tour de siège de ta centurie est en flammes.', centurion:'Deux choix : sauver l’ouvrage ou sauver les hommes.', superieur:'Vingt-cinq jours de travail brûlent. Les légions arrivent en désordre.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Sauver l’ouvrage à tout prix',
+      test:{attr:'virtus', unit:'fides', dc:15}, risque:'très élevé',
+      succes:{ txt:'On combat le feu et les Gaulois à la fois, toute la nuit, à découvert sur la terrasse. Au matin la terrasse tient encore et il n’y a plus de nuit à donner.', eff:{virtus:4,disciplina:3,fama:8,favor:{caesar:7}}, pertes:14, blessure:.35, perf:10 },
+      echec:{ txt:'Le feu gagne, la tour s’effondre et l’on perd des hommes pour un ouvrage qu’il faudra refaire de toute façon.', eff:{fama:-4,unit:{cohaesio:-9}}, pertes:19, blessure:.4, perf:-4 } },
+    { id:'b', scopes:['*'], txt:'Retirer les hommes, laisser brûler, reconstruire demain',
+      test:{attr:'auctoritas', dc:0}, risque:'moyen',
+      succes:{ txt:'Tu décroches proprement. On perd trois jours de terrasse et pas un homme. Le lendemain, elle remonte plus vite qu’elle n’avait monté.', eff:{auctoritas:3,unit:{fides:7}}, pertes:4, perf:2 },
+      echec:{ txt:'Le décrochage se lit comme une fuite. La sortie gauloise gagne cent pas et il faut la rejeter au prix fort.', eff:{fama:-5}, pertes:12, blessure:.25, perf:-2 } }
+    ]},
+  { titre:'L’assaut sous la pluie',
+    texte:`Le vingt-septième jour, une averse. Les gardes gaulois se sont abrités. César fait monter les hommes en silence, sans signal, et promet les récompenses aux premiers sur le mur. Une fois dedans, l’armée se souvient d’Atuatuca et du défilé d’Ambiorix.`,
+    vue:{ soldat:'Tu es dans la première vague. L’échelle est glissante.', sousoff:'Ta centurie monte en deuxième.', centurion:'Ta cohorte a la porte est.', superieur:'Il n’y aura pas d’ordre pour arrêter ce qui va suivre.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Monter dans la première vague',
+      test:{attr:'virtus', dc:10}, risque:'élevé',
+      succes:{ txt:'Tu es sur le parapet avant qu’ils comprennent. La récompense est réelle et la nuit qui suit ne l’est pas moins.', eff:{virtus:4,fama:8,peculium:400,favor:{caesar:6}}, pertes:10, blessure:.3, perf:7 },
+      echec:{ txt:'L’échelle bascule. Tu tombes de douze pieds sur des pierres, avec ton bouclier sur la figure.', eff:{valetudo:-22}, blessure:.6, pertes:12, perf:-1 } },
+    { id:'b', scopes:['*'], txt:'Entrer après, tenir les rues, ramasser le butin',
+      test:{attr:'ingenium', dc:0}, risque:'moyen',
+      succes:{ txt:'Tu prends les rues, pas le mur. C’est là qu’est le grain, l’argenterie et le bétail. Ta part est bonne et tes hommes sont entiers.', eff:{ingenium:2,peculium:650,unit:{fides:4}}, pertes:4, perf:2 },
+      echec:{ txt:'Tu arrives derrière trois cohortes qui ont déjà tout raflé et tout brûlé. Tu ramasses de la cendre.', eff:{peculium:60,fama:-2}, pertes:5, perf:0 } },
+    { id:'c', scopes:['sousoff','centurion','superieur'], txt:'Tenir tes hommes pendant le sac', note:'Sur quarante mille habitants, il en sortira huit cents vivants. Cela n’a pas d’effet sur la bataille.',
+      test:{attr:'auctoritas', dc:20}, risque:'élevé',
+      succes:{ txt:'Tu gardes tes hommes en rang au milieu d’une armée devenue folle, et tu les fais escorter jusqu’à la porte ce qui peut marcher. Ils t’obéissent parce que c’est toi. On ne t’en remerciera pas.', eff:{auctoritas:5,disciplina:3,unit:{fides:12},fama:-3,peculium:-100}, perf:5 },
+      echec:{ txt:'Une légion en sac n’a pas de centurions. Tes hommes disparaissent dans les ruelles et tu les récupères à l’aube, ivres, chargés et muets.', eff:{auctoritas:-4,unit:{fides:-5},peculium:300}, perf:-2 } }
+    ]}
+  ]};
+
+BATAILLES.gergovie = {
+  nom:'Gergovie', lieu:'Oppidum arverne, sur son plateau', date:'Été 52 av. J.-C.',
+  ennemi:'Vercingétorix, position inexpugnable', dc:70, issue:'défaite',
+  intro:`La seule défaite ouverte de César en Gaule. La ville est sur un plateau à mille pieds, avec un seul accès. Les Éduens, nos alliés, viennent de basculer. César veut se retirer sans que la retraite ressemble à une fuite : il monte une démonstration pour prendre le camp gaulois du flanc, avec ordre formel de ne pas aller plus loin.`,
+  phases:[
+  { titre:'La feinte',
+    texte:`On fait défiler des muletiers casqués sur les hauteurs pour simuler une colonne, on fait grand bruit à l’ouest, et pendant ce temps deux légions montent en silence par un chemin creux. Le camp gaulois du flanc est pris presque sans coup férir.`,
+    vue:{ soldat:'Tu montes dans un chemin creux, courbé, depuis une heure.', sousoff:'Le camp gaulois est devant, presque vide.', centurion:'L’ordre est clair : prendre le camp et s’arrêter là.', superieur:'La feinte a marché au-delà du calcul. C’est exactement le moment dangereux.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Prendre le camp et s’arrêter, comme ordonné',
+      test:{attr:'disciplina', unit:'cohaesio', dc:10}, risque:'moyen',
+      succes:{ txt:'Tu tiens tes hommes au bord du camp pris, sur la ligne exacte que César a désignée. Trois cohortes voisines, elles, continuent de monter vers le mur de la ville.', eff:{disciplina:4,auctoritas:3,favor:{caesar:10},fama:5}, pertes:3, perf:6 },
+      echec:{ txt:'Le camp pris, l’élan emporte tout. Tes hommes sont déjà cinquante pas plus haut quand tu cries de s’arrêter.', eff:{auctoritas:-3}, pertes:8, perf:-2 } },
+    { id:'b', scopes:['*'], txt:'Monter vers le mur de la ville avec les autres',
+      test:{attr:'virtus', dc:25}, risque:'très élevé',
+      succes:{ txt:'Tu montes. Un centurion, Lucius Fabius, atteint le parapet et crie qu’il aura la couronne murale. Il y est monté ; il n’en redescendra pas. Toi, si, avec ta part de gloire douteuse.', eff:{virtus:4,fama:6,favor:{caesar:-8}}, pertes:22, blessure:.45, perf:0 },
+      echec:{ txt:'Tu montes contre les ordres et tu redescends de la pire manière : en courant, sous les pierres, avec des hommes en moins et ton nom dans le mauvais rapport.', eff:{fama:-8,favor:{caesar:-12},auctoritas:-4}, pertes:28, blessure:.5, mort:.05, perf:-4 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Faire sonner la retraite pour ton secteur immédiatement',
+      test:{attr:'auctoritas', dc:15}, risque:'moyen',
+      succes:{ txt:'Tu fais sonner avant l’ordre général. Les hommes t’en veulent une heure et te bénissent le lendemain, quand on compte quarante-six centurions morts dans les autres cohortes.', eff:{auctoritas:5,scientia:3,favor:{caesar:8},unit:{fides:8}}, pertes:4, perf:6 },
+      echec:{ txt:'Le cornet sonne dans un vacarme où personne ne l’entend. Tes hommes montent avec les autres.', eff:{auctoritas:-2}, pertes:20, blessure:.4, perf:-2 } }
+    ]},
+  { titre:'La contre-attaque arverne',
+    texte:`Toute la population de la ville a d’abord fui vers la citadelle en croyant l’oppidum pris. Puis les femmes ont vu, du haut du mur, que nous n’étions que quelques cohortes. Alors les guerriers sont redescendus, et la pente qui nous avait portés se retourne.`,
+    vue:{ soldat:'La pente est raide et tu la descends à reculons, bouclier vers le haut.', sousoff:'La Dixième s’est arrêtée en bas et forme une ligne pour te recueillir.', centurion:'Il faut décrocher en bon ordre ou il n’y aura pas de décrochage du tout.', superieur:'Sept cents hommes vont mourir dans les vingt prochaines minutes. La question est lesquels.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Descendre en formant le mur de boucliers vers le haut',
+      test:{attr:'disciplina', unit:'cohaesio', dc:10}, risque:'élevé',
+      succes:{ txt:'Vous descendez pas à pas, le bouclier vers la pente, en encaissant tout. C’est lent, c’est humiliant, et cela ramène des hommes vivants.', eff:{disciplina:4,virtus:2,unit:{cohaesio:4}}, pertes:14, blessure:.3, perf:5 },
+      echec:{ txt:'La formation se rompt à mi-pente. À partir de là ce n’est plus une retraite, c’est une chute.', eff:{unit:{cohaesio:-14},fama:-4}, pertes:26, blessure:.45, mort:.04, perf:-3 } },
+    { id:'b', scopes:['*'], txt:'Tenir un point d’appui pour couvrir la descente des autres',
+      test:{attr:'virtus', unit:'fides', dc:20}, risque:'très élevé',
+      crit:{ txt:'Tu tiens un rocher avec vingt hommes pendant que trois cohortes passent derrière toi. Vous en descendez neuf. Ceux qui sont passés savent ce qu’ils te doivent, et le disent — c’est ainsi qu’on devient quelqu’un dans une légion.', eff:{virtus:6,auctoritas:5,fama:14,unit:{fides:14},favor:{caesar:8}}, pertes:32, blessure:.5, mort:.05, perf:11 },
+      succes:{ txt:'Tu tiens assez longtemps. Le prix est très lourd et tu ne le sauras qu’en comptant, en bas.', eff:{virtus:4,fama:9,unit:{fides:9}}, pertes:28, blessure:.45, mort:.04, perf:9 },
+      echec:{ txt:'Le point d’appui est submergé en deux minutes. Tu n’as couvert personne et tu as perdu ce que tu avais.', eff:{fama:-4,unit:{fides:-6}}, pertes:34, blessure:.55, mort:.09, perf:-4 } },
+    { id:'c', scopes:['*'], txt:'Décrocher vite, en abandonnant ce qui ne suit pas',
+      test:{attr:'ingenium', dc:-5}, risque:'moyen',
+      succes:{ txt:'Tu ramènes la plus grande part de tes hommes en bas, rapidement. Les blessés restés en haut ne sont plus une question qui se pose.', eff:{ingenium:2}, pertes:11, perf:1 },
+      echec:{ txt:'La descente rapide dégénère. Tu arrives en bas avec moins de monde que si tu avais tenu.', eff:{unit:{fides:-9},fama:-5}, pertes:24, blessure:.4, perf:-2 } }
+    ]},
+  { titre:'Après',
+    texte:`Sept cents morts, dont quarante-six centurions. César rassemble l’armée le lendemain et fait un discours qui blâme les hommes pour leur indiscipline — puis, voyant l’effet, les console de leur courage. Deux jours plus tard, il offre la bataille en plaine. Vercingétorix ne vient pas. Alors on lève le camp, et cela ressemble à une retraite parce que c’en est une.`,
+    vue:{ soldat:'Tu as enterré des gens que tu connaissais depuis six ans.', sousoff:'Ta centurie est amère et silencieuse.', centurion:'Quarante-six centurions. Il y a des places vides partout.', superieur:'Toute la Gaule va apprendre que César peut être battu.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Prendre publiquement ta part de la faute',
+      test:{attr:'auctoritas', dc:5}, risque:'moyen',
+      succes:{ txt:'Tu dis devant les hommes que l’ordre était clair et que tu ne l’as pas fait respecter assez fort. Personne n’attendait cela. C’est le genre de phrase qui fait qu’on te suivra à Alésia.', eff:{auctoritas:4,fama:6,unit:{fides:10},favor:{caesar:5}}, perf:3 },
+      echec:{ txt:'Tu t’accuses devant des hommes qui cherchaient un coupable, et tu leur en fournis un.', eff:{fama:-6,auctoritas:-3}, perf:-2 } },
+    { id:'b', scopes:['*'], txt:'Te taire et remettre l’unité au travail',
+      test:{attr:'disciplina', dc:-10}, risque:'faible',
+      succes:{ txt:'Exercice, fossé, inspection d’armes. Au bout de quatre jours, les hommes ont autre chose en tête. C’est la vieille méthode et elle fonctionne.', eff:{disciplina:3,unit:{cohaesio:6,fatigatio:10}}, perf:2 },
+      echec:{ txt:'On te trouve dur avec des hommes qui viennent d’enterrer leurs camarades. Le ressentiment s’installe.', eff:{unit:{fides:-7}}, perf:-1 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Demander à César des places pour tes meilleurs hommes', note:'Quarante-six centurionats vacants. Le moment est cynique et il ne reviendra pas.',
+      test:{attr:'ingenium', dc:10}, risque:'moyen',
+      succes:{ txt:'Tu présentes trois noms avec leurs états de service, sans un mot sur toi. César en promeut deux sur-le-champ. Tu viens de te faire deux centurions qui te doivent tout.', eff:{ingenium:4,auctoritas:3,fama:5,favor:{caesar:6}}, perf:5 },
+      echec:{ txt:'Tu arrives troisième dans la file des officiers venus placer leurs gens. César s’en aperçoit et cela se voit sur son visage.', eff:{favor:{caesar:-5},fama:-3}, perf:-2 } }
+    ]}
+  ]};
+
+BATAILLES.alesia = {
+  nom:'Alésia', lieu:'Oppidum des Mandubiens, entre deux lignes', date:'Septembre–octobre 52 av. J.-C.',
+  ennemi:'80 000 assiégés, 250 000 en armée de secours', dc:68, issue:'victoire décisive',
+  intro:`Onze milles de contrevallation, quatorze de circonvallation. Deux fossés de quinze pieds, dont l’un noyé. Des <span class="lat">cippi</span> — troncs ébranchés fichés en avant. Des <span class="lat">lilia</span> — fosses coniques avec un pieu aiguisé au fond, en quinconce, huit rangs. Des <span class="lat">stimuli</span> — crochets de fer sur des billots enterrés. Vingt-trois redoutes, quatre camps de cavalerie. Et nous au milieu, à défendre les deux faces à la fois.`,
+  phases:[
+  { titre:'Les Mandubiens',
+    texte:`Vercingétorix, à court de vivres, chasse de l’oppidum toute la population non combattante : les Mandubiens qui l’avaient accueilli, avec leurs femmes et leurs enfants. Ils descendent jusqu’à notre ligne et supplient qu’on les prenne comme esclaves, pourvu qu’on les nourrisse. César a ordonné de refuser.`,
+    vue:{ soldat:'Ils sont à quarante pas de ton poste, assis dans l’herbe. Ils ne bougent plus.', sousoff:'Ils resteront là entre les deux lignes jusqu’à ce qu’ils meurent. C’est le calcul.', centurion:'L’ordre est de refuser le passage. Il est aussi de ne pas les tuer.', superieur:'Les accepter, c’est nourrir des milliers de bouches et donner à Vercingétorix la place qu’il cherche.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Appliquer l’ordre',
+      test:{attr:'disciplina', dc:0}, risque:'faible',
+      succes:{ txt:'Tu tiens ton poste. Ils restent entre les deux lignes. Cela dure des jours. On finit par ne plus regarder de ce côté.', eff:{disciplina:3,unit:{fides:-3}}, perf:2 },
+      echec:{ txt:'Deux de tes hommes leur passent du pain la nuit. Tu le sais et tu ne sais pas quoi en faire.', eff:{disciplina:1,unit:{fides:2},fama:-2}, perf:0 } },
+    { id:'b', scopes:['*'], txt:'Faire passer discrètement de l’eau',
+      test:{attr:'ingenium', dc:10}, risque:'moyen',
+      succes:{ txt:'Des outres roulées dans le fossé, la nuit, par deux hommes sûrs. Cela ne sauve personne, en toute rigueur. Tes hommes t’ont vu le faire.', eff:{ingenium:2,unit:{fides:10},fama:2}, perf:1 },
+      echec:{ txt:'Un tribun le remarque. Il n’y a pas de sanction : il y a un regard, et l’affaire remonte quand même.', eff:{favor:{caesar:-6},fama:-4}, perf:-2 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Interdire à tes hommes de regarder et les remettre au travail',
+      test:{attr:'auctoritas', dc:-5}, risque:'faible',
+      succes:{ txt:'Tu déplaces ton secteur de travail de l’autre côté de la redoute. Ce n’est pas de la pitié, c’est de la conservation d’effectif : un homme qui regarde cela dix jours ne se bat pas pareil.', eff:{auctoritas:3,scientia:2,unit:{cohaesio:5}}, perf:3 },
+      echec:{ txt:'On ne détourne pas des yeux qui ont décidé de voir. Le moral baisse dans ta cohorte et rien ne le remonte.', eff:{unit:{fides:-6,cohaesio:-4}}, perf:-1 } }
+    ]},
+  { titre:'La première attaque de nuit',
+    texte:`À minuit, l’armée de secours attaque la circonvallation depuis l’extérieur pendant que Vercingétorix sort de l’oppidum avec des fascines et des échelles. Il faut tenir les deux faces du même rempart à la fois. On se bat à l’aveugle, aux cris, sans savoir où on gagne.`,
+    vue:{ soldat:'Tu ne vois rien. Tu entends des Gaulois des deux côtés.', sousoff:'Ta centurie garde vingt pas de rempart, dos à dos.', centurion:'Ta cohorte est étirée sur deux cents pas. Il n’y a pas de réserve.', superieur:'Labienus tient un secteur, Antoine l’autre. La réserve mobile est de six cohortes pour tout le dispositif.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Tenir le rempart et tirer sur tout ce qui bouge dans le fossé',
+      test:{attr:'disciplina', unit:'cohaesio', dc:5}, risque:'moyen',
+      succes:{ txt:'Les <span class="lat">lilia</span> font leur travail dans le noir : on entend des hommes tomber dans les fosses et ne plus en sortir. Le rempart tient jusqu’au jour.', eff:{disciplina:3,unit:{cohaesio:4}}, pertes:7, perf:3 },
+      echec:{ txt:'Ils passent le fossé sur les corps et montent aux échelles. Il faut se battre sur le parapet, dans le noir, contre des ombres.', eff:{valetudo:-14}, pertes:14, blessure:.3, perf:-2 } },
+    { id:'b', scopes:['sousoff','centurion','superieur'], txt:'Dégarnir la face intérieure pour renforcer l’extérieure',
+      test:{attr:'scientia', dc:15}, risque:'élevé',
+      succes:{ txt:'Tu paries que Vercingétorix mettra une heure à combler les pièges de son côté, et tu joues l’heure. Le pari est bon : la face extérieure tient parce que tu l’as doublée.', eff:{scientia:5,auctoritas:3,fama:7,favor:{caesar:6}}, pertes:6, perf:9 },
+      echec:{ txt:'Il est plus rapide que prévu. La face intérieure dégarnie prend l’assaut et tu passes la nuit à courir d’un côté à l’autre du rempart.', eff:{unit:{fatigatio:20,cohaesio:-8}}, pertes:16, blessure:.3, perf:-3 } },
+    { id:'c', scopes:['*'], txt:'Réveiller les hommes de la relève et doubler les postes',
+      test:{attr:'auctoritas', unit:'fides', dc:0}, risque:'faible',
+      succes:{ txt:'Tout le monde debout, personne ne dort, le rempart est garni double. Au matin les hommes sont morts de fatigue et tous vivants.', eff:{auctoritas:2,unit:{fatigatio:16,fides:5}}, pertes:5, perf:2 },
+      echec:{ txt:'La relève monte lentement et de mauvaise grâce. Les postes sont doublés après l’assaut, ce qui ne sert à rien.', eff:{unit:{fatigatio:16}}, pertes:11, perf:-1 } }
+    ]},
+  { titre:'Le camp du mont Réa',
+    texte:`Les Gaulois ont trouvé le point faible : un camp au nord, sur une pente, que le terrain empêche d’enfermer proprement. Soixante mille hommes triés y montent à couvert pendant la nuit et attaquent à midi. La <span class="lat">testudo</span> gauloise avance sous les traits ; ils démantèlent le rempart à mains nues.`,
+    vue:{ soldat:'Le rempart s’écroule à dix pas sur ta gauche.', sousoff:'Les hommes du camp voisin refluent à travers ta position.', centurion:'Le secteur nord va tomber. C’est une question de minutes.', superieur:'César envoie Labienus avec six cohortes et l’ordre de tenir, ou de sortir s’il ne peut plus tenir.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Boucher la brèche avec ce que tu as sous la main',
+      test:{attr:'virtus', unit:'fides', dc:15}, risque:'très élevé',
+      crit:{ txt:'Tu jettes tout ce qui tient debout dans la brèche : blessés, valets, toi. Ça tient dix minutes de plus que cela n’aurait dû, et ces dix minutes-là décident du siège.', eff:{virtus:6,auctoritas:4,fama:15,favor:{caesar:12},unit:{fides:12}}, pertes:24, blessure:.45, mort:.04, perf:12 },
+      succes:{ txt:'La brèche tient, mal, à un homme par pas. Tu ne peux plus lever le bras droit quand la relève arrive.', eff:{virtus:4,fama:9,favor:{caesar:6}}, pertes:20, blessure:.4, perf:9 },
+      echec:{ txt:'Ils entrent. Il faut se battre à l’intérieur du camp, entre les tentes, jusqu’à ce que Labienus arrive.', eff:{valetudo:-20,unit:{cohaesio:-12}}, pertes:30, blessure:.5, mort:.07, perf:-4 } },
+    { id:'b', scopes:['centurion','superieur'], txt:'Décrocher du camp et se reformer en rase campagne', note:'Ce que Labienus finit par faire, avec trente-neuf cohortes ramassées en chemin.',
+      req:{scientia:55}, test:{attr:'scientia', unit:'experientia', dc:10}, risque:'élevé',
+      succes:{ txt:'Tu abandonnes le camp et tu ramasses en te repliant tout ce qui traîne de cohortes. En rase campagne, avec un front, la légion redevient la légion — et ce sont eux qui sont mal placés.', eff:{scientia:5,auctoritas:4,fama:10,favor:{caesar:9,labienus:10}}, pertes:12, blessure:.25, perf:10 },
+      echec:{ txt:'Décrocher d’un camp sous assaut est ce qu’il y a de plus difficile au monde. Ta cohorte sort en morceaux et se reforme deux fois trop loin.', eff:{unit:{cohaesio:-14},fama:-5}, pertes:26, blessure:.4, mort:.05, perf:-3 } },
+    { id:'c', scopes:['*'], txt:'Tenir ta position exacte quoi qu’il arrive à côté',
+      test:{attr:'disciplina', unit:'cohaesio', dc:10}, risque:'élevé',
+      succes:{ txt:'Tu ne bouges pas d’un pouce. Le flot passe à côté de toi et te laisse sur une île. Quand la contre-attaque arrive, ton îlot est le point d’appui dont elle avait besoin.', eff:{disciplina:4,virtus:3,fama:7}, pertes:15, blessure:.3, perf:7 },
+      echec:{ txt:'Tenir sans appui, c’est être enveloppé. Tu combats sur quatre côtés pendant vingt minutes.', eff:{valetudo:-22}, pertes:27, blessure:.5, mort:.05, perf:-3 } }
+    ]},
+  { titre:'Le manteau rouge',
+    texte:`César a fait donner ses dernières réserves et, quand il n’en a plus, il vient lui-même. On voit son <span class="lat">paludamentum</span> écarlate descendre depuis la hauteur : c’est la couleur qu’il porte au combat pour être vu de loin, et elle est vue. La cavalerie germanique sort par une porte dérobée et arrive à revers de l’armée de secours.`,
+    vue:{ soldat:'Tu vois le manteau rouge. Tout le monde le voit.', sousoff:'Les hommes se remettent debout sans qu’on leur dise rien.', centurion:'Le moment de bascule est là. Il durera quatre minutes.', superieur:'Il faut engager maintenant, ou avoir tenu pour rien.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Charger avec tout ce qui reste',
+      test:{attr:'virtus', unit:'fides', dc:5}, risque:'élevé',
+      succes:{ txt:'Vous sortez du rempart et vous les prenez de front pendant que les Germains les prennent de dos. À partir de là ce n’est plus une bataille. Soixante-quatorze enseignes gauloises seront ramassées sur ce champ.', eff:{virtus:4,fama:9,peculium:500,favor:{caesar:8}}, pertes:12, blessure:.3, perf:9 },
+      echec:{ txt:'L’élan est là mais les jambes ne suivent plus après trois jours de rempart. La charge s’arrête à mi-chemin.', eff:{unit:{fatigatio:20}}, pertes:16, blessure:.3, perf:-1 } },
+    { id:'b', scopes:['*'], txt:'Garder ta position pour couvrir le retour éventuel',
+      test:{attr:'disciplina', dc:-10}, risque:'faible',
+      succes:{ txt:'Tu restes. Si la charge avait échoué, tu étais ce sur quoi elle serait revenue. Elle n’a pas échoué, et personne ne saura jamais à quoi tu servais.', eff:{disciplina:3,unit:{cohaesio:5}}, pertes:3, perf:2 },
+      echec:{ txt:'Rester quand tout le monde charge se lit d’une seule façon dans une armée, même quand c’est le bon calcul.', eff:{fama:-5}, pertes:3, perf:-1 } },
+    { id:'c', scopes:['superieur'], txt:'Lancer ta cavalerie sur leur camp de base pendant qu’ils combattent',
+      req:{scientia:60}, test:{attr:'scientia', dc:10}, risque:'moyen',
+      succes:{ txt:'Pendant qu’ils meurent devant le rempart, tu prends leur camp derrière eux avec leurs vivres et leurs bagages. L’armée de secours n’a plus où revenir : elle se dissout dans la nuit au lieu de se reformer.', eff:{scientia:5,auctoritas:4,fama:12,peculium:800,favor:{caesar:12}}, pertes:6, perf:8 },
+      echec:{ txt:'Ta cavalerie arrive sur un camp mieux gardé qu’on ne le croyait, et tu l’as retirée du champ au moment décisif.', eff:{favor:{caesar:-6},fama:-4}, pertes:8, perf:-2 } }
+    ]},
+  { titre:'La reddition',
+    texte:`Le lendemain, Vercingétorix convoque son conseil et dit qu’il n’a pas fait cette guerre pour lui mais pour la liberté commune, et qu’il se livre. Il sort à cheval, en armes de parade, fait le tour du tribunal de César et met bas ses armes à ses pieds, sans un mot. On l’emmène. Il restera six ans dans une cellule avant qu’on l’étrangle après le triomphe.`,
+    vue:{ soldat:'Tu es dans le rang, à trente pas. Tu le vois passer.', sousoff:'Les hommes ne crient pas. C’est ce qui surprend le plus.', centurion:'Chaque légionnaire recevra un captif à titre de butin.', superieur:'Tu es au tribunal, derrière César, quand il descend de cheval.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Prendre ta part de captifs et la vendre',
+      test:{attr:'ingenium', dc:-10}, risque:'faible',
+      succes:{ txt:'Un homme, un captif, sauf pour les Éduens et les Arvernes qu’on rend pour raison politique. Les marchands qui suivent l’armée achètent au prix du bétail. Ta part est faite.', eff:{peculium:700,ingenium:1}, perf:1 },
+      echec:{ txt:'Tu vends mal, trop vite, à un marchand qui t’a lu comme un livre.', eff:{peculium:280}, perf:0 } },
+    { id:'b', scopes:['*'], txt:'Rendre ton captif à son peuple', note:'Aucun avantage. Sept cents deniers perdus.',
+      test:{attr:'ingenium', dc:0}, risque:'faible',
+      succes:{ txt:'Tu le renvoies chez les Mandubiens. Le geste ne coûte qu’à toi, et deux de tes hommes font la même chose sans rien dire.', eff:{unit:{fides:8},fama:3,ingenium:2}, perf:2 },
+      echec:{ txt:'Tes hommes ne comprennent pas et trouvent que tu joues au grand seigneur avec un butin qui aurait pu être le leur.', eff:{unit:{fides:-4}}, perf:0 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Demander à César la garde du captif Vercingétorix',
+      test:{attr:'ingenium', dc:25}, risque:'élevé',
+      succes:{ txt:'On te confie l’escorte jusqu’à la Cisalpine. Six semaines de route avec un homme qui a failli renvoyer Rome au-delà des Alpes, et qui ne dit presque rien. Tu apprends des choses sur la guerre qu’aucun manuel ne contient.', eff:{scientia:6,ingenium:3,fama:6,favor:{caesar:8}}, perf:7 },
+      echec:{ txt:'La mission est donnée à un tribun de meilleure naissance. On te remercie de ta proposition.', eff:{fama:-1}, perf:0 } }
+    ]}
+  ]};
+
+BATAILLES.uxellodunum = {
+  nom:'Uxellodunum', lieu:'Oppidum des Cadurques, sur son roc', date:'Été 51 av. J.-C.',
+  ennemi:'2 000 derniers résistants gaulois', dc:58, issue:'prise par la soif',
+  intro:`Le dernier oppidum qui résiste. Il est sur un roc entouré par une rivière, imprenable d’assaut. César décide de lui couper l’eau : galeries de sappe pour capter la source, tours pour interdire l’accès à la rivière. Ce n’est plus de la guerre, c’est de l’hydraulique.`,
+  phases:[
+  { titre:'Couper la source',
+    texte:`Les mineurs creusent des galeries sous le roc pour détourner les veines d’eau qui alimentent la source de l’oppidum. Pendant ce temps, des archers et des scorpions interdisent la descente vers la rivière. Les assiégés sortent la nuit avec du suif et de la poix pour brûler nos ouvrages.`,
+    vue:{ soldat:'Tu es au fond d’une galerie, à la chandelle, à passer des paniers de terre.', sousoff:'Tes hommes travaillent en trois relèves. Ils toussent tous.', centurion:'Tes ouvrages brûlent deux nuits sur trois.', superieur:'Le calcul est simple : leur source contre notre patience.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Pousser les galeries jour et nuit',
+      test:{attr:'disciplina', unit:'fatigatio', dc:10, inv:true}, risque:'moyen',
+      succes:{ txt:'La source tarit d’un coup, au trentième jour. Les assiégés y voient un signe des dieux, ce qui est plus efficace qu’un bélier.', eff:{disciplina:3,scientia:2,fama:5,favor:{trebonius:8}}, perf:5 },
+      echec:{ txt:'Un boyau s’effondre sur quatre hommes. On dégage deux corps ; les deux autres restent où ils sont.', eff:{unit:{fides:-8,fatigatio:18}}, pertes:5, perf:-2 } },
+    { id:'b', scopes:['*'], txt:'Garder les ouvrages contre les sorties nocturnes',
+      test:{attr:'virtus', unit:'cohaesio', dc:5}, risque:'moyen',
+      succes:{ txt:'Trois sorties repoussées en cinq nuits. Les ouvrages tiennent debout et la sappe continue sans perdre un jour.', eff:{virtus:3,disciplina:2,fama:4}, pertes:6, blessure:.2, perf:3 },
+      echec:{ txt:'Ils enflamment une tour et une galerie dans la même nuit. On repart de deux semaines en arrière.', eff:{fama:-4,unit:{fatigatio:14}}, pertes:9, blessure:.25, perf:-2 } }
+    ]},
+  { titre:'Les mains coupées',
+    texte:`La ville se rend. César, qui a épargné tant de peuples, décide ici de faire un exemple qu’on retiendra : il fait couper les mains à tous ceux qui ont porté les armes, et les renvoie vivants dans leurs villages. Il écrira que sa clémence est connue et qu’il fallait donc que la sanction ne pût pas être prise pour de la faiblesse.`,
+    vue:{ soldat:'On te met de corvée à l’enclos.', sousoff:'Ta centurie fournit les hommes. Il faut désigner qui tient la hache.', centurion:'On t’a chargé de l’exécution pour ton secteur.', superieur:'Tu as entendu la décision se prendre, en trois phrases.' },
+    opts:[
+    { id:'a', scopes:['*'], txt:'Exécuter la sentence',
+      test:{attr:'disciplina', dc:-10}, risque:'faible',
+      succes:{ txt:'C’est fait. On cautérise, on renvoie. Le camp est très silencieux ce soir-là, et pour une fois personne ne joue aux dés.', eff:{disciplina:2,unit:{fides:-4}}, perf:1 },
+      echec:{ txt:'Deux de tes hommes vomissent et un troisième refuse. Tu le fais fouetter parce que tu n’as pas le choix, et tu sais qu’il avait raison.', eff:{unit:{fides:-9},disciplina:1}, perf:0 } },
+    { id:'b', scopes:['sousoff','centurion','superieur'], txt:'Tirer au sort les exécutants et t’en charger le premier',
+      test:{attr:'auctoritas', dc:5}, risque:'moyen',
+      succes:{ txt:'Tu ne délègues pas ce que tu ne ferais pas. Tes hommes ne t’aimeront pas plus, mais ils ne te mépriseront pas, et dans une légion la différence est immense.', eff:{auctoritas:4,unit:{fides:2},disciplina:3}, perf:3 },
+      echec:{ txt:'Le geste passe pour de l’ostentation. On t’a vu vouloir être vu.', eff:{fama:-3,unit:{fides:-5}}, perf:-1 } },
+    { id:'c', scopes:['centurion','superieur'], txt:'Faire épargner les plus jeunes en les déclarant non-combattants',
+      test:{attr:'ingenium', dc:15}, risque:'moyen',
+      succes:{ txt:'Tu établis une liste où quarante garçons deviennent des porteurs d’eau plutôt que des porteurs d’armes. Le questeur signe sans lire. Personne ne le saura jamais, sauf eux.', eff:{ingenium:4,unit:{fides:8},fama:2}, perf:3 },
+      echec:{ txt:'Un centurion zélé recompte la liste devant le légat. On corrige. On te regarde.', eff:{favor:{caesar:-5},fama:-4}, perf:-2 } }
+    ]}
+  ]};
