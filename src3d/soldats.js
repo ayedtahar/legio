@@ -152,9 +152,17 @@ class Lot{
     this.a={ iPos:A(3), iRot:A(2), iAnim:A(4), iTint:A(3), iTint2:A(3) };
     for(const k in this.a) g.setAttribute(k,this.a[k]);
     g.instanceCount=0;
-    const m=new THREE.MeshLambertMaterial({ vertexColors:true, side:THREE.DoubleSide });
+    const m=new THREE.MeshStandardMaterial({ vertexColors:true, side:THREE.DoubleSide, roughness:.74, metalness:.12 });
     patchSoldat(m, thrust);
-    this.mesh=new THREE.Mesh(g,m); this.mesh.frustumCulled=false; scene.add(this.mesh);
+    ombre(m);
+    this.mesh=new THREE.Mesh(g,m); this.mesh.frustumCulled=false;
+    /* l'homme est déformé dans le shader ; sans la même déformation sur la carte
+       de profondeur, son ombre resterait plantée en T au milieu du champ. */
+    const dm=new THREE.MeshDepthMaterial({ depthPacking:THREE.RGBADepthPacking, side:THREE.DoubleSide });
+    patchSoldat(dm, thrust);
+    this.mesh.customDepthMaterial=dm;
+    this.mesh.castShadow=true; this.mesh.receiveShadow=true;
+    scene.add(this.mesh);
     this.g=g; this.n=0;
   }
   ecrire(s){
@@ -178,7 +186,9 @@ class Armee{
     this.oPos=new THREE.InstancedBufferAttribute(new Float32Array(N*3),3).setUsage(THREE.DynamicDrawUsage);
     this.oRot=new THREE.InstancedBufferAttribute(new Float32Array(N*2),2).setUsage(THREE.DynamicDrawUsage);
     og.setAttribute('iPos',this.oPos); og.setAttribute('iRot',this.oRot); og.instanceCount=0;
-    const om=new THREE.MeshBasicMaterial({ color:0x000000, transparent:true, opacity:.36, depthWrite:false, map:texRonde() });
+    /* le soleil donne maintenant la vraie ombre portée ; cette tache ne sert
+       plus qu'au contact au sol, que la carte d'ombre est trop lâche pour rendre. */
+    const om=new THREE.MeshBasicMaterial({ color:0x000000, transparent:true, opacity:.16, depthWrite:false, map:texRonde() });
     om.onBeforeCompile=(sh)=>{
       sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nattribute vec3 iPos; attribute vec2 iRot;')
         .replace('#include <begin_vertex>','vec3 transformed=position*vec3(1.+iRot.y*1.2,1.,1.+iRot.y*.6)+iPos+vec3(0.,.04,0.);');

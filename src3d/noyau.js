@@ -29,7 +29,7 @@ function fbm(x,y,o=4){ let s=0,a=.5,f=1; for(let i=0;i<o;i++){ s+=a*bruit(x*f,y*
 const SCENARIOS={
 bibracte:{
   n:'Bibracte', an:58, ev:'Bibracte', lieu:'Pente au-dessus de la plaine éduenne',
-  ennemi:'gaulois', saison:'ete',
+  ennemi:'gaulois', saison:'ete', ciel:'kloofendal_48d_partly_cloudy_puresky_2k.hdr',
   brief:'Les Helvètes montent vers vous en phalange, boucliers imbriqués. César a fait renvoyer tous les chevaux, à commencer par le sien : que nul n’ait d’espoir dans la fuite. Vous tenez la pente.',
   relief:(x,z)=> 22*sigm((z-30)/42) + 9*Math.exp(-((x+380)**2+(z+260)**2)/90000) + 3*fbm(x*.006+3,z*.006+7) - 1.5,
   soleil:{ az:-.9, el:.42 }, brume:.0011,
@@ -41,7 +41,7 @@ bibracte:{
   duree:480 },
 pharsale:{
   n:'Pharsale', an:48, ev:'Pharsale — la quatrième ligne', lieu:'Plaine de l’Énipeus, Thessalie',
-  ennemi:'pompeien', saison:'sec',
+  ennemi:'pompeien', saison:'sec', ciel:'kloofendal_43d_clear_puresky_2k.hdr',
   brief:'En face, les légions de Pompée — des Romains, armés comme vous. Elles ont reçu l’ordre de ne pas bouger et d’attendre votre charge : vous aurez deux fois la distance à courir. Les vétérans savent qu’il faut s’arrêter à mi-course pour reprendre son souffle.',
   relief:(x,z)=> 2.2*fbm(x*.004,z*.004) + 6*Math.exp(-((x-500)**2+(z+420)**2)/160000),
   soleil:{ az:.7, el:.55 }, brume:.0013,
@@ -51,7 +51,7 @@ pharsale:{
   duree:480 },
 munda:{
   n:'Munda', an:45, ev:'Munda', lieu:'Bétique, sous la colline',
-  ennemi:'pompeien', saison:'sec',
+  ennemi:'pompeien', saison:'sec', ciel:'qwantani_afternoon_puresky_2k.hdr',
   brief:'Ils tiennent la hauteur et n’ont nulle part où aller : des vétérans, des transfuges, des proscrits sans pardon possible. Il faudra monter, et pousser. César a mis pied à terre.',
   relief:(x,z)=> 26*sigm((-z-40)/38) + 3*fbm(x*.005+11,z*.005+5) + 12*Math.exp(-((x+420)**2+(z+380)**2)/120000),
   soleil:{ az:.3, el:.32 }, brume:.0014,

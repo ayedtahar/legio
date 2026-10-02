@@ -123,16 +123,44 @@ Depuis la campagne, Bibracte, Pharsale et Munda proposent **« Combattre en temp
 entres dans la bataille avec ton grade et tes attributs, et ce qui t'arrive s'inscrit dans ta
 carrière — y compris la mort. Depuis l'accueil, **Acies** lance une bataille isolée.
 
-Tout est construit dans le code (modèles, terrain, ciel, sons synthétisés) : aucune image ni
-aucun son externe. Three.js (MIT) est embarqué dans la page. Une carte graphique récente est
-conseillée.
+Les hommes, le relief et les sons restent construits dans le code. Le ciel et le sol, eux,
+sont photographiques.
+
+### Le rendu
+
+Le ciel est un panorama HDRI : il sert de fond **et** de lumière d'ambiance, ce qui donne au
+bronze et au cuir leur matière. Le soleil projette ses ombres par cascades (`CSM`) — carte
+serrée près de l'œil, large au loin — sans quoi, à l'échelle d'un champ de bataille, l'ombre
+est soit grossière de près, soit absente à trente pas. Les quatre mille hommes projettent
+chacun la leur : leur pose est calculée dans le shader, donc la carte de profondeur reçoit
+la même déformation, faute de quoi leurs ombres resteraient plantées en T.
+
+Le sol tient en deux matières photographiées — herbe et terre sèche — mêlées par la pente et
+par plaques, puis teintées pour que la Gaule soit verte et la Bétique jaune. La tuile se
+répétant tous les six mètres, une seconde lecture pivotée brouille le damier.
+
+Enfin ACES pour la plage dynamique, un voile léger sur les métaux, et FXAA.
+
+### Les ressources
+
+Toutes libres, aucun compte requis. Les modules three.js sont versionnés ici ; les trente
+mégaoctets de ciels et de sols ne le sont pas.
+
+| Quoi | D'où | Licence |
+|---|---|---|
+| 3 ciels HDRI 2k | [Poly Haven](https://polyhaven.com) | CC0 |
+| 2 sols PBR 2k (couleur, normales, ARM) | Poly Haven | CC0 |
+| three.js r169 + modules | [mrdoob/three.js](https://github.com/mrdoob/three.js) | MIT |
+
+    ./fetch-assets.sh     # ~30 Mo, à ne lancer qu'une fois
 
 ## Lancer
 
-    ./build.sh && xdg-open index.html
+    ./fetch-assets.sh && ./build.sh && ./serve.sh
 
-`index.html` et `bataille.html` sont autonomes ; la carrière se sauvegarde en `localStorage`.
-`build.sh` demande Node.js pour assembler `bataille.html`.
+Puis <http://localhost:8080/>. `index.html` — la carrière — reste autonome et ouvrable par
+double-clic ; elle se sauvegarde en `localStorage`. `bataille.html` lit ses textures par le
+réseau : ouverte en `file://`, le navigateur les lui refuse, d'où le serveur.
 
 ## Ajouter une campagne
 
@@ -150,12 +178,14 @@ par exemple — ne demande que de nouveaux `data-*.js`, sans toucher à `app.js`
     src2/app.js             moteur et interface
 
     src3d/noyau.js          outils, bruit, scénarios des batailles
-    src3d/monde.js          relief, ciel, végétation, poussière, traits
+    src3d/ressources.js     chargement du ciel HDRI et des sols photographiés
+    src3d/monde.js          relief, sol, lumière, ombres, végétation, poussière
     src3d/soldats.js        modèles et rendu par instances, animés dans le shader
     src3d/sim.js            formations, pila, mêlée, moral, déroute, IA
     src3d/son.js            sons synthétisés
     src3d/jeu.js            joueur, commandement, interface, boucle
-    vendor/                 three.js r169 (MIT)
+    vendor/                 three.js r169 et ses modules (MIT)
+    assets/                 ciels et sols — non versionnés, voir fetch-assets.sh
 
     src/                    v1 — sources de la version « tableau d'état-major » (dépassée)
     archive/                v1 assemblée, jouable telle quelle
