@@ -1,0 +1,21 @@
+<div id="scene"></div>
+<div id="hud" class="hud">
+  <div class="haut"><span id="nomb"></span><span id="temps">0:00</span><span id="forces"></span></div>
+  <div id="cris"></div>
+  <div id="flash" class="fps-seul"></div>
+  <div id="reticule" class="fps-seul"></div><div id="marque"></div>
+  <div class="bas fps-seul">
+    <div class="jg"><div class="jg-t"><span>Valetudo</span><b id="pvn">100</b></div><div class="jg-b"><i id="pv"></i></div></div>
+    <div class="jg"><div class="jg-t"><span>Souffle</span></div><div class="jg-b"><i id="st"></i></div></div>
+    <div class="jg"><div class="jg-t"><span>Ta cohorte</span><b id="ordre"></b></div><div class="jg-b"><i id="moral"></i></div></div>
+    <div class="ligne-b"><span>Pila</span><b id="pila">▮▮</b></div>
+  </div>
+  <div id="labels" class="chef-seul"></div>
+  <div id="selinfo" class="chef-seul"></div>
+  <canvas id="mini" width="360" height="360"></canvas>
+  <div id="aide"></div><div class="indice">H : aide</div>
+</div>
+<div id="menu" class="ecran"></div>
+<div id="brief" class="ecran" hidden></div>
+<div id="pause" class="ecran" hidden><div class="carte"><div class="sur">Pause</div><h1>Quies</h1><p>La bataille attend.</p><button onclick="pause(false)">Reprendre</button><button class="sombre" onclick="location.href=location.pathname">Quitter la bataille</button></div></div>
+<div id="fin" class="ecran" hidden></div>

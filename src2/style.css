@@ -405,3 +405,14 @@ button{font-family:inherit;font-size:inherit;color:inherit;border:0;background:n
   .attrs{grid-template-columns:repeat(3,1fr);}
 }
 @media (prefers-reduced-motion:reduce){ *{transition:none!important;} }
+
+/* ---------- entrée dans une bataille en temps réel ---------- */
+.acies-b{display:flex;align-items:center;gap:13px;width:100%;text-align:left;margin-top:16px;padding:14px;border-radius:3px;
+  border:1px solid var(--or);background:linear-gradient(180deg,rgba(110,32,26,.85),rgba(40,14,11,.95));
+  box-shadow:inset 0 1px 0 rgba(242,223,166,.2),0 0 18px rgba(196,84,74,.18);transition:.14s;}
+.acies-b:hover{transform:translateY(-1px);filter:brightness(1.12);}
+.acies-b .ch-t{font-size:17px;color:#F7E7B8;letter-spacing:.06em;}
+.acies-b .ch-note{color:#C9B48C;}
+.acies-ou{margin:12px 0 -6px;text-align:center;font-family:var(--caps);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gris-2);
+  display:flex;align-items:center;gap:10px;}
+.acies-ou::before,.acies-ou::after{content:'';flex:1;height:1px;background:var(--or-nuit);}

@@ -92,11 +92,47 @@ Les cinq onglets :
 | `Nota` | les notes historiques recueillies |
 | `Cursus` | le rail des grades, les seuils de promotion en barres, attributs, blessures |
 
+## Acies — les batailles en temps réel
+
+`bataille.html` : une bataille en trois dimensions, en temps réel, sans aucun choix à cocher.
+Deux armées entières sur le terrain — plus de cinq mille hommes, chacun simulé — sur un relief,
+sous un ciel, dans l'herbe et la poussière. Trois batailles : **Bibracte** (contre les Helvètes,
+puis les Boïens qui tombent sur le flanc), **Pharsale** et **Munda** (contre les légions de Pompée).
+
+**Ton grade décide de ta place :**
+
+| Grade | Rôle | Ce que tu fais |
+|---|---|---|
+| `Miles`, `Immunis`, `Tesserarius` | au premier rang, vue subjective | glaive, bouclier, umbo, pilum ; tu tiens ton rang |
+| `Optio` | dans le rang, vue subjective | idem, et tu commandes la relève et le serrement des rangs |
+| `Centurio`, `Pilus Prior` | au premier rang, vue subjective | ta cohorte manœuvre à ta voix : tenir, avancer, pila, charger, reculer |
+| `Primus Pilus`, `Praefectus Fabrum` | vue d'ensemble | tu disposes des dix cohortes de la légion |
+
+**Au rang** : souris pour regarder, `ZQSD`/`WASD` pour marcher, `Maj` pour courir, clic gauche
+pour l'estoc, clic droit maintenu pour lever le scutum, `Espace` pour le coup d'umbo, `F` pour
+lancer le pilum. Sans touche pressée, le rang te porte : tu suis ta place dans la formation.
+L'homme d'en face **arme son coup** avant de frapper — c'est le moment de lever le bouclier,
+puis de frapper pendant qu'il est découvert.
+
+**Ce qui est simulé** : formations en triplex acies, volées de pila (qui tuent ou clouent les
+boucliers), mêlée homme à homme, fatigue, relève des rangs, deuxième ligne qui monte quand la
+première faiblit, moral par unité, prise de flanc, déroute contagieuse et poursuite. On meurt
+surtout dans la déroute.
+
+Depuis la campagne, Bibracte, Pharsale et Munda proposent **« Combattre en temps réel »** : tu
+entres dans la bataille avec ton grade et tes attributs, et ce qui t'arrive s'inscrit dans ta
+carrière — y compris la mort. Depuis l'accueil, **Acies** lance une bataille isolée.
+
+Tout est construit dans le code (modèles, terrain, ciel, sons synthétisés) : aucune image ni
+aucun son externe. Three.js (MIT) est embarqué dans la page. Une carte graphique récente est
+conseillée.
+
 ## Lancer
 
     ./build.sh && xdg-open index.html
 
-`index.html` est autonome et se sauvegarde en `localStorage`.
+`index.html` et `bataille.html` sont autonomes ; la carrière se sauvegarde en `localStorage`.
+`build.sh` demande Node.js pour assembler `bataille.html`.
 
 ## Ajouter une campagne
 
@@ -112,6 +148,14 @@ par exemple — ne demande que de nouveaux `data-*.js`, sans toucher à `app.js`
     src2/data-phases-*.js   les 9 chapitres et leurs événements
     src2/data-communs.js    réserve d'événements de camp + branche pompéienne
     src2/app.js             moteur et interface
+
+    src3d/noyau.js          outils, bruit, scénarios des batailles
+    src3d/monde.js          relief, ciel, végétation, poussière, traits
+    src3d/soldats.js        modèles et rendu par instances, animés dans le shader
+    src3d/sim.js            formations, pila, mêlée, moral, déroute, IA
+    src3d/son.js            sons synthétisés
+    src3d/jeu.js            joueur, commandement, interface, boucle
+    vendor/                 three.js r169 (MIT)
 
     src/                    v1 — sources de la version « tableau d'état-major » (dépassée)
     archive/                v1 assemblée, jouable telle quelle
