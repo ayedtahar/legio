@@ -30,6 +30,16 @@ for t in aerial_grass_rock brown_mud_dry; do
   for m in Diffuse nor_gl arm; do pick "$t" textures "$m" jpg 2k assets/sol; done
 done
 
+echo "— Squelette et animations —"
+# Le X Bot de Mixamo, redistribué dans le dépôt three.js : squelette complet
+# (mixamorig, 67 os) et clips idle / walk / run. Aucun compte requis.
+for m in Xbot.glb; do
+  f="assets/anim/$m"
+  [ -f "$f" ] && { echo "  = $m"; continue; }
+  curl -sfL -o "$f" "https://raw.githubusercontent.com/mrdoob/three.js/r169/examples/models/gltf/$m" \
+    && echo "  ↓ $m ($(du -h "$f" | cut -f1))" || echo "  ✗ $m"
+done
+
 echo "— Modules three.js r169 (MIT) —"
 B=https://raw.githubusercontent.com/mrdoob/three.js/r169/examples/jsm
 for m in loaders/RGBELoader loaders/GLTFLoader csm/CSM csm/CSMFrustum csm/CSMShader \
@@ -37,7 +47,9 @@ for m in loaders/RGBELoader loaders/GLTFLoader csm/CSM csm/CSMFrustum csm/CSMSha
          postprocessing/ShaderPass postprocessing/OutputPass postprocessing/UnrealBloomPass \
          postprocessing/SSAOPass postprocessing/MaskPass shaders/CopyShader \
          shaders/LuminosityHighPassShader shaders/FXAAShader shaders/SSAOShader \
-         shaders/OutputShader math/SimplexNoise utils/BufferGeometryUtils; do
+         shaders/OutputShader math/SimplexNoise utils/BufferGeometryUtils \
+         loaders/FBXLoader curves/NURBSCurve curves/NURBSUtils curves/NURBSVolume \
+         libs/fflate.module; do
   f="vendor/addons/$(basename $m).js"
   [ -f "$f" ] && { echo "  = $(basename $f)"; continue; }
   curl -sf -A "$UA" -o "$f" "$B/$m.js" && echo "  ↓ $(basename $f)" || echo "  ✗ $m"
@@ -56,3 +68,4 @@ PYEOF
 
 echo
 echo "assets : $(du -sh assets | cut -f1) · vendor/addons : $(du -sh vendor/addons | cut -f1)"
+[ -f assets/anim/poses.bin ] || echo "Reste à cuire les animations : ./serve.sh puis ./outils/cuire.sh"

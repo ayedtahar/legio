@@ -1,0 +1,44 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>inspection</title></head><body>
+<pre id="out">…</pre>
+<script>
+window.__L=['(démarrage)'];
+window.dire=function(s){ window.__L.push(s); document.getElementById('out').textContent=window.__L.join('\n'); };
+addEventListener('error',e=>dire('ERREUR '+(e.message||e)+' @'+(e.filename||'')+':'+(e.lineno||'')),true);
+addEventListener('unhandledrejection',e=>dire('REJET '+e.reason+'\n'+((e.reason&&e.reason.stack)||'')));
+</script>
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.min.js", "three/addons/": "../vendor/addons/" } }
+</script>
+<script type="module">
+dire('module chargé');
+try{
+  const THREE = await import('three');
+  const { GLTFLoader } = await import('three/addons/GLTFLoader.js');
+  dire('three ' + (THREE.REVISION||'?'));
+
+  const fichiers=(new URLSearchParams(location.search).get('f')||'Xbot.glb,Soldier.glb').split(',');
+  const loader=new GLTFLoader();
+
+  for(const f of fichiers){
+    dire('═══ '+f+' ═══');
+    const g=await loader.loadAsync('../assets/anim/'+f);
+    let sk=null; g.scene.traverse(o=>{ if(o.isSkinnedMesh && !sk) sk=o; });
+    if(sk){
+      const os=sk.skeleton.bones;
+      g.scene.updateMatrixWorld(true);
+      const bb=new THREE.Box3().setFromObject(g.scene);
+      dire(`  os : ${os.length} · hauteur : ${(bb.max.y-bb.min.y).toFixed(3)} unités`);
+      dire('  noms : '+os.map(b=>b.name).join(' '));
+      const p=new THREE.Vector3();
+      for(const n of ['Hips','Spine','Spine1','Spine2','Neck','Head','LeftShoulder','LeftArm','LeftForeArm','LeftHand','LeftUpLeg','LeftLeg','LeftFoot','LeftToeBase']){
+        const b=os.find(x=>x.name.endsWith(n));
+        if(b){ b.getWorldPosition(p); dire(`    ${n.padEnd(13)} x=${p.x.toFixed(3)} y=${p.y.toFixed(3)} z=${p.z.toFixed(3)}`); }
+      }
+    } else dire('  (pas de maillage lié)');
+    dire('  clips :');
+    for(const c of g.animations) dire(`    ${c.name.padEnd(26)} ${c.duration.toFixed(2)} s · ${c.tracks.length} pistes`);
+  }
+  dire('(fini)');
+  document.title='fini';
+}catch(e){ dire('EXCEPTION '+e.message+'\n'+(e.stack||'')); document.title='erreur'; }
+</script></body></html>

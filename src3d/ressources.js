@@ -5,7 +5,35 @@
    servie en http:// — un file:// se heurte à la politique
    d'origine du navigateur. Voir serve.sh.
    ============================================================ */
-const RES={ ciel:null, ibl:null, sol:null, horizon:null, pret:false };
+const RES={ ciel:null, ibl:null, sol:null, horizon:null, poses:null, sq:null, pret:false };
+
+/* Les poses cuites : une colonne de quatre texels par os, une ligne par image.
+   Le shader y lit la matrice de l'os, donc des milliers d'hommes peuvent jouer
+   des animations différentes en un seul appel de dessin. */
+async function chargerPoses(){
+  try{
+    const [sq,bin]=await Promise.all([
+      fetch('assets/anim/squelette.json').then(r=>r.ok?r.json():Promise.reject(r.status)),
+      fetch('assets/anim/poses.bin').then(r=>r.ok?r.arrayBuffer():Promise.reject(r.status))
+    ]);
+    const t=new THREE.DataTexture(new Float32Array(bin), sq.largeur, sq.hauteur, THREE.RGBAFormat, THREE.FloatType);
+    t.minFilter=t.magFilter=THREE.NearestFilter;  /* on interpole nous-mêmes entre deux images */
+    t.generateMipmaps=false; t.needsUpdate=true;
+    RES.poses=t; RES.sq=sq;
+    RES.clip={}; for(const c of sq.clips) RES.clip[c.nom]=c;
+  }catch(e){
+    /* Sans la cuisson, on fabrique une pose unique faite d'identités : les
+       hommes restent en T, mais rien ne casse et le message est clair. */
+    console.warn('poses absentes (lance outils/cuire.sh) — les hommes resteront en T :',e);
+    const nOs=20, largeur=nOs*4, d=new Float32Array(largeur*4);
+    for(let b=0;b<nOs;b++){ const o=b*16; d[o]=1; d[o+5]=1; d[o+10]=1; d[o+15]=1; }
+    const t=new THREE.DataTexture(d,largeur,1,THREE.RGBAFormat,THREE.FloatType);
+    t.minFilter=t.magFilter=THREE.NearestFilter; t.generateMipmaps=false; t.needsUpdate=true;
+    RES.poses=t;
+    RES.sq={ os:[], largeur, hauteur:1, ips:30, clips:[{nom:'repos',ligne0:0,images:1,duree:1}] };
+    RES.clip={ idle:RES.sq.clips[0] };
+  }
+}
 
 /* La brume doit avoir la couleur du ciel qu'on lui a donné, sinon le lointain
    se décolle du fond. On relève donc la bande d'horizon du panorama. */
@@ -55,7 +83,7 @@ function chargerRessources(sc, pret, avance){
     pm.dispose();
   });
 
-  gest.onLoad=()=>{ RES.pret=true; pret(); };
+  gest.onLoad=()=>{ chargerPoses().then(()=>{ RES.pret=true; pret(); }); };
   gest.onError=(u)=>{ console.warn('ressource manquante :',u); };
 }
 

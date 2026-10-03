@@ -150,9 +150,28 @@ mégaoctets de ciels et de sols ne le sont pas.
 |---|---|---|
 | 3 ciels HDRI 2k | [Poly Haven](https://polyhaven.com) | CC0 |
 | 2 sols PBR 2k (couleur, normales, ARM) | Poly Haven | CC0 |
-| three.js r169 + modules | [mrdoob/three.js](https://github.com/mrdoob/three.js) | MIT |
+| squelette et animations (X Bot Mixamo) | [mrdoob/three.js](https://github.com/mrdoob/three.js) | redistribué par three.js |
+| three.js r169 + modules | mrdoob/three.js | MIT |
 
-    ./fetch-assets.sh     # ~30 Mo, à ne lancer qu'une fois
+    ./fetch-assets.sh     # ~36 Mo, à ne lancer qu'une fois
+
+### Les hommes bougent sur du mouvement capturé
+
+Ils ne pivotent plus autour de points posés à la main : chaque pièce est attachée à l'un des
+vingt os du squelette Mixamo, et c'est un acteur qui donne la pose.
+
+Mais quatre mille squelettes, aucun processeur ne les calcule par image. Les poses sont donc
+**cuites dans une texture** : une colonne de quatre texels par os, une ligne par image de
+chaque clip. Le sommet y lit la matrice de son os selon le clip et l'avancement de son
+homme — un seul appel de dessin pour toute l'armée, et chacun entre dans le cycle à son heure.
+
+    ./serve.sh &          # la cuisson lit les fichiers par le réseau
+    ./outils/cuire.sh     # → assets/anim/poses.bin + squelette.json
+
+La cuisson passe par Chromium sans fenêtre : les lecteurs FBX et glTF n'existent qu'en
+JavaScript. Elle reprend tout `.fbx` déposé dans `assets/anim/`, ce qui permet d'ajouter des
+clips Mixamo (`Sword And Shield Slash`, `Block Idle`, `Death`…) sans toucher au code. En
+attendant, l'estoc et la garde restent des rotations calculées, posées par-dessus la pose.
 
 ## Lancer
 

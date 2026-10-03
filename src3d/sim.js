@@ -94,6 +94,7 @@ function creerSignum(u, aigle){
 
 function deployer(sc){
   M.sc=sc;
+  initPoses();
   const lp=modeleLegionnaire(false), ll=modeleLoin(false);
   M.armees.cesar=new Armee(lp, ll, 2400, 1);
   M.armees.pompee=new Armee(lp, ll, sc.ennemi==='pompeien'?2600:1, 1);
