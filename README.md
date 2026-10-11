@@ -1,5 +1,11 @@
 # Legio
 
+> **English summary.** Legio is a browser game where you make a career in a Roman legion. You
+> enlist in *Legio X Equestris* in 58 BC and serve under Caesar until Munda: one decision per
+> screen, 54 per playthrough, and your rank decides which options you see. Three battles
+> (Bibracte, Pharsalus, Munda) are also playable in real-time 3D with three.js. The game text
+> is in French.
+
 Moteur de jeu de carrière dans une légion romaine — une campagne par époque.
 
 ## Campagne actuelle — *Legio X Equestris*, 58-45 av. J.-C.
