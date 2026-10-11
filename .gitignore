@@ -4,3 +4,10 @@ archive/reference-chat-dacie.jsx
 # Divers
 *.log
 .DS_Store
+
+# Ressources graphiques téléchargées depuis Poly Haven (CC0) — ./fetch-assets.sh les reprend
+assets/
+# Page de test générée pour les captures automatiques
+auto.html
+ancien.html
+test-ombre.html

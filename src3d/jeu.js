@@ -12,16 +12,24 @@ const $=(id)=>document.getElementById(id);
 
 /* ---------- lancement ---------- */
 function demarrer(id, rang, st, nom, camp){
-  SCN=SCENARIOS[id]; ETAT='brief';
+  SCN=SCENARIOS[id]; ETAT='chargement';
   J.rang=rang; J.role=RANGS[rang].p; J.st=st; J.nom=nom; J.camp=camp;
   J.pv=J.pv0=Math.max(25,st.valetudo); J.pila=2;
   $('menu').hidden=true;
-  initMonde(SCN); deployer(SCN); M.cx0=0; M.cz0=0;
-  placerJoueur();
-  reconstruireGrille();
-  ecrireRendu();
-  montrerBrief();
-  requestAnimationFrame(boucle);
+  /* le ciel et les sols sont des photographies : il faut les attendre */
+  $('brief').innerHTML=`<div class="carte"><div class="sur">${SCN.an} av. J.-C. · ${SCN.lieu}</div>
+    <h1>${SCN.n}</h1><p>On dresse le terrain…</p>
+    <div class="jg"><div class="jg-b"><i id="chg" style="width:4%"></i></div></div></div>`;
+  $('brief').hidden=false;
+  chargerRessources(SCN, ()=>{
+    ETAT='brief';
+    initMonde(SCN); deployer(SCN); M.cx0=0; M.cz0=0;
+    placerJoueur();
+    reconstruireGrille();
+    ecrireRendu();
+    montrerBrief();
+    requestAnimationFrame(boucle);
+  }, (p)=>{ const b=$('chg'); if(b) b.style.width=Math.round(4+p*96)+'%'; });
 }
 function placerJoueur(){
   const coh=M.unites.filter(u=>u.side==='R'&&u.legion===0);
@@ -199,8 +207,12 @@ function majJoueur(dt){
 /* ---------- l'arme en main ---------- */
 function construireArmes(){
   const g=new THREE.Group();
-  const rouge=new THREE.MeshLambertMaterial({color:0x8E2016, side:THREE.DoubleSide}), bronze=new THREE.MeshLambertMaterial({color:0xA07E3C}),
-        fer=new THREE.MeshLambertMaterial({color:0xC8C8CC}), cuir=new THREE.MeshLambertMaterial({color:0x4A321C}), peau=new THREE.MeshLambertMaterial({color:0xB98A66});
+  /* Ce sont les deux objets que le joueur a sous le nez en permanence : c'est là
+     que la matière doit se voir. Le bronze et le fer sont des métaux — ils
+     réfléchissent le ciel ; la planche peinte et le cuir ne réfléchissent rien. */
+  const M_=(c,r,me,d)=>ombre(new THREE.MeshStandardMaterial({color:c, roughness:r, metalness:me, side:d?THREE.DoubleSide:THREE.FrontSide}));
+  const rouge=M_(0x8E2016,.78,0,true), bronze=M_(0xA07E3C,.34,.95),
+        fer=M_(0xC8C8CC,.22,.95), cuir=M_(0x4A321C,.86,0), peau=M_(0xB98A66,.72,0);
   const bouclier=new THREE.Group();
   const sc=new THREE.Mesh(new THREE.CylinderGeometry(.62,.62,1.06,16,1,true,Math.PI-.56,1.12),rouge); sc.position.z=.62; bouclier.add(sc);
   const um=new THREE.Mesh(new THREE.SphereGeometry(.08,10,8),bronze); um.position.z=-.01; bouclier.add(um);
@@ -259,7 +271,8 @@ function majCamera(dt){
     camera.position.set(s.x+rand(-sh,sh), s.y+h+rand(-sh,sh), s.z+rand(-sh,sh));
     camera.rotation.order='YXZ'; camera.rotation.set(J.pitch, J.yaw+Math.PI, J.mort?Math.min(1,J.tMort)*.9:0);
   }
-  camera.userData.ciel.position.copy(camera.position);
+  /* le dôme peint suivait l'œil ; le panorama HDRI, lui, est déjà à l'infini */
+  if(camera.userData.ciel) camera.userData.ciel.position.copy(camera.position);
 }
 
 /* ---------- commandement : la vue d'ensemble ---------- */
@@ -409,7 +422,8 @@ function boucle(now){
   if(J.role!=='superieur'){ majArmes(dt); }
   if(!(ETAT==='brief'&&J.role!=='superieur')) majCamera(dt);
   if(ETAT==='jeu') majHUD();
-  renderer.render(scene,camera);
+  csm.update();
+  composer.render();
 }
 
 /* ---------- briefing ---------- */
@@ -517,4 +531,6 @@ function menu(){
   };
   rendreMenu();
 }
-addEventListener('DOMContentLoaded', menu);
+/* acies.js est injecté par le module qui charge three.js : quand il s'exécute,
+   DOMContentLoaded est déjà passé. */
+if(document.readyState==='loading') addEventListener('DOMContentLoaded', menu); else menu();

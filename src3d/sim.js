@@ -76,7 +76,9 @@ function avant(u){ return { x:Math.sin(u.yaw), z:Math.cos(u.yaw) }; }
 /* enseignes : un signum par cohorte, l'aigle sur la première */
 function creerSignum(u, aigle){
   const g=new THREE.Group();
-  const bois=new THREE.MeshLambertMaterial({color:0x4A3420}), or=new THREE.MeshLambertMaterial({color:0xC9A13A}), pourpre=new THREE.MeshLambertMaterial({color:u.side==='R'?0x8E1A12:0x2E4A7A, side:THREE.DoubleSide});
+  const bois=ombre(new THREE.MeshStandardMaterial({color:0x4A3420, roughness:.9, metalness:0}));
+  const or=ombre(new THREE.MeshStandardMaterial({color:0xC9A13A, roughness:.26, metalness:1}));
+  const pourpre=ombre(new THREE.MeshStandardMaterial({color:u.side==='R'?0x8E1A12:0x2E4A7A, roughness:.82, metalness:0, side:THREE.DoubleSide}));
   const hampe=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,3.4,6),bois); hampe.position.y=1.7; g.add(hampe);
   if(aigle){
     const a=new THREE.Mesh(new THREE.ConeGeometry(.12,.3,6),or); a.position.y=3.55; g.add(a);
@@ -92,6 +94,7 @@ function creerSignum(u, aigle){
 
 function deployer(sc){
   M.sc=sc;
+  initPoses();
   const lp=modeleLegionnaire(false), ll=modeleLoin(false);
   M.armees.cesar=new Armee(lp, ll, 2400, 1);
   M.armees.pompee=new Armee(lp, ll, sc.ennemi==='pompeien'?2600:1, 1);

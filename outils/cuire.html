@@ -1,0 +1,136 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>cuisson</title></head><body>
+<pre id="log">…</pre><div id="json" hidden></div><div id="bin" hidden></div>
+<script>
+window.__L=[];
+window.dire=function(s){ __L.push(s); document.getElementById('log').textContent=__L.join('\n'); };
+addEventListener('error',e=>dire('ERREUR '+(e.message||e)),true);
+addEventListener('unhandledrejection',e=>dire('REJET '+e.reason+'\n'+((e.reason&&e.reason.stack)||'')));
+</script>
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.min.js", "three/addons/": "../vendor/addons/" } }
+</script>
+<script type="module">
+/* ============================================================
+   Cuit les animations en une texture de matrices d'os.
+   Entrée  : les .glb / .fbx déposés dans assets/anim/
+   Sortie  : poses.bin (Float32, RGBA) + squelette.json, recrachés
+             en base64 dans la page — c'est le script appelant qui
+             les écrit sur le disque.
+   ============================================================ */
+const IPS=30;
+
+/* Les os qu'on garde. Le reste — doigts, orteils, yeux — ne porte
+   aucune pièce de notre légionnaire et coûterait de la texture. */
+const OS=['Hips','Spine','Spine1','Spine2','Neck','Head',
+  'LeftShoulder','LeftArm','LeftForeArm','LeftHand',
+  'RightShoulder','RightArm','RightForeArm','RightHand',
+  'LeftUpLeg','LeftLeg','LeftFoot',
+  'RightUpLeg','RightLeg','RightFoot'];
+
+try{
+const THREE=await import('three');
+const { GLTFLoader }=await import('three/addons/GLTFLoader.js');
+const { FBXLoader }=await import('three/addons/FBXLoader.js');
+dire('three '+THREE.REVISION);
+
+const q=new URLSearchParams(location.search);
+const base=q.get('base')||'Xbot.glb';
+const extras=(q.get('clips')||'').split(',').filter(Boolean);
+
+const charger=async(f)=>{
+  const u='../assets/anim/'+f;
+  if(/\.fbx$/i.test(f)){ const o=await new FBXLoader().loadAsync(u); return { scene:o, animations:o.animations }; }
+  const g=await new GLTFLoader().loadAsync(u); return { scene:g.scene, animations:g.animations };
+};
+
+const socle=await charger(base);
+socle.scene.updateMatrixWorld(true);
+
+/* le squelette, et la correspondance nom court -> os */
+let sk=null; socle.scene.traverse(o=>{ if(o.isSkinnedMesh && !sk) sk=o; });
+if(!sk) socle.scene.traverse(o=>{ if(o.isBone && !sk) sk={ skeleton:{ bones:null } }; });
+const tousOs=[]; socle.scene.traverse(o=>{ if(o.isBone) tousOs.push(o); });
+const court=(n)=>n.replace(/^mixamorig[:_]?/i,'');
+const trouve=(n)=>tousOs.find(b=>court(b.name)===n);
+const os=OS.map(trouve);
+const manquants=OS.filter((n,i)=>!os[i]);
+if(manquants.length) throw new Error('os absents : '+manquants.join(', '));
+
+/* échelle : on ramène le modèle à 1,80 m s'il est en centimètres */
+const bb=new THREE.Box3().setFromObject(socle.scene);
+const haut=bb.max.y-bb.min.y;
+const ech= haut>10 ? 1.8/haut : 1;
+dire(`socle ${base} · hauteur ${haut.toFixed(3)} · échelle ${ech.toFixed(4)}`);
+
+/* pose de liaison : on la relève AVANT toute animation */
+socle.scene.updateMatrixWorld(true);
+const liaisonInv=os.map(b=>b.matrixWorld.clone().invert());
+const reposMonde=os.map(b=>new THREE.Vector3().setFromMatrixPosition(b.matrixWorld).multiplyScalar(ech));
+
+/* tous les clips : ceux du socle, plus un par fichier supplémentaire */
+const clips=[];
+for(const c of socle.animations) clips.push({ nom:c.name, clip:c });
+for(const f of extras){
+  const o=await charger(f);
+  for(const c of o.animations){
+    const nom=f.replace(/\.(glb|fbx)$/i,'').replace(/[ _]+/g,'-').toLowerCase();
+    clips.push({ nom, clip:c });
+  }
+}
+if(!clips.length) throw new Error('aucun clip');
+
+const mixer=new THREE.AnimationMixer(socle.scene);
+const nOs=os.length, largeur=nOs*4;
+const lignes=[], meta=[];
+const M=new THREE.Matrix4(), hips=os[0];
+
+for(const {nom,clip} of clips){
+  const n=Math.max(1,Math.round(clip.duration*IPS));
+  const action=mixer.clipAction(clip);
+  mixer.stopAllAction(); action.reset().play();
+  const ligne0=lignes.length;
+  let ancre=null;
+  for(let i=0;i<n;i++){
+    mixer.setTime(i/IPS);
+    socle.scene.updateMatrixWorld(true);
+    /* sur place : on retire la dérive horizontale du bassin, pour que
+       ce soit la simulation qui déplace l'homme, pas le clip. */
+    const h=new THREE.Vector3().setFromMatrixPosition(hips.matrixWorld);
+    if(i===0) ancre=h.clone();
+    const dx=h.x-ancre.x, dz=h.z-ancre.z;
+    const ligne=new Float32Array(largeur*4);
+    for(let b=0;b<nOs;b++){
+      M.multiplyMatrices(os[b].matrixWorld, liaisonInv[b]);
+      const e=M.elements;
+      /* mise à l'échelle et recentrage portent sur la translation seule */
+      const tx=(e[12]-dx)*ech, ty=e[13]*ech, tz=(e[14]-dz)*ech;
+      const o=b*16;
+      ligne[o+0]=e[0]; ligne[o+1]=e[1]; ligne[o+2]=e[2];  ligne[o+3]=0;
+      ligne[o+4]=e[4]; ligne[o+5]=e[5]; ligne[o+6]=e[6];  ligne[o+7]=0;
+      ligne[o+8]=e[8]; ligne[o+9]=e[9]; ligne[o+10]=e[10];ligne[o+11]=0;
+      ligne[o+12]=tx;  ligne[o+13]=ty;  ligne[o+14]=tz;   ligne[o+15]=1;
+    }
+    lignes.push(ligne);
+  }
+  meta.push({ nom, ligne0, images:n, duree:n/IPS });
+  dire(`  ${nom.padEnd(22)} ${n} images`);
+}
+
+/* un seul tampon : largeur*4 flottants par ligne */
+const hauteur=lignes.length;
+const buf=new Float32Array(largeur*4*hauteur);
+lignes.forEach((l,i)=>buf.set(l,i*largeur*4));
+
+const o8=new Uint8Array(buf.buffer);
+let s=''; const pas=0x8000;
+for(let i=0;i<o8.length;i+=pas) s+=String.fromCharCode.apply(null,o8.subarray(i,i+pas));
+document.getElementById('bin').textContent=btoa(s);
+document.getElementById('json').textContent=JSON.stringify({
+  os:OS, largeur, hauteur, ips:IPS, clips:meta,
+  repos:reposMonde.map(v=>[+v.x.toFixed(5),+v.y.toFixed(5),+v.z.toFixed(5)])
+});
+dire(`texture ${largeur}×${hauteur} · ${(buf.byteLength/1024).toFixed(0)} Ko · ${meta.length} clips`);
+dire('(fini)');
+document.title='fini';
+}catch(e){ dire('EXCEPTION '+e.message+'\n'+(e.stack||'')); document.title='erreur'; }
+</script></body></html>
