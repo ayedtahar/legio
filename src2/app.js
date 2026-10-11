@@ -137,6 +137,10 @@ function choisir(i){
   if(et.cache||et.verrou) return;
   let res=o.res, ok=true, parie=false;
   if(o.check){ parie=true; ok=(S.s[o.check.s]+rnd(26))>=o.check.dc; res=ok?o.ok:o.ko; }
+  appliquer(ev, o.t, res, parie, ok);
+}
+/* applique un résultat à la carrière — commun aux choix et aux batailles jouées en temps réel */
+function appliquer(ev, libelle, res, parie, ok){
   const e=res.e||{}, notes=[], avant={...S.s};
   STATS.forEach(st=>{ if(!e[st.k]) return;
     let d=e[st.k]; if(d>0&&st.k!=='valetudo') d=attenuer(S.s[st.k],d);
@@ -154,7 +158,7 @@ function choisir(i){
   if(e.peculium) eff.push({c:e.peculium>0?'gain':'perte', i:'nummus', t:`${e.peculium>0?'+':''}${e.peculium} deniers`});
   eff.push(...notes);
 
-  S.log.push({ y:annee(), t:`${ev.t} — ${o.t}` });
+  S.log.push({ y:annee(), t:`${ev.t} — ${libelle}` });
   if(!S.vus.includes(ev.t)) S.vus.push(ev.t);
   if(ev.nota && !S.notas.some(n=>n.t===ev.t)) S.notas.push({ t:ev.t, x:ev.nota, y:annee() });
 
@@ -319,9 +323,26 @@ function ecranCastra(){
       ${ev.vue&&ev.vue[portee()]?`<div class="vue">
         <b>${icone('scutum')}Ce que tu vois — ${PORTEE_N[portee()].n}</b>
         <span>${esc(ev.vue[portee()])}</span></div>`:''}
-      ${r?blocResultat(r):blocChoix(ev)}
+      ${r?blocResultat(r):(ACIES[ev.t]?blocAcies(ev):'')+blocChoix(ev)}
     </div>
   </div>`;
+}
+/* batailles jouables en temps réel (bataille.html) */
+const ACIES={ 'Bibracte':'bibracte', 'Pharsale — la quatrième ligne':'pharsale', 'Munda':'munda' };
+function blocAcies(ev){
+  return `<button class="acies-b" onclick="sauver();location.href='bataille.html?b=${ACIES[ev.t]}&camp=1'">
+    <div class="medaille">${icone('gladius')}</div>
+    <div class="ch-c"><div class="ch-t">Combattre en temps réel</div>
+      <div class="ch-note">Entre dans la bataille en 3D, à ta place de ${esc(RANKS[S.rank].n)} : ${esc(PORTEE_N[portee()].vue)}.</div>
+      <div class="puces"><span class="puce perte">${icone('gladius')}on peut y mourir</span></div></div>
+    <div class="ch-fl">›</div></button>
+    <div class="acies-ou">ou décider en un geste</div>`;
+}
+function retourAcies(){
+  let r=null; try{ r=JSON.parse(localStorage.getItem('legio_acies_res')); localStorage.removeItem('legio_acies_res'); }catch(e){}
+  if(!r||!S||S.fin||V.res) return;
+  const ev=evenement(); if(!ev||ev.t!==r.ev) return;
+  appliquer(ev, `Combattu en ligne — ${r.issue}`, { r:r.recit, e:r.e }, false, true);
 }
 function blocChoix(ev){
   return `<div class="choix">${ev.o.map((o,i)=>{
@@ -501,6 +522,10 @@ function ecranIntro(){
     ${sv&&!sv.fin?`<div class="cta-w" style="margin-left:0;margin-right:0;">
       <button class="cta sombre" onclick="S=charger();V.onglet='castra';rendre()">Reprendre la partie en cours</button></div>`:''}
     <p class="hint" style="margin-top:14px;">La partie se sauvegarde dans ce navigateur.</p>
+  </div></div>
+  <div class="cadre guerre"><div class="cadre-t">Acies</div><div class="cadre-b">
+    <p class="ev-x" style="margin-top:0;">Une bataille en temps réel, en trois dimensions : des milliers d’hommes sur le terrain. Légionnaire, tu combats au premier rang ; centurion, ta cohorte manœuvre à ta voix ; primipile, tu disposes de la légion.</p>
+    <div class="cta-w" style="margin-left:0;margin-right:0;">${icone('gladius')}<button class="cta" onclick="location.href='bataille.html'">Entrer dans une bataille</button>${icone('gladius')}</div>
   </div></div>`;
 }
 
@@ -556,5 +581,6 @@ function ecranFin(){
 
 window.addEventListener('DOMContentLoaded',()=>{
   const s=charger(); if(s&&!s.fin) S=s;
+  if(S) retourAcies();
   rendre();
 });
