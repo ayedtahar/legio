@@ -1,0 +1,148 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Legio — Acies</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>:root{ --or:#C79A45; --or-vif:#E8CB7C; --or-clair:#F2DFA6; --or-nuit:#4A3A1E; --gris:#9C8C6E; --gris-2:#6E6249; --rouge:#C4544A; --vert:#7FB05A;
+  --caps:'Cinzel',Georgia,serif; --prose:'EB Garamond',Georgia,serif; --data:'IBM Plex Mono',ui-monospace,monospace; }
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;overflow:hidden;background:#080706;color:#E9DDC2;font-family:var(--prose);}
+#scene{position:fixed;inset:0;}
+#scene canvas{display:block;}
+button{font-family:inherit;cursor:pointer;}
+kbd{font-family:var(--data);font-size:11px;padding:1px 6px;border:1px solid #7A6031;border-radius:3px;color:var(--or-vif);background:#0E0B07;}
+
+/* écrans : menu, briefing, pause, fin */
+.ecran{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:16px;overflow:auto;
+  background:radial-gradient(ellipse at center,rgba(20,12,8,.55),rgba(8,6,4,.92));}
+.ecran[hidden]{display:none;}
+#menu{background:radial-gradient(ellipse at 50% 30%,#3A1414,#0B0806 70%);}
+.carte{width:min(640px,100%);padding:26px 26px 22px;border:1px solid var(--or-nuit);border-radius:3px;
+  background:linear-gradient(180deg,rgba(30,25,19,.96),rgba(18,14,10,.97));box-shadow:0 12px 40px rgba(0,0,0,.7),inset 0 1px 0 rgba(242,223,166,.08);}
+.carte .sur{font-family:var(--caps);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gris);}
+.carte h1{margin:6px 0 12px;font-family:var(--caps);font-size:40px;letter-spacing:.1em;font-weight:700;
+  background:linear-gradient(180deg,#F7E7B8,#D3AE5C 55%,#EBD69B);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.carte h1.defaite,.carte h1.tombe{background:linear-gradient(180deg,#F0B5A8,#C4544A 60%,#8E2F27);-webkit-background-clip:text;background-clip:text;}
+.carte h1.indecis{background:linear-gradient(180deg,#D9CBA9,#9C8C6E);-webkit-background-clip:text;background-clip:text;}
+.carte p{font-size:17.5px;line-height:1.55;color:#DCCDAA;margin:0 0 14px;}
+.carte ul{margin:0 0 16px;padding:12px 14px 12px 30px;border:1px solid rgba(122,96,49,.3);background:rgba(0,0,0,.25);font-size:15px;line-height:1.9;color:var(--gris);}
+.carte ul b{color:var(--or-vif);font-weight:600;}
+.carte .role{margin:0 0 14px;padding:10px 13px;border-left:3px solid var(--or);background:rgba(199,154,69,.07);}
+.carte .role b{display:block;font-family:var(--caps);font-size:14px;letter-spacing:.08em;color:var(--or-vif);}
+.carte .role span{font-size:15.5px;color:var(--gris);font-style:italic;}
+.carte .avert{font-size:14.5px;color:#E2A497;font-style:italic;}
+.carte > button{width:100%;margin-top:8px;padding:14px;border-radius:3px;border:1px solid var(--or);
+  background:linear-gradient(180deg,#8E2F27,#5E1B16);color:#F7E7B8;font-family:var(--caps);font-size:16px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  box-shadow:inset 0 1px 0 rgba(242,223,166,.28),0 3px 10px rgba(0,0,0,.6);}
+.carte > button:hover{filter:brightness(1.15);}
+.carte > button.sombre{background:linear-gradient(180deg,#2E2618,#191309);border-color:#7A6031;color:var(--or-vif);}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:4px 0 8px;}
+.grades button{padding:10px 4px;border:1px solid var(--or-nuit);border-radius:3px;background:rgba(0,0,0,.3);color:inherit;}
+.grades button b{display:block;font-family:var(--caps);font-size:12px;color:#E7D7B0;}
+.grades button span{display:block;margin-top:3px;font-size:12.5px;color:var(--gris-2);font-style:italic;}
+.grades button.on{border-color:var(--or);background:linear-gradient(180deg,#7A2222,#4A1212);}
+.role-d{font-size:15px!important;color:var(--gris)!important;font-style:italic;}
+.batailles{display:flex;flex-direction:column;gap:8px;margin:6px 0 14px;}
+.batailles button{text-align:left;padding:13px 15px;border:1px solid var(--or-nuit);border-radius:3px;color:inherit;
+  background:linear-gradient(180deg,rgba(46,37,23,.75),rgba(22,18,13,.9));transition:.14s;}
+.batailles button:hover{border-color:var(--or);transform:translateY(-1px);}
+.batailles b{display:block;font-family:var(--caps);font-size:17px;color:#EFDFB6;letter-spacing:.04em;}
+.batailles span{display:block;font-size:14.5px;color:var(--gris-2);font-style:italic;margin-top:2px;}
+.batailles em{display:block;font-family:var(--data);font-size:10.5px;color:var(--gris);font-style:normal;margin-top:5px;text-transform:uppercase;letter-spacing:.06em;}
+.retour{display:inline-block;font-family:var(--caps);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gris);text-decoration:none;}
+.retour:hover{color:var(--or);}
+.bilan{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));border:1px solid var(--or-nuit);margin:4px 0 14px;}
+.bilan div{padding:10px 6px;text-align:center;border-right:1px solid rgba(122,96,49,.25);border-bottom:1px solid rgba(122,96,49,.25);}
+.bilan b{display:block;font-family:var(--caps);font-size:22px;color:#F1E2BE;}
+.bilan span{font-size:12.5px;color:var(--gris-2);font-style:italic;}
+.eff{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+.eff span{font-family:var(--data);font-size:11px;padding:4px 9px;border:1px solid currentColor;border-radius:2px;}
+.eff .g{color:var(--vert);} .eff .p{color:var(--rouge);}
+
+/* HUD */
+.hud{position:fixed;inset:0;z-index:10;pointer-events:none;}
+.hud .haut{position:absolute;left:14px;top:12px;display:flex;gap:14px;align-items:center;
+  font-family:var(--caps);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--or-clair);text-shadow:0 1px 3px #000;}
+#temps{font-family:var(--data);letter-spacing:0;color:#F7E7B8;}
+#forces{font-family:var(--data);font-size:12px;letter-spacing:0;}
+#forces i{display:inline-block;width:9px;height:9px;margin:0 4px 0 8px;vertical-align:-1px;}
+#forces i.r{background:#C4443A;} #forces i.e{background:#B8A88A;}
+#cris{position:absolute;left:50%;top:14px;transform:translateX(-50%);width:min(560px,92vw);display:flex;flex-direction:column;align-items:center;gap:6px;}
+.cri{padding:7px 16px;text-align:center;background:linear-gradient(90deg,transparent,rgba(12,8,5,.78) 15%,rgba(12,8,5,.78) 85%,transparent);transition:opacity 1.4s;}
+.cri b{display:block;font-family:var(--caps);font-size:19px;letter-spacing:.1em;color:#F7E7B8;text-shadow:0 0 12px rgba(199,154,69,.5);}
+.cri span{display:block;font-size:15.5px;color:#DCCDAA;font-style:italic;}
+.cri.fort b{color:#FFB8A8;}
+.cri.vieux{opacity:0;}
+.bas{position:absolute;left:14px;bottom:14px;width:260px;padding:10px 12px;background:rgba(12,8,5,.62);border:1px solid rgba(122,96,49,.45);border-radius:3px;}
+.jg{margin-bottom:7px;}
+.jg-t{display:flex;justify-content:space-between;font-family:var(--caps);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gris);}
+.jg-t b{font-family:var(--data);letter-spacing:0;color:#F1E2BE;font-weight:500;}
+.jg-b{height:7px;margin-top:3px;background:#0A0806;border:1px solid var(--or-nuit);border-radius:3px;overflow:hidden;}
+.jg-b i{display:block;height:100%;transition:width .2s;}
+#pv{background:linear-gradient(180deg,#9FD07A,#5F8C41);} #st{background:linear-gradient(180deg,#8FB4DE,#4A6E99);} #moral{background:linear-gradient(180deg,#EDCE86,#B0842F);}
+.ligne-b{display:flex;justify-content:space-between;font-family:var(--caps);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gris);margin-top:2px;}
+.ligne-b b{font-family:var(--data);letter-spacing:.1em;color:var(--or-vif);font-weight:500;}
+#reticule{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:rgba(242,223,166,.7);box-shadow:0 0 0 1px rgba(0,0,0,.5);}
+#marque{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border:2px solid;border-radius:50%;opacity:0;}
+#marque.ok{border-color:#FFDFA0;} #marque.ko{border-color:#8C8070;}
+#marque.on{animation:marque .35s ease-out;}
+@keyframes marque{0%{opacity:1;transform:scale(.6)}100%{opacity:0;transform:scale(1.5)}}
+#flash{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 35%,rgba(150,20,10,.85));opacity:0;}
+#mini{position:absolute;right:14px;bottom:14px;width:180px;height:180px;border:1px solid rgba(122,96,49,.6);border-radius:3px;}
+#aide{position:absolute;right:14px;top:12px;max-width:420px;padding:8px 12px;background:rgba(12,8,5,.7);border:1px solid rgba(122,96,49,.45);font-size:14px;color:var(--gris);display:none;}
+#aide.on{display:block;} #aide ul{margin:0;padding-left:16px;line-height:1.8;}
+.indice{position:absolute;right:14px;top:12px;font-family:var(--data);font-size:11px;color:var(--gris-2);}
+#aide.on + .indice{display:none;}
+.hud.chef .fps-seul{display:none;} .hud.fps .chef-seul{display:none;}
+#labels .lab{position:absolute;transform:translate(-50%,-100%);padding:2px 6px 4px;min-width:34px;text-align:center;background:rgba(12,8,5,.7);border:1px solid rgba(122,96,49,.5);border-radius:2px;}
+#labels .lab b{display:block;font-family:var(--caps);font-size:11px;color:#EFDFB6;letter-spacing:.06em;}
+#labels .lab span{display:block;font-size:12px;color:var(--gris);font-style:italic;}
+#labels .lab i{display:block;height:3px;margin-top:3px;background:linear-gradient(90deg,#B0842F,#EDCE86);}
+#labels .lab.sel{border-color:#F2DFA6;box-shadow:0 0 10px rgba(242,223,166,.35);}
+#labels .lab.fuite{opacity:.5;}
+#labels .lab.e{min-width:40px;padding:2px;background:rgba(12,8,5,.5);}
+#labels .lab.e i{margin:0;background:linear-gradient(90deg,#7E3229,#C77A6E);}
+#selinfo{position:absolute;left:14px;bottom:14px;padding:8px 12px;background:rgba(12,8,5,.62);border:1px solid rgba(122,96,49,.45);font-family:var(--caps);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--or-clair);}
+@media(max-width:700px){ #mini{width:120px;height:120px;} .bas{width:200px;} .carte h1{font-size:32px;} .grades{grid-template-columns:repeat(2,1fr);} }
+</style></head><body>
+<div id="scene"></div>
+<div id="hud" class="hud">
+  <div class="haut"><span id="nomb"></span><span id="temps">0:00</span><span id="forces"></span></div>
+  <div id="cris"></div>
+  <div id="flash" class="fps-seul"></div>
+  <div id="reticule" class="fps-seul"></div><div id="marque"></div>
+  <div class="bas fps-seul">
+    <div class="jg"><div class="jg-t"><span>Valetudo</span><b id="pvn">100</b></div><div class="jg-b"><i id="pv"></i></div></div>
+    <div class="jg"><div class="jg-t"><span>Souffle</span></div><div class="jg-b"><i id="st"></i></div></div>
+    <div class="jg"><div class="jg-t"><span>Ta cohorte</span><b id="ordre"></b></div><div class="jg-b"><i id="moral"></i></div></div>
+    <div class="ligne-b"><span>Pila</span><b id="pila">▮▮</b></div>
+  </div>
+  <div id="labels" class="chef-seul"></div>
+  <div id="selinfo" class="chef-seul"></div>
+  <canvas id="mini" width="360" height="360"></canvas>
+  <div id="aide"></div><div class="indice">H : aide</div>
+</div>
+<div id="menu" class="ecran"></div>
+<div id="brief" class="ecran" hidden></div>
+<div id="pause" class="ecran" hidden><div class="carte"><div class="sur">Pause</div><h1>Quies</h1><p>La bataille attend.</p><button onclick="pause(false)">Reprendre</button><button class="sombre" onclick="location.href=location.pathname">Quitter la bataille</button></div></div>
+<div id="fin" class="ecran" hidden></div>
+
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }
+</script>
+<script type="module">
+/* three.js r169 — MIT, voir vendor/three.LICENSE */
+import * as THREE from 'three';
+import { RGBELoader }      from 'three/addons/RGBELoader.js';
+import { GLTFLoader }      from 'three/addons/GLTFLoader.js';
+import { CSM }             from 'three/addons/CSM.js';
+import { EffectComposer }  from 'three/addons/EffectComposer.js';
+import { RenderPass }      from 'three/addons/RenderPass.js';
+import { ShaderPass }      from 'three/addons/ShaderPass.js';
+import { OutputPass }      from 'three/addons/OutputPass.js';
+import { UnrealBloomPass } from 'three/addons/UnrealBloomPass.js';
+import { SSAOPass }        from 'three/addons/SSAOPass.js';
+import { FXAAShader }      from 'three/addons/FXAAShader.js';
+Object.assign(window,{ THREE, RGBELoader, GLTFLoader, CSM, EffectComposer, RenderPass,
+                       ShaderPass, OutputPass, UnrealBloomPass, SSAOPass, FXAAShader });
+const s=document.createElement('script'); s.src='./acies.js'; document.body.appendChild(s);
+</script>
+</body></html>

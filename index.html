@@ -1,0 +1,2452 @@
+<title>Legio X Equestris</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --noir:#0C0A08;
+  --panel:#16120D;
+  --panel-2:#1E1913;
+  --panel-3:#272016;
+  --velours:#6B1E1E;
+  --velours-2:#421010;
+  --or:#C79A45;
+  --or-clair:#F2DFA6;
+  --or-vif:#E8CB7C;
+  --or-sombre:#7A6031;
+  --or-nuit:#4A3A1E;
+  --ivoire:#E9DDC2;
+  --gris:#9C8C6E;
+  --gris-2:#6E6249;
+  --vert:#7FB05A;
+  --rouge:#C4544A;
+  --rouge-fonce:#8E2F27;
+
+  --caps:'Cinzel',Georgia,serif;
+  --prose:'EB Garamond',Georgia,serif;
+  --data:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;background:#080706;color:var(--ivoire);
+  font-family:var(--prose);font-size:17px;line-height:1.55;
+  min-height:100vh;
+}
+h1,h2,h3{margin:0;font-family:var(--caps);font-weight:700;letter-spacing:.04em;text-wrap:balance;}
+p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+button{font-family:inherit;font-size:inherit;color:inherit;border:0;background:none;cursor:pointer;}
+:focus-visible{outline:2px solid var(--or-vif);outline-offset:2px;}
+::selection{background:var(--velours);color:#F7ECD2;}
+.ic{width:1em;height:1em;fill:currentColor;stroke:currentColor;display:block;flex:none;}
+.ic[stroke-width]{fill:none;}
+
+/* ---------- coque façon application ---------- */
+.app{
+  max-width:470px;margin:0 auto;min-height:100vh;position:relative;
+  background:
+    radial-gradient(ellipse 120% 40% at 50% 0%, rgba(110,30,30,.35), transparent 60%),
+    linear-gradient(180deg,#12100C 0%,#0C0A08 40%,#0A0806 100%);
+  box-shadow:0 0 70px rgba(0,0,0,.8);
+  padding-bottom:96px;
+}
+
+/* ---------- bannière de velours ---------- */
+.banniere{
+  position:relative;padding:16px 16px 14px;text-align:center;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.55)),
+    repeating-linear-gradient(94deg, #7A2222 0 7px, #661C1C 7px 14px, #571818 14px 21px),
+    var(--velours);
+  border-bottom:2px solid var(--or-nuit);
+  box-shadow:inset 0 -14px 26px rgba(0,0,0,.55), 0 4px 14px rgba(0,0,0,.5);
+}
+.banniere::before,.banniere::after{
+  content:'';position:absolute;top:8px;bottom:8px;width:16px;
+  border:1px solid rgba(199,154,69,.35);
+}
+.banniere::before{left:8px;border-right:0;}
+.banniere::after{right:8px;border-left:0;}
+.aigle{font-size:42px;color:var(--or-vif);margin:0 auto 3px;width:42px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.7));}
+.titre{
+  font-family:var(--caps);font-weight:700;font-size:30px;letter-spacing:.11em;line-height:1;
+  background:linear-gradient(180deg,#F7E7B8 0%,#D8B45E 42%,#A87F35 62%,#F0D999 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.55)) drop-shadow(0 2px 5px rgba(0,0,0,.5));
+}
+.sous-titre{
+  margin-top:5px;font-family:var(--caps);font-size:12px;letter-spacing:.34em;
+  color:var(--or);text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.sous-titre::before,.sous-titre::after{content:'';height:1px;width:26px;background:linear-gradient(90deg,transparent,var(--or-sombre));}
+.sous-titre::after{background:linear-gradient(270deg,transparent,var(--or-sombre));}
+.banniere-legende{margin-top:7px;font-size:15px;color:#E4CFA0;font-style:italic;}
+
+/* ---------- cadre orné ---------- */
+.cadre{
+  position:relative;margin:12px;border:1px solid var(--or-nuit);border-radius:3px;
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  box-shadow:inset 0 1px 0 rgba(242,223,166,.09), 0 3px 12px rgba(0,0,0,.5);
+}
+.cadre::before{
+  content:'';position:absolute;inset:3px;border:1px solid rgba(199,154,69,.18);
+  border-radius:2px;pointer-events:none;
+}
+.cadre-t{
+  font-family:var(--caps);font-size:13px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--or);text-align:center;padding:11px 14px 9px;
+  display:flex;align-items:center;justify-content:center;gap:11px;
+}
+.cadre-t::before,.cadre-t::after{content:'◆';font-size:8px;color:var(--or-sombre);}
+.cadre-b{padding:0 15px 15px;}
+
+/* ---------- barre du personnage ---------- */
+.perso{display:flex;align-items:center;gap:12px;padding:13px 14px;}
+.portrait{
+  position:relative;width:66px;height:66px;flex:none;border-radius:50%;
+  background:radial-gradient(circle at 40% 30%,#3A2E1E,#16120D);
+  border:2px solid var(--or-sombre);
+  box-shadow:inset 0 0 14px rgba(0,0,0,.8), 0 0 0 1px rgba(0,0,0,.6), 0 2px 8px rgba(0,0,0,.6);
+  display:grid;place-items:center;color:var(--or-sombre);font-size:34px;
+}
+.grade-ecu{
+  position:absolute;left:-7px;bottom:-5px;width:26px;height:29px;
+  background:linear-gradient(180deg,#8E6B2C,#5C4520);
+  clip-path:polygon(0 0,100% 0,100% 68%,50% 100%,0 68%);
+  display:grid;place-items:center;
+  font-family:var(--caps);font-size:13px;font-weight:700;color:#F7E7B8;
+  border:1px solid var(--or);box-shadow:0 2px 5px rgba(0,0,0,.7);
+}
+.perso-c{flex:1;min-width:0;}
+.perso-n{font-family:var(--caps);font-size:19px;font-weight:700;color:#F3E6C6;line-height:1.15;}
+.perso-g{display:flex;align-items:center;gap:6px;margin-top:3px;font-size:15.5px;color:var(--or-vif);}
+.perso-g .ic{font-size:14px;color:var(--or);}
+.xp{margin-top:7px;display:flex;align-items:center;gap:9px;}
+.xp-b{flex:1;height:9px;border:1px solid var(--or-nuit);border-radius:5px;background:#0A0806;overflow:hidden;box-shadow:inset 0 1px 3px rgba(0,0,0,.8);}
+.xp-b i{display:block;height:100%;background:linear-gradient(180deg,#F0D18A,#B98C36);box-shadow:0 0 8px rgba(199,154,69,.5);transition:width .5s ease;}
+.xp-n{font-family:var(--data);font-size:10.5px;color:var(--gris);white-space:nowrap;}
+
+/* vexillum de la légion */
+.vexille{
+  flex:none;width:56px;padding:7px 4px 0;text-align:center;
+  background:linear-gradient(180deg,#7A2222,#4E1414);
+  border:1px solid var(--or-sombre);
+  clip-path:polygon(0 0,100% 0,100% 78%,50% 100%,0 78%);
+  box-shadow:0 3px 8px rgba(0,0,0,.6);
+}
+.vexille-t{font-family:var(--caps);font-size:8.5px;letter-spacing:.13em;color:var(--or-clair);}
+.vexille .ic{font-size:19px;color:var(--or-vif);margin:2px auto 1px;}
+.vexille-n{font-family:var(--caps);font-size:8px;letter-spacing:.1em;color:var(--or-clair);padding-bottom:7px;}
+
+/* ---------- bandeau des attributs ---------- */
+.attrs{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  margin:0 12px;border:1px solid var(--or-nuit);border-radius:3px;
+  background:linear-gradient(180deg,#221C14,#15110C);
+  box-shadow:inset 0 1px 0 rgba(242,223,166,.07);overflow:hidden;
+}
+.at{padding:9px 6px;text-align:center;border-right:1px solid rgba(122,96,49,.28);border-bottom:1px solid rgba(122,96,49,.28);}
+.at:nth-child(3n){border-right:0;}
+.at:nth-child(n+4){border-bottom:0;}
+.at .ic{font-size:19px;color:var(--or);margin:0 auto 3px;}
+.at-n{font-family:var(--caps);font-size:9px;letter-spacing:.14em;color:var(--gris);text-transform:uppercase;}
+.at-v{font-family:var(--caps);font-size:19px;font-weight:700;color:#F1E2BE;line-height:1.1;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;gap:4px;}
+.at-v small{font-size:11px;}
+.at-v small.up{color:var(--vert);} .at-v small.dn{color:var(--rouge);}
+.at.bas .at-v{color:var(--rouge);} .at.bas .ic{color:var(--rouge);}
+.at.haut .at-v{color:var(--or-clair);}
+
+/* ---------- panneau d'illustration gravé ---------- */
+.grav{
+  position:relative;height:154px;border:1px solid var(--or-nuit);border-radius:2px;overflow:hidden;
+  background:
+    radial-gradient(ellipse 90% 80% at 50% 40%, #2E2517 0%, #171208 70%),
+    var(--panel);
+  display:grid;place-items:center;
+}
+.grav::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg, rgba(0,0,0,.13) 0 2px, transparent 2px 5px);
+  pointer-events:none;
+}
+.grav .scene{position:absolute;inset:0;width:100%;height:100%;}
+.grav::before{content:'';position:absolute;inset:0;z-index:1;
+  box-shadow:inset 0 0 44px rgba(0,0,0,.75), inset 0 -22px 30px rgba(6,5,4,.7);pointer-events:none;}
+.grav-l{z-index:2;}
+.grav-l{
+  position:absolute;left:0;right:0;bottom:0;padding:9px 13px;
+  background:linear-gradient(180deg,transparent,rgba(6,5,4,.93));
+  font-family:var(--caps);font-size:11px;letter-spacing:.19em;text-transform:uppercase;color:var(--or-vif);
+}
+.grav img{width:100%;height:100%;object-fit:cover;}
+
+/* ---------- l'événement ---------- */
+.ev-t{
+  font-family:var(--caps);font-size:24px;font-weight:700;line-height:1.16;letter-spacing:.02em;
+  background:linear-gradient(180deg,#F7E7B8,#D3AE5C 55%,#EBD69B);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.5));
+  margin-top:13px;
+}
+.ev-l{
+  margin-top:6px;font-family:var(--caps);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gris-2);display:flex;align-items:center;gap:8px;
+}
+.ev-l::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--or-nuit),transparent);}
+.ev-x{margin-top:14px;font-size:17.5px;line-height:1.62;color:#DCCDAA;}
+.ev-x em{color:var(--or-vif);font-style:italic;}
+.ev-x strong{color:#F7E7B8;font-weight:600;}
+.ev-x .lat{font-style:italic;color:var(--or);}
+.guerre .ev-t{background:linear-gradient(180deg,#F7D6B8,#D08A5C 55%,#EFC9A0);-webkit-background-clip:text;background-clip:text;}
+.guerre .ev-l{color:#B0664E;}
+
+.vue{
+  margin-top:14px;padding:10px 13px;border-radius:2px;
+  border:1px solid rgba(122,96,49,.4);border-left:3px solid var(--or-sombre);
+  background:rgba(199,154,69,.05);
+}
+.vue b{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--caps);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--or);
+  margin-bottom:4px;font-weight:700;
+}
+.vue b .ic{font-size:12px;}
+.vue span{font-size:15.5px;color:var(--gris);line-height:1.5;font-style:italic;}
+
+/* ---------- les choix ---------- */
+.choix{margin-top:16px;display:flex;flex-direction:column;gap:9px;}
+.ch{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  padding:12px 13px;border-radius:3px;position:relative;
+  border:1px solid var(--or-nuit);
+  background:linear-gradient(180deg,rgba(46,37,23,.85),rgba(22,18,13,.9));
+  transition:border-color .14s, background .14s, transform .12s;
+}
+.ch:not(:disabled):hover{border-color:var(--or);background:linear-gradient(180deg,rgba(62,49,28,.9),rgba(30,24,16,.95));transform:translateY(-1px);}
+.ch:not(:disabled):active{transform:translateY(0);}
+.ch:disabled{opacity:.42;cursor:not-allowed;}
+.ch.rouge{background:linear-gradient(180deg,rgba(86,26,22,.7),rgba(30,14,12,.85));border-color:#6B2A22;}
+.ch.rouge:not(:disabled):hover{border-color:#C4544A;}
+.ch.vert{background:linear-gradient(180deg,rgba(38,60,32,.6),rgba(16,24,14,.85));border-color:#3E5A31;}
+.ch.vert:not(:disabled):hover{border-color:var(--vert);}
+.ch.bleu{background:linear-gradient(180deg,rgba(26,38,60,.6),rgba(12,18,28,.85));border-color:#2E425F;}
+.ch.bleu:not(:disabled):hover{border-color:#5E86B8;}
+
+.medaille{
+  flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 38% 30%,#3D3120,#171208);
+  border:1.5px solid var(--or-sombre);
+  box-shadow:inset 0 1px 3px rgba(242,223,166,.15), 0 2px 5px rgba(0,0,0,.65);
+  color:var(--or-vif);font-size:22px;
+}
+.ch-c{flex:1;min-width:0;}
+.ch-t{font-family:var(--caps);font-size:15.5px;font-weight:600;color:#EFDFB6;line-height:1.25;letter-spacing:.01em;}
+.ch-note{margin-top:4px;font-size:14.5px;font-style:italic;color:var(--gris-2);line-height:1.35;}
+.puces{margin-top:6px;display:flex;flex-wrap:wrap;gap:5px 9px;align-items:center;}
+.puce{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:var(--data);font-size:10.5px;letter-spacing:.02em;
+}
+.puce .ic{font-size:12px;}
+.puce.gain{color:var(--vert);} .puce.perte{color:var(--rouge);}
+.puce.pari{color:var(--or-vif);} .puce.verrou{color:var(--gris-2);font-style:italic;}
+.ch-fl{flex:none;color:var(--or-sombre);font-size:22px;font-family:var(--caps);}
+
+/* ---------- résultat ---------- */
+.res{margin-top:16px;padding-top:15px;border-top:1px solid var(--or-nuit);}
+.verdict{
+  display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;
+  font-family:var(--caps);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;
+  padding:4px 11px;border-radius:2px;border:1px solid currentColor;
+}
+.verdict.ok{color:var(--vert);} .verdict.ko{color:var(--rouge);}
+.res-x{font-size:17.5px;line-height:1.62;color:#DCCDAA;}
+.res-e{margin-top:13px;display:flex;flex-wrap:wrap;gap:6px;}
+.res-e .puce{padding:4px 9px;border-radius:2px;border:1px solid currentColor;font-size:11px;}
+
+/* nota */
+.nota{margin-top:15px;}
+.nota-b{
+  display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:2px;
+  border:1px solid var(--or-nuit);background:rgba(199,154,69,.06);
+  font-family:var(--caps);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--or);
+}
+.nota-b:hover{border-color:var(--or);color:var(--or-clair);}
+.nota-b .ic{font-size:13px;}
+.nota-x{
+  margin-top:9px;padding:12px 14px;border-radius:2px;
+  border:1px solid rgba(122,96,49,.3);background:rgba(0,0,0,.3);
+  font-size:15.5px;line-height:1.58;color:var(--gris);font-style:italic;
+}
+.nota-x .lat{font-style:normal;color:var(--or);}
+
+/* ---------- grand bouton ---------- */
+.cta-w{display:flex;align-items:center;gap:10px;justify-content:center;margin:18px 12px 4px;}
+.cta-w .ic{font-size:30px;color:var(--or-sombre);flex:none;}
+.cta-w .ic:last-child{transform:scaleX(-1);}
+.cta{
+  flex:1;padding:14px 18px;border-radius:3px;position:relative;
+  background:linear-gradient(180deg,#8E2F27,#5E1B16);
+  border:1px solid var(--or);
+  box-shadow:inset 0 1px 0 rgba(242,223,166,.28), inset 0 -8px 16px rgba(0,0,0,.4), 0 3px 10px rgba(0,0,0,.6);
+  font-family:var(--caps);font-size:16px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:#F7E7B8;text-shadow:0 1px 2px rgba(0,0,0,.7);
+  transition:filter .14s, transform .12s;
+}
+.cta:hover{filter:brightness(1.18);} .cta:active{transform:translateY(1px);}
+.cta.sombre{background:linear-gradient(180deg,#2E2618,#191309);border-color:var(--or-sombre);color:var(--or-vif);}
+
+/* ---------- listes ---------- */
+.ligne{
+  display:flex;align-items:center;gap:11px;padding:10px 0;
+  border-bottom:1px solid rgba(122,96,49,.22);
+}
+.ligne:last-child{border-bottom:0;}
+.ligne .ic{font-size:19px;color:var(--or-sombre);flex:none;}
+.ligne-c{flex:1;min-width:0;}
+.ligne-t{font-family:var(--caps);font-size:15px;font-weight:600;color:#E7D7B0;}
+.ligne-d{font-size:14.5px;color:var(--gris-2);font-style:italic;margin-top:2px;line-height:1.35;}
+.ligne-v{font-family:var(--data);font-size:12px;color:var(--gris);white-space:nowrap;}
+
+/* rail du cursus */
+.rail-l{display:flex;gap:12px;padding:9px 0;position:relative;}
+.rail-p{
+  flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  border:1.5px solid var(--or-nuit);background:#12100B;color:var(--gris-2);font-size:17px;position:relative;z-index:1;
+}
+.rail-l.fait .rail-p{border-color:var(--or-sombre);color:var(--or-sombre);}
+.rail-l.ici .rail-p{border-color:var(--or);color:var(--or-vif);box-shadow:0 0 0 3px rgba(199,154,69,.16), 0 0 14px rgba(199,154,69,.35);}
+.rail-l.suiv .rail-p{border-color:var(--or-sombre);color:var(--or);}
+.rail-l::before{content:'';position:absolute;left:16.5px;top:0;bottom:0;width:1px;background:rgba(122,96,49,.3);}
+.rail-l:first-child::before{top:50%;} .rail-l:last-child::before{bottom:50%;}
+.rail-l.fait::before,.rail-l.ici::before{background:var(--or-sombre);}
+.rail-c{flex:1;padding-top:4px;}
+.rail-t{font-family:var(--caps);font-size:16px;font-weight:600;color:var(--gris-2);}
+.rail-l.ici .rail-t{color:#F3E6C6;font-size:18px;}
+.rail-l.suiv .rail-t{color:var(--or-vif);}
+.rail-d{font-size:14px;color:var(--gris-2);font-style:italic;margin-top:1px;}
+.rail-l.ici .rail-d{color:var(--or);font-style:normal;font-family:var(--caps);font-size:11px;letter-spacing:.15em;text-transform:uppercase;}
+
+/* exigences de promotion */
+.exig{padding:10px 0;border-bottom:1px solid rgba(122,96,49,.2);}
+.exig:last-child{border-bottom:0;}
+.exig-t{display:flex;align-items:center;gap:9px;margin-bottom:6px;}
+.exig-t .ic{font-size:17px;color:var(--or-sombre);}
+.exig-n{flex:1;font-size:15.5px;color:#DFCFA8;}
+.exig-v{font-family:var(--data);font-size:12px;color:var(--gris);}
+.exig-v b{color:var(--or-vif);font-weight:500;}
+.exig-v.ok b{color:var(--vert);}
+.exig-b{height:6px;border-radius:3px;background:#0A0806;border:1px solid var(--or-nuit);overflow:hidden;}
+.exig-b i{display:block;height:100%;background:linear-gradient(180deg,#EDCE86,#B0842F);transition:width .5s ease;}
+.exig-b.ok i{background:linear-gradient(180deg,#9FD07A,#5F8C41);}
+
+/* ---------- navigation basse ---------- */
+.nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:20;
+  max-width:470px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  background:linear-gradient(180deg,#1B1610,#0B0906);
+  border-top:2px solid var(--or-nuit);
+  box-shadow:0 -6px 20px rgba(0,0,0,.75);
+}
+.nav-b{
+  padding:9px 2px 10px;text-align:center;color:var(--gris-2);
+  border-right:1px solid rgba(122,96,49,.2);transition:.14s;
+}
+.nav-b:last-child{border-right:0;}
+.nav-b .ic{font-size:22px;margin:0 auto 4px;}
+.nav-b span{font-family:var(--caps);font-size:9px;letter-spacing:.11em;text-transform:uppercase;display:block;}
+.nav-b:hover{color:var(--or);}
+.nav-b.on{
+  color:var(--or-clair);
+  background:linear-gradient(180deg,#7A2222,#4A1212);
+  box-shadow:inset 0 2px 0 var(--or), inset 0 -10px 18px rgba(0,0,0,.4);
+}
+
+/* ---------- écran de promotion ---------- */
+.promo{text-align:center;padding:26px 16px 20px;}
+.promo .ic.gros{font-size:56px;color:var(--or-vif);margin:0 auto 12px;filter:drop-shadow(0 0 16px rgba(199,154,69,.4));}
+.promo-de{font-family:var(--caps);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gris-2);}
+.promo-a{
+  font-family:var(--caps);font-size:29px;font-weight:700;letter-spacing:.09em;margin:8px 0 12px;
+  background:linear-gradient(180deg,#F7E7B8,#D3AE5C 55%,#EBD69B);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.promo-w{font-size:16.5px;font-style:italic;color:var(--gris);max-width:38ch;margin:0 auto;line-height:1.5;}
+
+/* ---------- pierre gravée ---------- */
+.stone{
+  margin:14px;padding:34px 24px;border:1px solid #574834;border-radius:3px;text-align:center;
+  background:linear-gradient(175deg,#3E362A 0%,#2E2820 45%,#221D16 100%);
+  box-shadow:inset 0 2px 0 rgba(242,223,166,.15), inset 0 -2px 8px rgba(0,0,0,.5), 0 12px 34px rgba(0,0,0,.65);
+}
+.st-l{font-family:var(--caps);font-weight:600;color:#D2C097;letter-spacing:.26em;line-height:2;font-size:13px;text-transform:uppercase;}
+.st-l.big{font-size:19px;color:#F5E6C0;letter-spacing:.2em;}
+.st-l.dm{font-size:12px;color:#C4544A;letter-spacing:.48em;margin-bottom:14px;}
+.st-f{margin-top:22px;font-family:var(--prose);font-style:italic;color:#A3947A;font-size:15.5px;letter-spacing:0;text-transform:none;line-height:1.55;}
+
+/* ---------- écran d'accueil ---------- */
+.orig-l{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 13px;
+  border:1px solid var(--or-nuit);border-radius:3px;margin-bottom:9px;
+  background:linear-gradient(180deg,rgba(46,37,23,.75),rgba(22,18,13,.9));transition:.14s;
+}
+.orig-l:hover{border-color:var(--or);transform:translateY(-1px);}
+.orig-n{font-family:var(--caps);font-size:15.5px;font-weight:600;color:#EFDFB6;}
+.orig-d{font-size:14.5px;color:var(--gris-2);font-style:italic;margin-top:3px;line-height:1.35;}
+.orig-e{margin-top:6px;font-family:var(--data);font-size:10px;color:var(--gris);letter-spacing:.02em;}
+
+.log{font-family:var(--data);font-size:12px;line-height:1.7;color:var(--gris-2);}
+.log div{padding:3px 0;border-bottom:1px solid rgba(122,96,49,.14);}
+.log .y{color:var(--or-sombre);}
+.hint{font-family:var(--data);font-size:10.5px;color:var(--gris-2);letter-spacing:.05em;line-height:1.7;text-align:center;}
+.vide{padding:26px 10px;text-align:center;color:var(--gris-2);font-style:italic;font-size:15.5px;}
+
+@media(max-width:470px){
+  .app{max-width:none;}
+  .titre{font-size:26px;}
+  .attrs{grid-template-columns:repeat(3,1fr);}
+}
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;} }
+
+/* ---------- entrée dans une bataille en temps réel ---------- */
+.acies-b{display:flex;align-items:center;gap:13px;width:100%;text-align:left;margin-top:16px;padding:14px;border-radius:3px;
+  border:1px solid var(--or);background:linear-gradient(180deg,rgba(110,32,26,.85),rgba(40,14,11,.95));
+  box-shadow:inset 0 1px 0 rgba(242,223,166,.2),0 0 18px rgba(196,84,74,.18);transition:.14s;}
+.acies-b:hover{transform:translateY(-1px);filter:brightness(1.12);}
+.acies-b .ch-t{font-size:17px;color:#F7E7B8;letter-spacing:.06em;}
+.acies-b .ch-note{color:#C9B48C;}
+.acies-ou{margin:12px 0 -6px;text-align:center;font-family:var(--caps);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gris-2);
+  display:flex;align-items:center;gap:10px;}
+.acies-ou::before,.acies-ou::after{content:'';flex:1;height:1px;background:var(--or-nuit);}
+</style>
+<div id="app"></div>
+<script>
+/* ===== src2/icons.js ===== */
+/* ============================================================
+   EMBLÈMES — silhouettes pleines, lisibles à 18 px
+   ============================================================ */
+const ICONS = {
+
+/* aigle légionnaire de face, ailes déployées */
+aquila:`<circle cx="32" cy="11" r="5.5"/><path d="M36 8l7 3-7 3z"/>
+<path d="M28 15h8l-1.5 30h-5z"/>
+<path d="M28.5 45h7l-3.5 11z"/>
+<path d="M29 18C22 12 13 7 4 5c2 9 7 15 13 19-5-.5-9-1.5-13-3 4 8 11 13 19 15l7-3z"/>
+<path d="M35 18c7-6 16-11 25-13-2 9-7 15-13 19 5-.5 9-1.5 13-3-4 8-11 13-19 15l-7-3z"/>
+<rect x="19" y="56" width="26" height="5" rx="2"/>`,
+
+/* couronne de laurier */
+laurea:`<path d="M32 60C16 53 8 39 8 25c0-7 2-13 5-17 2 6.5.8 12-1 16.5 4-3 9-3 13 .5-5 2-8.5 5.5-10 10.5 4.5-3.5 9.5-4 13.5-1.5-5 3-8 7.5-8.5 13 4-4 9-5.5 13.5-3.5-5 4-7.5 9.5-6.5 16z"/>
+<path d="M32 60c16-7 24-21 24-35 0-7-2-13-5-17-2 6.5-.8 12 1 16.5-4-3-9-3-13 .5 5 2 8.5 5.5 10 10.5-4.5-3.5-9.5-4-13.5-1.5 5 3 8 7.5 8.5 13-4-4-9-5.5-13.5-3.5 5 4 7.5 9.5 6.5 16z"/>`,
+
+/* casque à cimier */
+galea:`<path d="M32 8c-10 0-17 7-17 16v6h6v-6c0-6.4 5-11 11-11s11 4.6 11 11v6h6v-6c0-9-7-16-17-16z"/>
+<path d="M29 2h6v8h-6z"/>
+<path d="M24 10h16c3 0 5 1.6 5 4H19c0-2.4 2-4 5-4z"/>
+<path d="M15 30h8v14c0 4-1.8 6-4 6s-4-2-4-6z"/>
+<path d="M41 30h8v14c0 4-1.8 6-4 6s-4-2-4-6z"/>
+<path d="M25 28h14v12c0 6-3 10-7 10s-7-4-7-10z"/>
+<rect x="23" y="24" width="18" height="6" rx="2"/>`,
+
+/* caducée */
+caduceus:`<rect x="29.5" y="6" width="5" height="52" rx="2.5"/>
+<circle cx="32" cy="7" r="5"/>
+<path d="M20 14c4-5 9-5 12 0-4-2-8-1.6-12 0z"/>
+<path d="M44 14c-4-5-9-5-12 0 4-2 8-1.6 12 0z"/>
+<path d="M24 20c-5 2-6 8-1 11s10 3 10 7-5 5-10 8-4 10 1 11" fill="none" stroke-width="6" stroke-linecap="round"/>
+<path d="M40 20c5 2 6 8 1 11s-10 3-10 7 5 5 10 8 4 10-1 11" fill="none" stroke-width="6" stroke-linecap="round"/>`,
+
+/* denier */
+nummus:`<circle cx="32" cy="32" r="26"/>
+<circle cx="32" cy="32" r="21" fill="#16120D"/>
+<circle cx="32" cy="28" r="8"/>
+<path d="M18 48c2.5-8 7.5-12 14-12s11.5 4 14 12z"/>`,
+
+/* poignée de main */
+manus:`<path d="M4 30c0-3 2.4-5 5.4-5H24l-6-6c-2-2-2-5 0-7s5-2 7 0l10 10h5v18h-8l-8 8c-2 2-5 2-7 0l-8-8c-.6-.6-1-1.6-1-2.6z"/>
+<path d="M60 30c0-3-2.4-5-5.4-5H40l6-6c2-2 2-5 0-7s-5-2-7 0L29 22h-5v18h8l8 8c2 2 5 2 7 0l8-8c.6-.6 1-1.6 1-2.6z"/>`,
+
+/* glaive */
+gladius:`<path d="M32 2 23 16v24h18V16z"/>
+<rect x="12" y="40" width="40" height="7" rx="2.5"/>
+<rect x="28.5" y="46" width="7" height="12"/>
+<circle cx="32" cy="59" r="5"/>`,
+
+/* bouclier */
+scutum:`<path d="M32 2C22 2 14 5 10 8v32c0 11 10 18 22 22 12-4 22-11 22-22V8c-4-3-12-6-22-6z"/>
+<path d="M32 12v40M14 32h36" stroke="#16120D" stroke-width="3.5" fill="none"/>
+<circle cx="32" cy="32" r="8" fill="#16120D"/>
+<circle cx="32" cy="32" r="3.5"/>`,
+
+/* balance */
+libra:`<rect x="29" y="8" width="6" height="46" rx="2"/>
+<rect x="16" y="54" width="32" height="6" rx="2"/>
+<circle cx="32" cy="8" r="5"/>
+<rect x="8" y="15" width="48" height="5" rx="2.5"/>
+<path d="M14 20 4 34h20z"/><path d="M50 20 40 34h20z"/>
+<path d="M4 34c0 5 4.5 8.5 10 8.5S24 39 24 34z" fill="#16120D" stroke="currentColor" stroke-width="3"/>
+<path d="M40 34c0 5 4.5 8.5 10 8.5S60 39 60 34z" fill="#16120D" stroke="currentColor" stroke-width="3"/>`,
+
+/* rouleau */
+volumen:`<rect x="12" y="10" width="40" height="44" rx="3"/>
+<path d="M20 20h24M20 28h24M20 36h24M20 44h16" stroke="#16120D" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+<circle cx="12" cy="10" r="6"/><circle cx="12" cy="54" r="6"/>
+<circle cx="52" cy="10" r="6"/><circle cx="52" cy="54" r="6"/>`,
+
+/* temple */
+templum:`<path d="M32 4 4 20h56z"/>
+<rect x="6" y="21" width="52" height="5"/>
+<rect x="10" y="27" width="7" height="24"/><rect x="21" y="27" width="7" height="24"/>
+<rect x="32" y="27" width="7" height="24"/><rect x="43" y="27" width="7" height="24"/>
+<rect x="4" y="52" width="56" height="7" rx="2"/>`,
+
+/* vexillum */
+vexillum:`<rect x="27" y="4" width="5" height="56" rx="2"/>
+<circle cx="29.5" cy="5" r="5"/>
+<path d="M32 10h26v28H32z"/>
+<path d="M32 38h26l-5 8H32z"/>
+<path d="M40 20h10M40 28h10" stroke="#16120D" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+
+/* chevrons de promotion */
+chevron:`<path d="M32 6 56 30h-12L32 18 20 30H8z"/><path d="M32 26 56 50h-12L32 38 20 50H8z"/>`,
+
+/* cadenas */
+sera:`<rect x="12" y="28" width="40" height="30" rx="5"/>
+<path d="M20 28v-8c0-6.6 5.4-12 12-12s12 5.4 12 12v8h-7v-8c0-2.8-2.2-5-5-5s-5 2.2-5 5v8z"/>
+<circle cx="32" cy="40" r="5" fill="#16120D"/><rect x="29.5" y="42" width="5" height="9" rx="2" fill="#16120D"/>`,
+
+/* enseigne de centurie */
+signum:`<rect x="29" y="6" width="6" height="54" rx="2"/>
+<circle cx="32" cy="6" r="6"/>
+<rect x="16" y="14" width="32" height="6" rx="3"/>
+<circle cx="32" cy="30" r="9"/><circle cx="32" cy="30" r="4" fill="#16120D"/>
+<circle cx="32" cy="46" r="7"/><circle cx="32" cy="46" r="3" fill="#16120D"/>`,
+
+/* nota */
+nota_i:`<circle cx="32" cy="32" r="27"/>
+<circle cx="32" cy="19" r="4.5" fill="#16120D"/>
+<rect x="28" y="27" width="8" height="22" rx="3" fill="#16120D"/>`,
+
+check:`<path d="M10 33 26 49 54 16" fill="none" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>`,
+
+/* sablier */
+clepsydra:`<rect x="12" y="4" width="40" height="6" rx="3"/><rect x="12" y="54" width="40" height="6" rx="3"/>
+<path d="M18 10c0 12 14 18 14 22s-14 10-14 22h28c0-12-14-18-14-22s14-10 14-22z"/>
+<path d="M24 50c2-6 6-9 8-9s6 3 8 9z" fill="#16120D"/>`,
+
+/* buste */
+capita:`<circle cx="32" cy="32" r="27"/>
+<circle cx="32" cy="24" r="9" fill="#16120D"/>
+<path d="M15 50c3-10 9-14 17-14s14 4 17 14z" fill="#16120D"/>`
+};
+
+/* ---------- scènes gravées (viewBox large) ---------- */
+const SCENES = {
+castra:`<defs><linearGradient id="ciel" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#3B3020"/><stop offset="1" stop-color="#15100A"/></linearGradient></defs>
+<rect width="400" height="150" fill="url(#ciel)"/>
+<path d="M0 78c40-16 70-6 108-16 34-9 58 4 96-6 34-9 66 6 96-4 40-13 70 2 100-6v104H0z" fill="#221A10" opacity=".85"/>
+<path d="M0 96c46-12 78 2 120-8 40-9 70 8 112-2 42-10 78 6 120-6 20-6 34-2 48-6v76H0z" fill="#1A1409"/>
+<g fill="#0E0A05">
+  <rect x="30" y="86" width="340" height="8"/>
+  <g>${[46,86,126,166,206,246,286,326].map(x=>`<path d="M${x} 94V72l5-6 5 6v22z"/>`).join('')}</g>
+  <rect x="58" y="52" width="34" height="44"/><path d="M52 54h46l-8-10H60z"/>
+  <rect x="300" y="52" width="34" height="44"/><path d="M294 54h46l-8-10h-30z"/>
+  <rect x="170" y="66" width="58" height="30"/><path d="M164 68h70l-10-12h-50z"/>
+</g>
+<g fill="#6B1E1E">
+  <path d="M70 30h16v22l-8-5-8 5z"/><path d="M312 30h16v22l-8-5-8 5z"/>
+</g>
+<g fill="#C79A45" opacity=".55">
+  <rect x="76" y="24" width="4" height="10"/><rect x="318" y="24" width="4" height="10"/>
+</g>
+<g fill="#2A2114" opacity=".7">
+  <path d="M0 110h400v40H0z"/>
+</g>`,
+
+acies:`<defs><linearGradient id="ciel2" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#3A2418"/><stop offset="1" stop-color="#160E08"/></linearGradient></defs>
+<rect width="400" height="150" fill="url(#ciel2)"/>
+<path d="M0 74c50-20 84 4 130-8 44-11 76 10 124-2 44-11 90 8 146-8v94H0z" fill="#221410" opacity=".8"/>
+<g fill="#120A06">
+  ${[...Array(13)].map((_,i)=>`<path d="M${8+i*31} 150v-34c0-7 5-12 11-12s11 5 11 12v34z"/>`).join('')}
+</g>
+<g stroke="#0C0704" stroke-width="4" stroke-linecap="round">
+  ${[...Array(12)].map((_,i)=>`<line x1="${22+i*31}" y1="106" x2="${16+i*31}" y2="40"/>`).join('')}
+</g>
+<g fill="#0C0704">
+  <rect x="186" y="26" width="7" height="90" rx="2"/>
+  <circle cx="189.5" cy="24" r="9"/>
+  <rect x="168" y="42" width="44" height="8" rx="3"/>
+</g>
+<g fill="#6B1E1E"><path d="M196 54h34v26l-17-8-17 8z"/></g>
+<g fill="#C79A45" opacity=".45"><circle cx="189.5" cy="24" r="5"/></g>`
+};
+function scene(nom){
+  const s=SCENES[nom]||SCENES.castra;
+  return `<svg class="scene" viewBox="0 0 400 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${s}</svg>`;
+}
+
+function icone(nom, cls){
+  const p=ICONS[nom]; if(!p) return '';
+  return `<svg class="ic ${cls||''}" viewBox="0 0 64 64" aria-hidden="true">${p}</svg>`;
+}
+
+/* ---------- noms romains ---------- */
+const PRAENOMINA=['Lucius','Marcus','Gaius','Quintus','Publius','Titus','Sextus','Aulus','Gnaeus','Decimus','Servius','Manius'];
+const NOMINA=['Valerius','Cornelius','Fabius','Sempronius','Terentius','Aemilius','Vibius','Petronius','Rutilius','Salvius','Munatius','Oppius','Baebius','Naevius','Aufidius','Varro'];
+const COGNOMINA=['Rufus','Severus','Longinus','Crispus','Niger','Priscus','Celsus','Varus','Sabinus','Maximus','Silvanus','Bassus','Tuscus','Marcellus','Gallus','Frugi'];
+function nomRomain(){
+  const p=PRAENOMINA[Math.floor(Math.random()*PRAENOMINA.length)];
+  const n=NOMINA[Math.floor(Math.random()*NOMINA.length)];
+  const c=COGNOMINA[Math.floor(Math.random()*COGNOMINA.length)];
+  return p+' '+n+' '+c;
+}
+
+/* ===== src2/data-core.js ===== */
+/* ============================================================
+   LEGIO X EQVESTRIS — campagne de Gaule et guerre civile, 58–45 av. J.-C.
+   Un écran, une décision. Le grade décide de ce que tu vois.
+   ============================================================ */
+
+const STATS = [
+  { k:'virtus',     n:'Virtus',     i:'gladius',  d:'courage au fer' },
+  { k:'disciplina', n:'Disciplina', i:'galea',    d:'tenue du rang, endurance' },
+  { k:'scientia',   n:'Scientia',   i:'volumen',  d:'métier, terrain, lettres' },
+  { k:'auctoritas', n:'Auctoritas', i:'laurea',   d:'poids auprès des hommes' },
+  { k:'gratia',     n:'Gratia',     i:'manus',    d:'faveur des chefs' },
+  { k:'valetudo',   n:'Valetudo',   i:'caduceus', d:'santé, blessures' }
+];
+
+/* portée : ce que tu vois et ce que tu peux ordonner */
+const PORTEE = ['soldat','sousoff','centurion','superieur'];
+const PORTEE_N = {
+  soldat:    { n:'Rang',       vue:'ton contubernium et vingt pas de poussière' },
+  sousoff:   { n:'Principal',  vue:'ta centurie, les enseignes voisines' },
+  centurion: { n:'Centurion',  vue:'ta cohorte et ses appuis' },
+  superieur: { n:'État-major', vue:'toute la ligne, les réserves, le terrain' }
+};
+
+const RANKS = [
+  { n:'Tiro',                fr:'recrue au tirocinium',                 p:'soldat',    pay:0 },
+  { n:'Miles Gregarius',     fr:'légionnaire de rang',                  p:'soldat',    pay:225 },
+  { n:'Immunis',             fr:'spécialiste, exempt de corvées',       p:'soldat',    pay:225 },
+  { n:'Tesserarius',         fr:'officier du mot de passe',             p:'soldat',    pay:337 },
+  { n:'Optio',               fr:'adjoint du centurion, solde double',   p:'sousoff',   pay:450 },
+  { n:'Centurio',            fr:'quatre-vingts hommes, premier rang',   p:'centurion', pay:3750 },
+  { n:'Pilus Prior',         fr:'centurion commandant de cohorte',      p:'centurion', pay:5000 },
+  { n:'Primus Pilus',        fr:'premier centurion de la légion',       p:'superieur', pay:15000 },
+  { n:'Praefectus Fabrum',   fr:'préfet du génie — rang équestre',      p:'superieur', pay:20000 }
+];
+
+/* promotion : jeux de seuils ALTERNATIFS — il suffit d'en satisfaire un.
+   Structurés en données pour être affichés en barres de progression. */
+const PROMO = [
+  { to:1, seuils:[{disciplina:22}],
+    why:'sacramentum prêté, tirocinium achevé' },
+  { to:2, seuils:[{scientia:42},{disciplina:48}],
+    why:'une compétence que le camp te reconnaît' },
+  { to:3, seuils:[{disciplina:50, auctoritas:42}],
+    why:'on te confie la tessère et les sentinelles' },
+  { to:4, seuils:[{virtus:52, auctoritas:55, gratia:45}],
+    why:'le centurion te veut derrière le rang, bâton en main' },
+  { to:5, seuils:[{virtus:62, auctoritas:62, gratia:57, disciplina:54}],
+    why:'le légat a signé : tu porteras le cep de vigne' },
+  { to:6, seuils:[{auctoritas:70, gratia:66, scientia:54}],
+    why:'une cohorte entière manœuvre à ta voix' },
+  { to:7, seuils:[{virtus:74, auctoritas:78, gratia:78}],
+    why:'premier centurion de la légion — après toi, le légat' },
+  { to:8, seuils:[{scientia:76, gratia:84}],
+    why:'le proconsul te confie le génie ; l’ordre équestre s’ouvre' }
+];
+PROMO.forEach(p => { p.req = s => p.seuils.some(j => Object.keys(j).every(k => (s[k]||0) >= j[k])); });
+
+const ORIGINES = [
+  { n:'Fils de vétéran de Marius',
+    d:'Ton père a marché contre les Cimbres. Il t’a laissé un gladius et des vieux qui se souviennent de son nom.',
+    s:{ virtus:38, disciplina:40, scientia:22, auctoritas:30, gratia:34, valetudo:84 }, p:200 },
+  { n:'Colon de Gaule cisalpine',
+    d:'Un lopin de terre lourde près de Crémone. La marche et la faim ne t’apprendront rien de neuf.',
+    s:{ virtus:34, disciplina:44, scientia:26, auctoritas:28, gratia:20, valetudo:92 }, p:120 },
+  { n:'Prolétaire de la Subure',
+    d:'Né dans une insula de Rome. Aucun bien, aucun nom, mais tu lis un homme avant qu’il ait parlé.',
+    s:{ virtus:32, disciplina:28, scientia:28, auctoritas:38, gratia:32, valetudo:76 }, p:60 },
+  { n:'Fils de décurion municipal',
+    d:'Ton père siège à la curie d’une petite ville d’Italie. Tu as eu un grammairien, et cela se verra.',
+    s:{ virtus:24, disciplina:32, scientia:46, auctoritas:26, gratia:42, valetudo:74 }, p:900 },
+  { n:'Chevalier désargenté',
+    d:'Ordre équestre, fortune fondue. Tu sers pour la refaire, sous le mépris des rangs.',
+    s:{ virtus:28, disciplina:24, scientia:38, auctoritas:44, gratia:48, valetudo:78 }, p:2500 }
+];
+
+const VULNERA = [
+  { n:'Balafre au visage',              e:{gratia:-2},                d:'La joue ouverte du sourcil à la mâchoire.' },
+  { n:'Épaule droite raide',            e:{virtus:-4},                d:'Le bras ne monte plus au-dessus de l’horizontale.' },
+  { n:'Jambe percée',                   e:{disciplina:-4},            d:'Elle porte, mais elle ne court plus vingt milles.' },
+  { n:'Côtes ressoudées de travers',    e:{disciplina:-3,virtus:-2},  d:'Le souffle manque au bout d’une heure de combat.' },
+  { n:'Main gauche à trois doigts',     e:{virtus:-3,disciplina:-2},  d:'Le bouclier tient par la courroie et l’habitude.' },
+  { n:'Œil gauche perdu',               e:{scientia:-4,virtus:-2},    d:'On perd la profondeur, et on ne s’y fait jamais.' },
+  { n:'Trait de fronde dans le crâne',  e:{scientia:-3,auctoritas:-2},d:'Des maux de tête qui durent trois jours.' },
+  { n:'Tendon du poignet sectionné',    e:{virtus:-4,disciplina:-2},  d:'Le glaive se tient autrement, moins bien.' }
+];
+
+/* ===== src2/data-phases-1.js ===== */
+/* ============================================================
+   CHAPITRES I – III  ·  58 – 56 av. J.-C.
+   o[].p = portée minimale (soldat par défaut)
+   ============================================================ */
+
+const PHASES = [
+
+/* ==================== I. SACRAMENTVM ==================== */
+{
+id:'sacramentum', n:'Sacramentum', sub:'Genava, sur le Rhône', y0:-58, y1:-58, len:5,
+events:[
+
+{ at:0, t:'Probatio', lieu:'Bureau du tribun, camp de Genava',
+  x:`Le tribun mesure ta taille, vérifie tes dents, contrôle que tu es citoyen romain. Puis vient le <span class="lat">sacramentum</span> : le serment qui te lie pour seize ans. On te donne trois pièces d’argent, le <span class="lat">viaticum</span>, et un numéro dans un rôle.`,
+  nota:`La <span class="lat">probatio</span> contrôlait la taille, la santé et la citoyenneté. Le service légionnaire sous César durait seize ans ; Auguste le portera à vingt. Sur dix engagés, trois ne verront pas la fin.`,
+  o:[
+  { t:'Présenter la lettre de recommandation de ton patron',
+    note:'On te classe avant d’avoir rien fait — et les autres recrues le voient.',
+    res:{ r:`Le tribun la lit sans hâte, hoche la tête, inscrit ton nom à part. Un nom noté à part, c’est déjà un pas. Les hommes du rang, eux, ont remarqué.`, e:{gratia:9, auctoritas:-4} } },
+  { t:'Prêter serment le premier, à voix forte',
+    res:{ r:`Ta voix porte au-dessus des autres. Le centurion instructeur te regarde une seconde de trop. Les recrues aussi.`, e:{disciplina:6, auctoritas:6} } },
+  { t:'Ne rien tenter, te fondre dans le rang',
+    res:{ r:`Personne ne retient ton nom. C’est souvent la meilleure façon de survivre au premier mois.`, e:{valetudo:5, disciplina:3} } }
+  ]},
+
+{ t:'Ad palum', lieu:'Terrain d’exercice',
+  x:`Six heures par jour contre un poteau de bois, avec un bouclier d’osier et un glaive de bois deux fois plus lourds que les vrais. <em>Pointe, ne taille pas.</em> C’est la seule leçon, répétée mille fois.`,
+  nota:`L’entraînement au <span class="lat">palus</span> employait des armes de bois au double du poids réel. La doctrine romaine privilégiait l’estoc : deux pouces de fer dans le ventre suffisent, et l’estoc découvre moins le flanc que le coup de taille.`,
+  o:[
+  { t:'Doubler ta ration d’exercice, le soir, seul',
+    res:{ r:`Tes mains saignent, mais ton poignet apprend l’angle. Le corps retient ce que la tête oublie.`, e:{virtus:8, scientia:3, valetudo:-3} } },
+  { t:'Payer une amphore de vin au campidoctor',
+    res:{ r:`Il corrige ta garde en dix minutes, ce que six mois ne t’auraient pas appris. Tout s’achète au camp, même le savoir.`, e:{scientia:8, virtus:4, peculium:-40} } },
+  { t:'Apprendre à nager avec les Cisalpins du contubernium',
+    res:{ r:`Le Rhône est glacé et personne ne t’a demandé de le traverser. Un jour, quelqu’un le fera.`, e:{scientia:6, auctoritas:5, valetudo:-2} } }
+  ]},
+
+{ t:'Gradus militaris', lieu:'Route de la Province',
+  x:`Vingt milles en cinq heures, avec trente kilos sur l’épaule : armes, pieu, meule, outils, rations de seize jours. On appelle cela une <span class="lat">mulus Marianus</span> — une mule de Marius. Un homme de ton contubernium s’effondre au quatorzième mille.`,
+  nota:`Végèce donne le pas militaire à vingt milles romains — environ vingt-neuf kilomètres — en cinq heures d’été, chargé. Marius avait fait porter le barda par l’homme plutôt que par le train, doublant la vitesse de marche des légions.`,
+  o:[
+  { t:'Le porter, quitte à finir vidé',
+    check:{ s:'valetudo', dc:64 },
+    ok:{ r:`Tu le traînes jusqu’au camp. Le contubernium n’oublie pas ce genre de dette : huit hommes, une tente, une meule — et désormais une créance sur toi qui joue dans l’autre sens.`, e:{auctoritas:11, valetudo:-5} },
+    ko:{ r:`Vous tombez tous les deux au dix-septième mille. Le campidoctor vous fait finir la marche en courant, sous les yeux de la colonne.`, e:{auctoritas:5, valetudo:-9, disciplina:-3} } },
+  { t:'Rester au pas, ne pas rompre le rang',
+    note:'Il sera ramassé par la voiture des bagages. Et il le saura.',
+    res:{ r:`L’instructeur note ta tenue. L’homme est ramassé par le train, vivant, et ne te regardera plus jamais tout à fait pareil.`, e:{disciplina:9, auctoritas:-6} } },
+  { t:'Forcer l’allure et doubler la tête de colonne',
+    check:{ s:'virtus', dc:56 },
+    ok:{ r:`Tu arrives dans les premiers, presque sec. Le tribun demande ton nom au centurion, qui le lui donne.`, e:{virtus:7, gratia:6, valetudo:-3} },
+    ko:{ r:`Tu craques au dernier mille et termines cassé en deux, à vomir sur le bas-côté. Le camp voit tout, toujours.`, e:{valetudo:-7, auctoritas:-5} } }
+  ]},
+
+{ t:'Le compte du signifer', lieu:'Sous l’enseigne de la centurie',
+  x:`Première solde. Le <span class="lat">signifer</span> tient le registre : sur tes soixante-quinze deniers du quadrimestre, il retient le blé, les bottes, le foin, la literie, la caisse des Saturnales et la contribution funéraire. Reste dix-sept.`,
+  nota:`Des papyrus de solde retrouvés en Égypte détaillent ces retenues — <span class="lat">in victum, caligas, fascias, saturnalicium</span>. Le signifer gérait aussi la caisse d’épargne obligatoire de la centurie : c’était le trésorier autant que le porte-enseigne.`,
+  o:[
+  { t:'Contester le compte ligne par ligne',
+    check:{ s:'scientia', dc:48 },
+    ok:{ r:`Tu relèves une erreur sur le foin. Le signifer corrige, sec, et te déteste désormais avec précision.`, e:{peculium:45, scientia:5, gratia:-7} },
+    ko:{ r:`Tu t’emmêles dans les chiffres. Il te fait répéter devant la file entière. Rire général.`, e:{auctoritas:-7, gratia:-4} } },
+  { t:'Payer et te taire',
+    res:{ r:`Tu signes. C’est ainsi que fonctionne l’armée : ce n’est pas ton argent, c’est un dépôt qu’on te rendra si tu vis.`, e:{disciplina:5} } },
+  { t:'Proposer de tenir le registre à sa place les soirs de garde',
+    need:{ s:'scientia', min:34 },
+    res:{ r:`Il te tend le stylet en haussant les épaules. Le <span class="lat">tabularium</span> est une porte, et tu viens d’y mettre le pied.`, e:{scientia:10, gratia:7} } }
+  ]},
+
+{ t:'Le bizutage du contubernium', lieu:'Tente huit, deuxième centurie',
+  x:`Huit hommes, une tente, une meule, une mule. Ils ont vidé ton sac pendant ta garde et attendent de voir ce que tu feras de ton bol brisé.`,
+  nota:`Le <span class="lat">contubernium</span> — huit hommes partageant tente et repas — était l’unité de vie réelle du légionnaire. On y mangeait, on y dormait, on y mourait ensemble ; la cohésion de la légion se fabriquait à cette échelle.`,
+  o:[
+  { t:'Trouver qui a fait le coup et le corriger devant les autres',
+    check:{ s:'virtus', dc:52 },
+    ok:{ r:`Tu le mets à terre en trois échanges et tu lui tends la main. La tente a sa réponse : on peut compter sur toi, et il ne faut pas te chercher.`, e:{virtus:6, auctoritas:9, valetudo:-3} },
+    ko:{ r:`Tu te trompes d’homme. Il te rend coup pour coup et la tente entière rit de toi pendant six semaines.`, e:{auctoritas:-9, valetudo:-4} } },
+  { t:'Rire, partager ton vin et n’en plus parler',
+    res:{ r:`Tu paies une tournée sur ton viatique. Au matin, ton bol est remplacé par un autre, volé à la centurie voisine. C’est de l’amitié, à leur manière.`, e:{auctoritas:7, gratia:-2, peculium:-30} } },
+  { t:'Le signaler au tesserarius',
+    note:'Le règlement te donne raison. Sept hommes te donneront tort pendant seize ans.',
+    res:{ r:`L’affaire est traitée, deux hommes sont punis, et tu dors désormais dans une tente où personne ne te parle. Le règlement a été appliqué.`, e:{disciplina:8, auctoritas:-12} } }
+  ]},
+
+{ t:'La question du blé', lieu:'Magasin du camp',
+  x:`Le blé livré par le contractant est coupé de son et d’ivraie. Tout le monde le sait, personne ne le dit : le fournisseur a des protections jusque chez les tribuns.`,
+  nota:`L’approvisionnement passait par des <span class="lat">publicani</span> adjudicataires. La fraude sur la qualité était endémique, et les officiers touchaient souvent une commission pour fermer les yeux.`,
+  o:[
+  { t:'Le signaler au centurion',
+    res:{ r:`Il te regarde longuement. « Je sais. » Puis il fait remplacer le lot pour ta centurie seulement, et tu comprends d’un coup comment fonctionne réellement une armée.`, e:{scientia:6, gratia:-4, auctoritas:5} } },
+  { t:'Trier le grain toi-même et apprendre à reconnaître l’ivraie',
+    res:{ r:`Trois soirs à trier. Tu sais désormais ce qu’un lot vaut d’un coup d’œil — un savoir qui servira longtemps.`, e:{scientia:7, valetudo:-2} } },
+  { t:'Racheter du bon grain aux marchands qui suivent l’armée',
+    res:{ r:`Tu paies et tu manges correctement. Deux hommes de la tente te demandent de leur en prendre aussi.`, e:{valetudo:7, auctoritas:4, peculium:-60} } }
+  ]}
+]},
+
+/* ==================== II. HELVETII ==================== */
+{
+id:'helvetii', n:'Helvetii', sub:'La première campagne', y0:-58, y1:-58, len:6,
+events:[
+
+{ at:0, t:'Le rempart de Genève', lieu:'Rive gauche du Rhône',
+  x:`Le proconsul est arrivé de Rome en huit jours — on dit qu’il a crevé des chevaux. Il n’a qu’une légion : la tienne. Il fait couper le pont et bâtir dix-neuf milles de rempart contre trois cent mille Helvètes qui veulent traverser.`,
+  nota:`César décrit lui-même cet ouvrage : dix-neuf milles de muraille et de fossé de seize pieds, bâtis en quelques semaines. Le génie fut son arme la plus constante — plus décisive, en Gaule, que le glaive.`,
+  o:[
+  { t:'Prendre le pieu et creuser sans lever la tête',
+    res:{ r:`Fossé, palissade, redoutes. Tu ne sais toujours pas te battre, mais tu sais bâtir un mur en une nuit, et cela tuera plus de Gaulois que ton glaive.`, e:{disciplina:8, scientia:4, valetudo:-3} } },
+  { t:'Te faire affecter aux équipes d’arpentage',
+    need:{ s:'scientia', min:38 },
+    res:{ r:`On te met à la corde et à la <span class="lat">groma</span>. Tracer un camp est un métier ; tu l’apprends de l’homme qui l’exerce depuis vingt ans.`, e:{scientia:11, gratia:5} } },
+  { t:'Te porter volontaire pour les postes avancés',
+    check:{ s:'virtus', dc:50 },
+    ok:{ r:`Trois nuits à guetter sur la rive. Tu vois les premiers Helvètes de ta vie, à cinquante pas, qui te regardent aussi.`, e:{virtus:7, scientia:4, valetudo:-2} },
+    ko:{ r:`Une sortie nocturne te surprend au poste. Tu t’en tires en courant, ce qui est raisonnable et qu’on ne te pardonnera pas tout de suite.`, e:{valetudo:-6, auctoritas:-5} } }
+  ]},
+
+{ at:2, t:'Bibracte', lieu:'Pente au-dessus de la plaine éduenne', guerre:true,
+  x:`Ils ont contourné le rempart par le pays séquane. Nous les suivons depuis quinze jours. Ce matin, César a fait retirer tous les chevaux du champ, à commencer par le sien : <em>que nul n’ait d’espoir dans la fuite.</em><br><br>La colline est derrière nous. Les Helvètes montent en phalange, boucliers imbriqués.`,
+  vue:{ soldat:'Tu vois trois rangs de boucliers gaulois et la buée de leur souffle.',
+        sousoff:'Ta centurie est en deuxième ligne. Les hommes serrent trop les coudes.',
+        centurion:'Ta cohorte tient le centre-droit. La pente joue pour nous.',
+        superieur:'Toute la première ligne est engagée. La deuxième attend à cinquante pas.' },
+  nota:`Le <span class="lat">pilum</span> avait une hampe de fer doux qui pliait à l’impact : il ne pouvait être renvoyé, et il condamnait le bouclier qu’il traversait. À Bibracte, les Helvètes durent jeter des boucliers cloués deux à deux et combattre à découvert.`,
+  o:[
+  { t:'Lancer à vingt-cinq pas, au commandement',
+    note:'Deux fois plus mortel. Et plus rien entre eux et toi si le rang flanche.',
+    check:{ s:'disciplina', dc:54 },
+    ok:{ r:`La volée part à bout portant. La phalange s’ouvre comme un fruit : les boucliers percés se collent, les Helvètes les jettent et se battent à découvert.`, e:{disciplina:6, virtus:5, gratia:4} },
+    ko:{ r:`Deux hommes lancent trop tôt, le reste suit en désordre. La volée s’éparpille et la phalange arrive presque intacte sur les boucliers.`, e:{valetudo:-7, auctoritas:-4} } },
+  { t:'Lancer tôt, sûrement, garder le rang',
+    res:{ r:`Volée propre à soixante pas. Moins d’effet, mais le rang n’a pas bougé d’un pouce et le second pilum reste en main.`, e:{disciplina:6, virtus:2} } },
+  { t:'Décaler la cohorte pour prendre la phalange en écharpe',
+    p:'centurion', need:{ s:'scientia', min:48 },
+    res:{ r:`Tu fais glisser la cohorte de vingt pas sur la droite pendant qu’ils montent. La volée les prend de biais, sur le flanc non couvert. Un légat te montre du doigt à César.`, e:{scientia:7, auctoritas:6, gratia:10} } },
+  { t:'Faire face à droite quand les Boïens tombent sur le flanc',
+    p:'sousoff',
+    check:{ s:'auctoritas', dc:58 },
+    ok:{ r:`Une vingtaine d’hommes pivotent avec toi. Le petit front improvisé tient assez longtemps pour que la troisième ligne arrive. César ordonnera la même manœuvre trois minutes plus tard.`, e:{auctoritas:10, virtus:6, gratia:7, valetudo:-4} },
+    ko:{ r:`Tu pivotes ; peu te suivent. On te bouscule, tu perds ton bouclier et l’on te ramasse dix pas en arrière.`, e:{valetudo:-10, auctoritas:-4, vulnus:1} } }
+  ]},
+
+{ t:'Les chariots', lieu:'Laager helvète, à la nuit', guerre:true,
+  x:`Le combat a duré de la septième heure au soir sans qu’un seul Helvète montre le dos. La nuit tombée, ils se replient sur leur <span class="lat">laager</span> : des milliers de chariots rangés en muraille, où les femmes tendent des javelots par-dessous.`,
+  vue:{ soldat:'Tu ne sens plus tes bras. On te tend une outre d’eau tiède.',
+        sousoff:'Les enseignes sont regroupées. Il manque un homme sur dix.',
+        centurion:'La cohorte peut encore donner une heure, pas deux.',
+        superieur:'Forcer cette nuit, ou attendre le jour et la reddition.' },
+  nota:`Sur trois cent soixante-huit mille partis, César dit qu’il en rentra cent dix mille. Il les renvoya reconstruire leurs villages : un pays vide se serait rempli de Germains, et il valait mieux des Helvètes vaincus qu’un vide à la frontière.`,
+  o:[
+  { t:'Forcer le laager dans la nuit',
+    note:'Le butin est réel. Ce qui se passe entre les timons ne se raconte pas au camp.',
+    res:{ r:`On arrache les chariots à la main sous les javelots lancés à bout portant par des gens qui n’ont plus rien à perdre. Le camp est pris avant l’aube.`, e:{virtus:6, peculium:220, valetudo:-8, auctoritas:3} } },
+  { t:'Investir et attendre le jour',
+    res:{ r:`On dort en armes, à cent pas. Au matin, ce qui reste se rend. Tes hommes sont tous vivants et la part de butin est maigre.`, e:{disciplina:6, valetudo:3, peculium:70} } },
+  { t:'Poster des piquets sur les routes du nord',
+    p:'centurion',
+    res:{ r:`Six mille Verbigènes tentent de gagner le Rhin dans la nuit ; tes piquets les cueillent. César apprend qu’un officier avait prévu ce qu’il n’avait pas ordonné.`, e:{scientia:7, gratia:11} } }
+  ]},
+
+{ at:4, t:'Arioviste', lieu:'Plaine d’Alsace, près du Rhin', guerre:true,
+  x:`À Besançon, la panique a pris l’armée : les marchands racontaient la taille des Germains, leur regard qu’on ne peut soutenir. Des tribuns demandaient des congés en pleurant.<br><br>César a dit qu’il partirait avec la Dixième seule, s’il le fallait, et qu’elle lui servirait de garde. Ta légion en est encore ivre d’orgueil. Ils chargent si vite qu’il n’y a pas de place pour lancer les <span class="lat">pila</span>.`,
+  vue:{ soldat:'Un homme énorme, torse nu, saute sur les boucliers devant toi.',
+        sousoff:'Ta centurie recule d’un pas sous le choc. Un pas seulement.',
+        centurion:'Le choc est frontal partout. Leur aile gauche est la plus mince.',
+        superieur:'César commande en personne l’aile droite, face au point faible.' },
+  nota:`Les prêtresses germaines avaient tiré les sorts : Arioviste ne devait pas combattre avant la nouvelle lune. César attaqua donc immédiatement. Le <span class="lat">gladius</span>, arme de vingt pouces faite pour la pointe, se révéla supérieur dans la presse à l’épée longue germaine.`,
+  o:[
+  { t:'Jeter la hampe et prendre le glaive dans le même mouvement',
+    res:{ r:`Tu es au fer avant qu’il t’atteigne. Vingt pouces, dans la presse, à hauteur de ventre. L’arme fait son travail.`, e:{virtus:8, valetudo:-4} } },
+  { t:'Reculer d’un pas pour laisser retomber ceux qui sautent',
+    need:{ s:'scientia', min:40 },
+    res:{ r:`Le rang s’ouvre d’un pas, le Germain tombe dans le vide entre les boucliers, et trois pointes le trouvent avant qu’il touche terre. Un vieux te tape sur le casque en riant.`, e:{scientia:7, virtus:4, auctoritas:4} } },
+  { t:'Porter l’effort sur leur aile gauche',
+    p:'centurion',
+    check:{ s:'auctoritas', dc:60 },
+    ok:{ r:`Tu pousses là où c’est mou. L’aile gauche germanique se replie sur ses chariots et la ligne entière commence à se tordre.`, e:{auctoritas:8, scientia:5, gratia:9} },
+    ko:{ r:`L’effort s’enlise. Ta cohorte est en pointe et prend des coups des deux côtés à la fois.`, e:{valetudo:-9, auctoritas:-5, vulnus:1} } },
+  { t:'Ouvrir les intervalles pour laisser passer la réserve',
+    p:'sousoff',
+    res:{ r:`Les centuries s’écartent en quinconce, la réserve de Crassus passe au travers et prend le combat. Les hommes épuisés s’asseyent littéralement sur place.`, e:{disciplina:8, auctoritas:6, gratia:4} } }
+  ]},
+
+{ t:'Jusqu’au Rhin', lieu:'Cinq milles de poursuite', guerre:true,
+  x:`Ils cassent et fuient vers le fleuve. Arioviste trouve une barque et passe ; ses deux femmes et une de ses filles meurent dans la fuite. La cavalerie fait le reste.`,
+  nota:`César écrit que la poursuite se fit sur cinquante milles jusqu’au Rhin. Les chiffres qu’il donne — quatre-vingt mille morts — sont ceux d’un homme qui rédige son propre rapport pour le Sénat et l’opinion romaine.`,
+  o:[
+  { t:'Poursuivre jusqu’au fleuve sans regarder derrière',
+    res:{ r:`Vous atteignez la rive. Ce qui se passe entre l’eau et le rang, on n’en parle pas au camp. Le butin, si.`, e:{virtus:4, peculium:280, valetudo:-4} } },
+  { t:'Rassembler ton monde et rentrer en ordre',
+    note:'Moins de butin. Les vétérans remarquent autre chose.',
+    res:{ r:`Tu ramènes tes hommes complets, en rang, avec leurs armes. Un centurion de la première cohorte te regarde passer et retient ton visage.`, e:{auctoritas:9, disciplina:6, gratia:3} } }
+  ]},
+
+{ t:'Le premier hiver', lieu:'Quartiers d’hiver, chez les Séquanes',
+  x:`Des baraques de bois à la place des tentes, un four, une infirmerie. On répare, on recoud, on enterre proprement ceux qu’on avait enterrés vite. Les lettres d’Italie arrivent par paquets de trois mois.`,
+  nota:`Les <span class="lat">hiberna</span> occupaient plus de la moitié de l’année. C’est là que se faisait l’essentiel de la vie militaire : réparation, instruction, comptes, et l’intrigue de camp qui décidait des carrières.`,
+  o:[
+  { t:'Refaire ton équipement de fond en comble',
+    res:{ r:`Cotte recloutée, semelles, courroies, fourreau. Un hiver d’atelier qui vaudra cher au printemps.`, e:{disciplina:5, valetudo:8, peculium:-70} } },
+  { t:'Passer l’hiver à te faire voir des officiers',
+    res:{ r:`Dîners, chasses, parties de dés perdues à propos. Un hiver bien employé vaut deux batailles pour un cursus.`, e:{gratia:11, auctoritas:-3, peculium:-150} } },
+  { t:'Écouter les vieux refaire les batailles sur le sable',
+    res:{ r:`Ils te montrent où placer un homme qui a peur, et comment reconnaître qu’une ligne va céder trois minutes avant qu’elle cède.`, e:{scientia:9, auctoritas:4} } },
+  { t:'Soigner réellement tes blessures',
+    res:{ r:`Trois mois sans marcher. Le médecin grec de la légion recoud correctement ce qui avait été recousu vite.`, e:{valetudo:20, gratia:-3}, soin:1 } }
+  ]}
+]},
+
+/* ==================== III. BELGAE ==================== */
+{
+id:'belgae', n:'Belgae', sub:'Le pays des Belges et l’Océan', y0:-57, y1:-56, len:6,
+events:[
+
+{ at:0, t:'Le camp sur l’Aisne', lieu:'Chez les Rèmes',
+  x:`Deux légions neuves sont arrivées de Cisalpine. Les vétérans les regardent comme on regarde du blé vert. Les Belges se sont ligués : on parle de trois cent mille hommes en armes.<br><br>Le camp sur l’Axona est un ouvrage de manuel : fossé de dix-huit pieds, deux redoutes, un pont gardé.`,
+  nota:`César ne livrait bataille que sur un terrain qu’il avait fabriqué. Le camp romain, retranché chaque soir même en marche, était moins un abri qu’une pièce de manœuvre : il permettait de refuser le combat jusqu’au moment choisi.`,
+  o:[
+  { t:'Tenir le gué et interdire le passage',
+    check:{ s:'virtus', dc:54 },
+    ok:{ r:`Le gué reste romain. Ils s’y écrasent par vagues, en aveugle, et rebroussent.`, e:{virtus:7, gratia:6, valetudo:-3} },
+    ko:{ r:`Un groupe passe cent pas plus bas pendant que tu regardes le gué. On te le fait remarquer, et pas doucement.`, e:{gratia:-6, valetudo:-5} } },
+  { t:'Reconnaître la rive avant de te poster',
+    res:{ r:`Tu trouves deux passages à sec en aval que personne n’avait signalés, et tu les fais garnir avant de tenir le tien.`, e:{scientia:9, gratia:6} } },
+  { t:'Fortifier ton poste avant toute chose',
+    p:'sousoff',
+    res:{ r:`Fossé, pieux, une nuit de travail. Au matin, l’attaque bute sur un ouvrage qui n’existait pas la veille.`, e:{disciplina:7, auctoritas:6, valetudo:-3} } }
+  ]},
+
+{ at:1, t:'La Sambre — sac à terre', lieu:'Sabis, chez les Nerviens', guerre:true,
+  x:`Le pire jour de la guerre des Gaules. Nous bâtissions le camp au-dessus de la rivière, sacs à terre, quand soixante mille Nerviens sont sortis du bois d’un seul coup.<br><br>Pas de ligne, pas de trompettes, pas d’ordre reçu. César fait dresser l’étendard rouge et court d’un point à l’autre en parlant à qui il croise.`,
+  vue:{ soldat:'Ton casque est sur ton sac, à trente pas, sous le sac d’un autre.',
+        sousoff:'Tes hommes sont éparpillés sur trois cents pas de chantier.',
+        centurion:'Aucun ordre ne viendra. C’est toi qui commandes, maintenant, et pour de bon.',
+        superieur:'Deux légions sont coupées. On ne voit rien de l’aile gauche.' },
+  nota:`César raconte qu’il n’eut le temps ni de faire sonner, ni de donner le mot d’ordre, ni de ranger la ligne : chaque homme se forma sur l’enseigne la plus proche. C’est cette capacité à se recomposer sans ordre qui distinguait une légion d’une foule armée.`,
+  o:[
+  { t:'Te ranger à la première enseigne venue, pas à la tienne',
+    note:'La règle est de rejoindre sa propre centurie. La règle vaut moins qu’une minute.',
+    res:{ r:`Tu te ranges sous une enseigne inconnue, avec des hommes que tu ne connais pas — et le front existe. C’est exactement ce que la légion sait faire et que rien d’autre au monde ne sait faire.`, e:{disciplina:8, virtus:5, valetudo:-4} } },
+  { t:'Perdre trente secondes à lacer casque et découvrir le bouclier',
+    res:{ r:`Trente secondes. Tu arrives au rang équipé comme il faut quand la moitié se bat tête nue. Cela se paiera à la troisième heure de combat.`, e:{scientia:5, valetudo:9, auctoritas:-3} } },
+  { t:'Rameuter à la voix tout ce qui passe',
+    p:'sousoff',
+    check:{ s:'auctoritas', dc:60 },
+    ok:{ r:`Ta voix porte au-dessus du bruit. Cent cinquante hommes de quatre centuries différentes se rangent sur toi. Il y a désormais un front là où il n’y avait qu’un chantier.`, e:{auctoritas:13, gratia:9, virtus:4, valetudo:-4} },
+    ko:{ r:`Tu cries dans un vacarme où l’on ne s’entend pas à cinq pas. Tu finis par te battre avec trois hommes, dos à un chariot.`, e:{valetudo:-10, vulnus:1} } }
+  ]},
+
+{ at:2, t:'La Douzième meurt', lieu:'Aile gauche, Sabis', guerre:true,
+  x:`La XII a tous ses centurions à terre, son porte-aigle de la quatrième cohorte tué, l’enseigne perdue, le primipile Sextius Baculus percé de coups au point de ne plus tenir debout.<br><br>Les rangs se sont tassés les uns dans les autres : les hommes ne peuvent plus lever le bras.`,
+  vue:{ soldat:'Devant toi, un rang de dos. Personne ne frappe plus, la presse est trop forte.',
+        sousoff:'L’enseigne de la centurie voisine est à terre. Personne ne la relève.',
+        centurion:'La XII est un bloc compressé qui ne combat plus. Elle va se faire égorger sur place.',
+        superieur:'César a pris un bouclier à un homme du dernier rang et est entré dans la ligne à pied.' },
+  nota:`Sextius Baculus, primipile de la XII, survécut à ce jour et reparaîtra deux fois dans les <span class="lat">Commentarii</span>, chaque fois blessé et chaque fois debout. César dit qu’il fit lui-même ouvrir les rangs pour que les hommes pussent se servir de leur glaive.`,
+  o:[
+  { t:'Aller chercher l’enseigne tombée',
+    note:'Tu la relèveras. Tu prendras un coup en le faisant : c’est certain, pas probable.',
+    res:{ r:`Tu la relèves et tu la portes en avant de trois pas. Trois pas, et deux cents hommes qui se croyaient morts se remettent à frapper. Une pointe t’ouvre l’épaule au passage. On te fera raconter cela pendant vingt ans.`, e:{virtus:11, auctoritas:14, gratia:12, valetudo:-12, vulnus:1} } },
+  { t:'Élargir les rangs pour qu’on puisse frapper',
+    need:{ s:'scientia', min:46 },
+    res:{ r:`Tu fais ouvrir les rangs et reculer les enseignes pour donner de l’air. Les hommes retrouvent la place de leur bras droit. C’est précisément ce que César ordonne à l’autre bout de la ligne, au même instant.`, e:{scientia:11, auctoritas:9, gratia:10, valetudo:-3} } },
+  { t:'Tenir le rang et frapper ce qui vient',
+    res:{ r:`Tu tiens ta place dans la presse et tu frappes dans les intervalles. Rien d’héroïque : la ligne existe encore à la fin de l’heure grâce à trois cents hommes qui ont fait exactement cela.`, e:{disciplina:8, virtus:4, valetudo:-7} } },
+  { t:'Faire relever les blessés pendant que la X revient à revers',
+    p:'centurion',
+    note:'Aucun avantage tactique. Six cents hommes vivront.',
+    res:{ r:`Tu détaches deux centuries pour tirer les blessés de la presse pendant que le reste avance. La XII s’en souviendra ; le rapport de bataille, non.`, e:{auctoritas:12, gratia:-3, valetudo:-4} } }
+  ]},
+
+{ t:'Cinquante-trois mille têtes', lieu:'Oppidum des Aduatuques',
+  x:`Les Aduatuques ont rendu leurs armes par-dessus le mur, puis tenté une sortie la nuit venue avec les armes cachées. Au matin, César a vendu la ville entière : cinquante-trois mille têtes, adjugées d’un seul lot au marchand qui suit l’armée.`,
+  nota:`Le chiffre est de César lui-même. Les marchands d’esclaves suivaient les armées et achetaient en gros sur le champ ; le produit était réparti entre le général, le trésor et les hommes. C’était une part normale de la solde.`,
+  o:[
+  { t:'Prendre ta part et n’y plus penser',
+    res:{ r:`Ta part est comptée et versée. C’est la guerre, c’est le droit de la guerre, ils ont violé leur serment. Toutes ces phrases sont vraies.`, e:{peculium:420, valetudo:-2} } },
+  { t:'Racheter une famille de ta part et l’affranchir',
+    note:'Personne ne comprendra. Toi non plus, tout à fait.',
+    res:{ r:`Tu paies le prix du lot pour trois personnes et tu les fais inscrire libres au registre. Tes hommes te regardent différemment — pas plus mal, différemment.`, e:{peculium:-350, auctoritas:11, gratia:-4} } },
+  { t:'Racheter le lot des forgerons pour le revendre en Cisalpine',
+    check:{ s:'scientia', dc:52 },
+    ok:{ r:`Les artisans valent quatre fois le prix du lot commun sur les marchés du Pô. Tu spécules sur des gens, et tu es très bon à cela.`, e:{peculium:900, scientia:4, auctoritas:-4} },
+    ko:{ r:`Le convoi est pillé sur la route de l’Italie. Tu perds ta mise et le reste.`, e:{peculium:-400} } }
+  ]},
+
+{ t:'Les faux de marine', lieu:'Golfe du Morbihan', guerre:true,
+  x:`Les navires vénètes sont plus hauts que les nôtres, en chêne, chevillés au fer, à voiles de cuir. L’éperon ne peut rien contre eux. Décimus Brutus a fait forger des faux emmanchées sur de longues perches, pour couper les drisses : un navire sans voile est un rocher.`,
+  nota:`César décrit précisément ce stratagème. Le vent tomba pendant l’action, immobilisant les deux cent vingt vaisseaux vénètes sous les yeux de l’armée massée sur les falaises. Ce fut la première bataille navale romaine sur l’Océan.`,
+  o:[
+  { t:'Manœuvrer à la perche et couper',
+    res:{ r:`La faux mord, on souque à six, la vergue tombe avec la voile de cuir. Le navire devient un ponton et l’on monte dedans.`, e:{disciplina:6, scientia:4, peculium:140, valetudo:-3} } },
+  { t:'Aborder de force sans couper la voile',
+    check:{ s:'virtus', dc:62 },
+    ok:{ r:`Tu montes à la corde sous les traits, en cotte de mailles, sur un pont plus haut d’un homme. Ceux qui te suivent ne l’oublieront pas.`, e:{virtus:9, auctoritas:8, peculium:180, valetudo:-5} },
+    ko:{ r:`On te repousse du bastingage. Deux hommes tombent entre les coques et ne remontent pas.`, e:{valetudo:-9, auctoritas:-5, vulnus:1} } },
+  { t:'Attendre la bascule du vent avant d’engager',
+    p:'centurion', need:{ s:'scientia', min:50 },
+    res:{ r:`Tu lis le calme qui vient et tu retiens tes navires vingt minutes. Le vent tombe : deux cent vingt vaisseaux s’immobilisent devant nous. On les prend un par un jusqu’au soir.`, e:{scientia:10, gratia:12, peculium:300} } }
+  ]},
+
+{ t:'Le sort des Vénètes', lieu:'Camp de la Loire',
+  x:`La flotte prise, la nation se rend. César décide de faire un exemple parce qu’ils ont saisi des ambassadeurs : il fait exécuter tout le sénat vénète et vendre le reste.`,
+  nota:`César justifie la sévérité par la violation du droit d’ambassade. Cicéron, dans une lettre privée, s’inquiétera de ce que son frère Quintus sert sous un homme qui traite ainsi des peuples qui se rendent.`,
+  o:[
+  { t:'Exécuter les ordres sans commentaire',
+    res:{ r:`C’est fait. Le butin est distribué. Le camp n’en parle pas et n’en parlera plus.`, e:{disciplina:5, peculium:200, auctoritas:-3} } },
+  { t:'Faire retirer les enfants du lot avant la vente',
+    p:'sousoff',
+    note:'Cela ne les sauve pas. Cela les sépare autrement.',
+    res:{ r:`Tu obtiens du questeur qu’on les vende à part, aux domaines et non aux mines. C’est une différence de dix ans d’espérance de vie, et personne au camp ne comprend pourquoi tu t’en soucies.`, e:{auctoritas:9, scientia:3, peculium:120} } },
+  { t:'Objecter au conseil qu’un peuple massacré en arme dix autres',
+    p:'centurion',
+    check:{ s:'scientia', dc:66 },
+    ok:{ r:`Tu le dis calmement, sans emphase. César t’écoute jusqu’au bout, ne change rien, et retient ton nom. Les officiers qui pensent avant de parler sont rares.`, e:{scientia:7, auctoritas:7, gratia:8} },
+    ko:{ r:`Tu passes pour un homme au cœur tendre devant vingt officiers. Le mot circulera plus vite que tu ne le voudrais.`, e:{gratia:-9, auctoritas:-5} } }
+  ]},
+
+{ t:'Le partage du monde', lieu:'Quartiers d’hiver, vallée de la Loire',
+  x:`À Lucques, ce printemps, César, Pompée et Crassus se sont partagé le monde comme trois hommes partagent une succession : l’Espagne à l’un, la Syrie à l’autre, et cinq années de plus en Gaule pour le nôtre.`,
+  nota:`La conférence de Lucques, en avril 56, prorogea le commandement de César de cinq ans. Elle scella aussi le sort de Crassus, qui partit pour la Parthie et y mourut à Carrhes trois ans plus tard.`,
+  o:[
+  { t:'Faire tes comptes : cinq ans de solde et de butin',
+    res:{ r:`Tu calcules ce que cinq ans rapportent si tu vis, et ce qu’ils coûtent si tu meurs. Le second chiffre est plus facile à établir.`, e:{scientia:5, peculium:180} } },
+  { t:'Écrire à ta famille de placer l’argent en terre plutôt qu’en prêts',
+    res:{ r:`La terre survit aux guerres civiles ; les créances, non. Ton correspondant exécute. Dans huit ans, tu seras l’un des rares du camp à posséder encore ce qu’il possédait.`, e:{scientia:6, peculium:200} } },
+  { t:'Sonder discrètement les officiers sur ce qu’ils feront si cela tourne mal',
+    check:{ s:'gratia', dc:58 },
+    ok:{ r:`Tu apprends que Labienus a des terres dans le Picénum, pays de Pompée, et qu’il y écrit souvent. C’est un détail. Dans sept ans, ce sera le détail.`, e:{scientia:7, gratia:4}, lien:{labienus:1} },
+    ko:{ r:`Ta curiosité se voit. On te fait dire, par un tiers, qu’un bon soldat ne s’occupe pas de politique.`, e:{gratia:-8, auctoritas:-3} } }
+  ]}
+]},
+
+/* ===== src2/data-phases-2.js ===== */
+/* ==================== IV. OCEANVS ==================== */
+{
+id:'oceanus', n:'Oceanus', sub:'Le Rhin et la Bretagne', y0:-55, y1:-54, len:6,
+events:[
+
+{ at:0, t:'La parole donnée', lieu:'Confluent de la Meuse et du Rhin',
+  x:`Quatre cent mille Germains ont passé le Rhin. Leurs chefs sont venus au camp sous couvert de trêve ; César les a fait arrêter, puis a lancé l’armée sur un camp resté sans chefs.<br><br>Il n’y a pas eu de bataille. Il y a eu ce qui suit une bataille, mais sans la bataille.`,
+  nota:`À Rome, Caton demanda au Sénat qu’on livrât César aux Germains pour expier la violation de la foi jurée. La motion échoua. César, dans ses <span class="lat">Commentarii</span>, présente l’arrestation comme une réponse à une embuscade germaine.`,
+  o:[
+  { t:'Faire ton office sans commentaire',
+    res:{ r:`Tu fais ce qu’on te dit. Tu n’es ni le premier ni le dernier, et cela ne console de rien.`, e:{disciplina:5, valetudo:-2, auctoritas:-2} } },
+  { t:'Laisser passer les non-combattants dans ton secteur',
+    note:'Un quart d’heure les yeux ailleurs. Quelques centaines de personnes.',
+    res:{ r:`Tu détournes les yeux pendant un quart d’heure. Personne ne saura jamais combien sont passés, ni que c’était toi. Deux hommes de ta tente l’ont vu.`, e:{auctoritas:10, gratia:-6} } },
+  { t:'Consigner par écrit les circonstances exactes de l’arrestation des chefs',
+    need:{ s:'scientia', min:44 },
+    res:{ r:`Tu rédiges un mémoire exact, daté, que tu gardes. Tu ne l’utiliseras jamais. Il existe, et il t’arrive d’y penser.`, e:{scientia:8, gratia:-4} } }
+  ]},
+
+{ at:1, t:'Dix jours de pont', lieu:'Rive gauche du Rhin',
+  x:`Il aurait pu passer sur les barques des Ubiens. Il a jugé cela indigne du peuple romain.<br><br>Le génie plante des pieux jumelés en biais dans le courant, entretoisés, lestés par la poussée du fleuve lui-même : plus l’eau pousse, plus le pont serre.`,
+  nota:`César consacre à ce pont une description technique de plusieurs paragraphes — la plus détaillée de tout l’ouvrage. Dix jours de la coupe du bois au passage. Il resta dix-huit jours en Germanie, ne combattit personne, et détruisit le pont derrière lui. Le message était l’ouvrage.`,
+  o:[
+  { t:'Travailler à la charpente jour et nuit',
+    res:{ r:`Tu apprends à assembler une pile sous un courant de six pieds par seconde. Ce savoir-là ne se perd pas.`, e:{scientia:9, disciplina:5, valetudo:-4} } },
+  { t:'Demander à l’architecte comment tient l’assemblage',
+    need:{ s:'scientia', min:42 },
+    res:{ r:`Il te dessine le principe sur une tablette de cire : les pieux inclinés à contre-courant, la poussée qui verrouille l’ouvrage au lieu de l’emporter. Tu gardes la tablette.`, e:{scientia:12, gratia:5} } },
+  { t:'Passer le premier sur le tablier quand il est achevé',
+    res:{ r:`Tu marches sur le Rhin. Personne dans ta famille n’a jamais vu ce fleuve, et personne ne te croira.`, e:{virtus:5, auctoritas:6} } }
+  ]},
+
+{ at:2, t:'L’aigle de la Dixième', lieu:'Côte de Bretagne', guerre:true,
+  x:`Les navires ne peuvent aborder à cause des hauts-fonds : il faut sauter dans l’eau jusqu’à la poitrine, en armes, sous les traits et les chars. Personne ne bouge.<br><br>Alors le porte-aigle de la Dixième saute le premier : <em>« Sautez, soldats, si vous ne voulez pas livrer l’aigle à l’ennemi ! »</em>`,
+  vue:{ soldat:'L’eau est plus froide que tout ce que tu connais.',
+        sousoff:'Ta centurie hésite une seconde entière. Une seconde, c’est très long.',
+        centurion:'Le débarquement se joue dans les quinze prochaines secondes.',
+        superieur:'Les navires longs peuvent venir prendre le flanc breton à la rame.' },
+  nota:`Le mot est rapporté par César lui-même, qui ne nomme pas le porte-aigle. Perdre une aigle était le déshonneur absolu d’une légion — celles de Crassus, perdues à Carrhes, ne seront récupérées qu’en 20 av. J.-C., par la diplomatie.`,
+  o:[
+  { t:'Sauter dans la seconde qui suit',
+    res:{ r:`Tu es dans l’eau avec lui, et les autres suivent parce qu’on ne laisse pas une aigle seule. On te citera avec les premiers.`, e:{virtus:9, auctoritas:8, gratia:8, valetudo:-4} } },
+  { t:'Organiser les barques pour repêcher ceux qui coulent',
+    note:'Une cotte de mailles pèse dix kilos. Beaucoup ne savent pas nager.',
+    res:{ r:`Tu détaches les chaloupes et les esquifs de reconnaissance. Une quarantaine d’hommes te doivent la vie sans savoir ton nom.`, e:{scientia:7, auctoritas:10, valetudo:-2} } },
+  { t:'Faire venir les navires longs prendre les Bretons de flanc',
+    p:'centurion',
+    res:{ r:`Frondes, arcs et scorpions à bout portant depuis la mer. Les chars bretons décrochent, et la plage devient praticable.`, e:{scientia:8, gratia:9} } }
+  ]},
+
+{ t:'Les chars', lieu:'Au-delà de la Tamise', guerre:true,
+  x:`Le char breton n’est pas une machine de choc : il court le long du front en jetant des traits, le guerrier saute à terre pour combattre, le conducteur se tient à portée pour le reprendre.<br><br>Cela combine la vitesse du cavalier et la fermeté du fantassin, et nos hommes n’ont jamais vu cela.`,
+  vue:{ soldat:'Tu passes tes journées à fourrager en armes.',
+        sousoff:'On te confie la garde des fourrageurs de trois centuries.',
+        centurion:'Tes détachements rentrent toujours incomplets.',
+        superieur:'Il faut choisir entre nourrir l’armée et la garder groupée.' },
+  nota:`César consacre au char breton une description admirative : c’était une tactique qu’aucun peuple continental ne pratiquait plus. Il ne parvint jamais à la contrer autrement qu’en refusant de disperser ses hommes.`,
+  o:[
+  { t:'Fourrager en formation serrée, quitte à rapporter moins',
+    note:'La faim est moins mortelle que les chars.',
+    res:{ r:`On rentre tous les soirs avec tout le monde et la moitié du grain nécessaire. Les hommes grognent et rentrent.`, e:{disciplina:7, auctoritas:6, valetudo:-3} } },
+  { t:'Tendre une embuscade aux embusqueurs',
+    check:{ s:'scientia', dc:60 },
+    ok:{ r:`Tu laisses un détachement bien visible et bien lent, et tu couches deux centuries dans le fossé de la haie. Les chars entrent dedans. On en prend neuf avec les attelages.`, e:{scientia:9, virtus:5, gratia:9, peculium:200} },
+    ko:{ r:`Ils ne mordent pas — ou plutôt, ils mordent ailleurs, et c’est ton détachement-appât qui prend tout.`, e:{auctoritas:-8, valetudo:-7, vulnus:1} } },
+  { t:'Traiter avec les Trinovantes contre Cassivellaunos',
+    p:'centurion',
+    res:{ r:`Ils haïssent Cassivellaunos, qui a tué leur roi. Ils livrent du blé, des otages et l’emplacement de son oppidum. La guerre change de nature en une conversation.`, e:{scientia:6, gratia:11} } }
+  ]},
+
+{ t:'La flotte brisée', lieu:'Camp naval, côte du Kent',
+  x:`Une marée de pleine lune, que personne n’avait prévue, a jeté les navires de transport les uns sur les autres. Quarante sont perdus, le reste est à réparer.`,
+  nota:`Les Romains, gens de Méditerranée, ne connaissaient pas les grandes marées de l’Atlantique. César perdit deux fois sa flotte pour cette raison. Rome décréta vingt jours d’actions de grâces pour une expédition qui ne rapporta ni province ni butin.`,
+  o:[
+  { t:'Tirer les navires à sec et réparer, dix jours durant',
+    res:{ r:`Dix jours de charpente sur une plage, sans dormir. On sauve ce qui peut l’être et l’on rembarque à l’étroit.`, e:{disciplina:6, scientia:5, valetudo:-5} } },
+  { t:'Dire aux hommes ce qu’ils ont fait, pas ce qu’ils n’ont pas gagné',
+    p:'sousoff',
+    res:{ r:`Tu leur dis qu’aucune armée du monde n’a passé cet Océan, que leurs petits-fils le raconteront, et que le blé, lui, est en Gaule. Ils rient. Cela suffit.`, e:{auctoritas:11, disciplina:3} } },
+  { t:'Payer une tournée sur ta propre bourse',
+    res:{ r:`Deux amphores et une nuit. Les hommes savent d’où vient le vin, et c’est tout l’intérêt.`, e:{auctoritas:9, peculium:-140} } }
+  ]},
+
+{ t:'Un homme libre d’un peuple libre', lieu:'Portus Itius',
+  x:`Dumnorix l’Éduen refuse d’embarquer et s’enfuit avec sa cavalerie en criant qu’il est un homme libre d’un peuple libre. César interrompt l’embarquement et détache la cavalerie avec ordre de le ramener — ou de le tuer s’il résiste.`,
+  nota:`César rapporte la phrase de Dumnorix : <span class="lat">se liberum liberaeque civitatis esse</span>. Il fut rattrapé et tué. Six ans plus tard, les Éduens basculeront dans la révolte de Vercingétorix.`,
+  o:[
+  { t:'Faire partie du détachement',
+    res:{ r:`On le rattrape à six milles. Il se bat, il crie sa phrase jusqu’au bout, et il meurt. Le détachement rentre en silence.`, e:{virtus:4, gratia:8, auctoritas:-5} } },
+  { t:'Rester à l’embarquement et le mener proprement',
+    res:{ r:`Tu fais embarquer ta part de la légion en bon ordre pendant que d’autres courent après un cavalier. C’est le travail.`, e:{disciplina:7, gratia:3} } },
+  { t:'Suggérer qu’un Éduen mort vaut moins qu’un Éduen otage',
+    p:'sousoff',
+    check:{ s:'scientia', dc:62 },
+    ok:{ r:`On ne te suit pas, mais l’argument est retenu — et il resservira dans deux ans, quand les Éduens basculeront et qu’on cherchera pourquoi.`, e:{scientia:8, gratia:6} },
+    ko:{ r:`On te répond que la décision est prise et que ton avis n’était pas demandé.`, e:{gratia:-5} } }
+  ]}
+]},
+
+/* ==================== V. ATVATVCA ==================== */
+{
+id:'atuatuca', n:'Atuatuca', sub:'Le désastre, et ce qui suit', y0:-54, y1:-53, len:5,
+events:[
+
+{ at:0, t:'Quinze cohortes', lieu:'Camp d’hiver d’Atuatuca',
+  x:`La récolte a manqué : les huit légions sont dispersées en huit camps, à cent milles les uns des autres. C’est là qu’Ambiorix a frappé.<br><br>Sabinus a cru à sa parole et fait sortir quinze cohortes. Elles sont mortes dans un défilé, jusqu’à la dernière ou presque. Cotta est tombé le visage fracassé, en refusant de parlementer.`,
+  nota:`C’est la plus lourde défaite de César en Gaule : environ six mille hommes. Il jura de ne pas se raser ni se couper les cheveux avant de l’avoir vengée. Les <span class="lat">Commentarii</span> chargent Sabinus et innocentent Cotta, qui avait voulu rester dans le camp.`,
+  o:[
+  { t:'Écouter les survivants et retenir la leçon',
+    res:{ r:`Ils sont sept. Ils racontent la colonne étirée dans le défilé, l’ordre de former le cercle donné trop tard, les bagages abandonnés qui ont désorganisé le rang. Tu retiens tout.`, e:{scientia:10, valetudo:-2, auctoritas:3} } },
+  { t:'Faire jurer à ta tente de ne jamais parlementer en campagne',
+    res:{ r:`Un serment de huit hommes sous une tente, sans témoin. Ce genre de chose ne vaut rien et tient parfois mieux que le règlement.`, e:{auctoritas:9, disciplina:5} } },
+  { t:'Vérifier toi-même les défenses de ton propre camp',
+    res:{ r:`Tu passes trois nuits à contrôler les postes, les réserves d’eau, les issues. On te trouve pénible. Dans six semaines, on ne te trouvera plus pénible.`, e:{disciplina:8, scientia:5, valetudo:-3} } }
+  ]},
+
+{ at:1, t:'Pullo et Vorenus', lieu:'Camp de Q. Cicéron, chez les Nerviens', guerre:true,
+  x:`Deux centurions de la première cohorte, Titus Pullo et Lucius Vorenus, se disputent depuis des années le premier rang. Aujourd’hui, Pullo sort du rempart en criant à Vorenus qu’il n’a plus d’excuse pour douter de sa valeur.<br><br>Vorenus le suit, parce qu’il ne peut pas faire autrement. Tout le camp est monté sur le rempart pour regarder.`,
+  vue:{ soldat:'Deux hommes seuls contre une ligne gauloise. Personne ne détourne les yeux.',
+        sousoff:'C’est absurde et c’est la chose la plus romaine que tu aies vue.',
+        centurion:'Tu connais les deux. Tu sais exactement pourquoi ils font cela.',
+        superieur:'Deux officiers de la première cohorte hors du rempart. Si tu les perds, tu perds plus que deux hommes.' },
+  nota:`César nomme les deux centurions et raconte l’épisode en détail : Pullo cloué au sol par un trait dans le baudrier, Vorenus revenant le chercher, tombant à son tour, et Pullo relevé le tirant en arrière. Ils rentrèrent vivants tous les deux. C’est l’un des rares passages où César s’attarde sur des individus du rang.`,
+  o:[
+  { t:'Les couvrir avec tout ce qui peut tirer du rempart',
+    res:{ r:`Frondeurs, archers, tout ce qui a un bras. Ils rentrent tous les deux, sous une pluie de traits qui vient de tes hommes. Le camp entier a vu qui les couvrait.`, e:{auctoritas:9, gratia:6, scientia:3} } },
+  { t:'Sortir les chercher',
+    note:'Tu les ramèneras. Tu y laisseras quelque chose : c’est certain.',
+    res:{ r:`Tu franchis le rempart avec une poignée d’hommes et tu ramènes les deux centurions par le col, sous les yeux du camp entier et de la moitié de la Gaule. Ton avant-bras est ouvert jusqu’à l’os. Il n’y a pas d’autre monnaie que celle-là dans une légion.`, e:{virtus:12, auctoritas:15, gratia:10, valetudo:-13, vulnus:1} } },
+  { t:'Interdire la sortie et les faire rentrer sous peine de sanction',
+    p:'centurion',
+    note:'Deux centurions vivants valent mieux qu’une légende. Tu seras le seul à le penser aujourd’hui.',
+    res:{ r:`Tu les rappelles au nom du légat, devant six mille hommes. Ils obéissent en te haïssant. Le camp te trouve mesquin et Quintus Cicéron te trouve solide.`, e:{disciplina:9, gratia:10, auctoritas:-8} } }
+  ]},
+
+{ t:'Le message', lieu:'Camp assiégé, neuvième jour',
+  x:`Il faut prévenir César, à cent milles. Tous les messagers envoyés ont été pris et torturés en vue du rempart. Un cavalier nervien à notre solde propose d’essayer, avec la lettre roulée dans la courroie de son javelot.`,
+  nota:`César rapporte que la lettre fut écrite en caractères grecs pour être illisible aux Gaulois si elle était prise, et que le javelot resta fiché deux jours dans une tour avant qu’on le remarque.`,
+  o:[
+  { t:'Payer le Nervien sur ta propre bourse et le lâcher de nuit',
+    res:{ r:`Il passe. Le javelot arrivera fiché dans une tour du camp de César, où il restera deux jours avant qu’on le remarque. Mais il arrivera.`, e:{gratia:11, auctoritas:6, peculium:-200} } },
+  { t:'Écrire la lettre en caractères grecs',
+    need:{ s:'scientia', min:48 },
+    res:{ r:`Du latin transcrit en lettres grecques : illisible pour un Gaulois qui lit le latin, immédiat pour un Romain lettré. La précaution paraît mineure jusqu’au jour où elle ne l’est plus.`, e:{scientia:9, gratia:8} } },
+  { t:'Sortir toi-même de nuit avec la lettre',
+    check:{ s:'virtus', dc:68 },
+    ok:{ r:`Trois nuits à travers les Ardennes, dans un manteau gaulois, en évitant les feux. Quand tu arrives, César lit la lettre debout et fait sonner le départ dans l’heure.`, e:{virtus:9, scientia:6, gratia:16, auctoritas:8, valetudo:-10} },
+    ko:{ r:`Tu es repéré au deuxième jour et tu passes une semaine à ramper vers le camp le plus proche, sans lettre et sans bottes.`, e:{valetudo:-14, gratia:-5, vulnus:1} } }
+  ]},
+
+{ t:'Le pays offert au pillage', lieu:'Forêt des Ardennes',
+  x:`César a fait proclamer que le pays des Éburons est ouvert à qui veut. Des Gaulois, des Germains, des marchands, des gens sans nom affluent pour piller.<br><br>Ce n’est pas une guerre, c’est une battue. On brûle les fermes, on coupe le blé sur pied, on comble les puits. Ambiorix s’échappe toujours, avec quatre cavaliers.`,
+  nota:`César écrit vouloir que la nation des Éburons cesse d’exister. C’est l’un des rares passages où il décrit une politique d’extermination délibérée. Ambiorix ne fut jamais pris.`,
+  o:[
+  { t:'Participer aux colonnes de destruction',
+    res:{ r:`Méthodique, et ce n’est pas la guerre. Le butin est maigre : il n’y a plus rien à prendre chez des gens qu’on a déjà pris.`, e:{disciplina:3, peculium:180, auctoritas:-6, valetudo:-2} } },
+  { t:'Rester au camp et renforcer la garde',
+    note:'Un camp à demi vide au milieu d’un pays qu’on saccage est une cible.',
+    res:{ r:`Deux mille Sugambres se présentent devant Atuatuca. Le rempart est garni parce que tu l’as voulu. Le vieux primipile Baculus, malade au lit depuis cinq jours, se lève pour tenir la porte et te dit deux mots que tu répéteras toute ta vie.`, e:{scientia:8, virtus:5, gratia:9, auctoritas:7} } },
+  { t:'Racheter des captifs aux pillards pour les revendre',
+    check:{ s:'gratia', dc:56 },
+    ok:{ r:`Tu achètes bas à des Germains pressés et tu revends haut aux marchands qui remontent vers le Rhin. C’est laid et c’est très rentable.`, e:{peculium:700, auctoritas:-6} },
+    ko:{ r:`Les Germains te reprennent la marchandise et ton argent à trois milles du camp. Tu rentres à pied.`, e:{peculium:-300, valetudo:-6} } }
+  ]},
+
+{ t:'Carrhes', lieu:'Quartiers d’hiver, Gaule du Nord',
+  x:`La nouvelle est arrivée de Syrie avec deux mois de retard. Crassus, sept légions, anéanties par les archers parthes. Trente mille Romains. On dit qu’ils ont coulé de l’or fondu dans la bouche du triumvir.<br><br>Ils étaient trois à se partager le monde. Ils ne sont plus que deux, et il n’y a plus rien entre eux.`,
+  nota:`Carrhes, juin 53. Julia, fille de César et femme de Pompée, était morte en couches l’année précédente. Avec Crassus disparaît le dernier arbitre, et avec Julia le dernier lien de famille.`,
+  o:[
+  { t:'Écouter ce qui se dit au camp',
+    res:{ r:`Les vétérans disent que cela finira mal et qu’ils suivront César. Les jeunes tribuns de bonne famille disent le contraire, à voix basse. Tu sais désormais qui pense quoi.`, e:{scientia:7, gratia:3} } },
+  { t:'Dire tout haut que tu sers la République, pas un homme',
+    note:'C’est courageux. Cela se répétera, et déformé.',
+    res:{ r:`Tu le dis sans provocation, devant des gens qui ne pensent pas comme toi. On te respecte pour la franchise et l’on te classe.`, e:{disciplina:6, auctoritas:8, gratia:-9}, lien:{labienus:2} } },
+  { t:'Dire simplement que tu sers César',
+    res:{ r:`La moitié du camp pense pareil et l’autre moitié le pense sans le dire. Ton nom monte d’un cran sur une liste que tu ne verras jamais.`, e:{gratia:11, auctoritas:3}, lien:{caesar:2} } }
+  ]}
+]},
+
+/* ==================== VI. VERCINGETORIX ==================== */
+{
+id:'vercingetorix', n:'Vercingetorix', sub:'Toute la Gaule se lève', y0:-52, y1:-52, len:7,
+events:[
+
+{ at:0, t:'Avaricum', lieu:'Oppidum des Bituriges', guerre:true,
+  x:`Un jeune Arverne a compris ce qu’aucun n’avait compris : ne pas nous livrer bataille, brûler devant nous. Vingt villes des Bituriges ont brûlé en un jour, par la main de leurs habitants.<br><br>Ils ont supplié d’épargner Avaricum. Nous sommes devant, dans la boue, à la ration de vingt jours qui en dure quarante. La terrasse monte : vingt-cinq pieds de haut, trois cents de large.`,
+  vue:{ soldat:'Tu portes des fascines depuis trois semaines. Pas de pain depuis dix jours.',
+        sousoff:'Tes hommes tiennent par habitude. Ils ne se plaignent pas, et c’est mauvais signe.',
+        centurion:'Tu peux exiger le double de travail, ou les ménager pour l’assaut.',
+        superieur:'César a proposé de lever le siège. Les légions ont supplié qu’on n’en fasse rien.' },
+  nota:`Le <span class="lat">murus gallicus</span> — poutres croisées, pierres et terre, cloué de fiches de fer — résistait au bélier parce que le bois amortissait, et au feu parce que la pierre protégeait. La seule réponse romaine était la terrasse. César dit que ses hommes refusèrent qu’on levât le siège plutôt que de perdre l’honneur.`,
+  o:[
+  { t:'Pousser le travail sans relâche',
+    res:{ r:`La terrasse monte de dix pieds en trois jours. Les hommes dorment sur le chantier, en armes, et il faut les enjamber pour circuler.`, e:{disciplina:8, gratia:6, valetudo:-6} } },
+  { t:'Aller chercher du grain dans la campagne brûlée',
+    check:{ s:'scientia', dc:58 },
+    ok:{ r:`Tu trouves des silos enterrés que les Bituriges avaient oubliés. Deux jours de blé pour la légion, et un nom que les hommes retiennent.`, e:{scientia:8, auctoritas:12, valetudo:4} },
+    ko:{ r:`Quarante milles de cendres, deux hommes perdus à la cavalerie gauloise, et le retour à vide devant des gens qui espéraient.`, e:{auctoritas:-8, valetudo:-7} } },
+  { t:'Contre-miner leurs galeries',
+    p:'centurion', need:{ s:'scientia', min:52 },
+    res:{ r:`Tu fais creuser à leur rencontre et l’on se bat sous terre, à la lampe, au couteau, dans un boyau où deux hommes ne passent pas de front. La terrasse cesse de s’affaisser.`, e:{scientia:11, virtus:6, gratia:8, valetudo:-5} } }
+  ]},
+
+{ at:1, t:'La nuit du feu', lieu:'Terrasse d’Avaricum', guerre:true,
+  x:`Vers minuit, une fumée sort de la terrasse : ils l’ont minée et enflammée par-dessous. Au même instant, ils sortent des deux portes.<br><br>Un Gaulois, debout devant la porte, reçoit les boules de suif que la foule lui passe et les jette au feu. Un trait le tue. Un autre prend sa place sur son corps. Puis un autre.`,
+  vue:{ soldat:'La terrasse brûle sous tes pieds.',
+        sousoff:'La tour de siège de ta centurie est en flammes.',
+        centurion:'Sauver l’ouvrage, ou sauver les hommes.',
+        superieur:'Vingt-cinq jours de travail brûlent, et les légions arrivent en désordre.' },
+  nota:`César décrit ces hommes se relayant devant la porte comme un spectacle qu’il juge digne d’être rapporté, bien qu’il s’agisse d’ennemis. C’est l’un des rares moments d’admiration explicite des <span class="lat">Commentarii</span>.`,
+  o:[
+  { t:'Sauver l’ouvrage à tout prix',
+    note:'Toute la nuit, à découvert, contre le feu et les Gaulois à la fois.',
+    res:{ r:`Au matin la terrasse tient encore et il n’y a plus de nuit à donner. Tu as les mains brûlées jusqu’aux poignets.`, e:{virtus:8, disciplina:6, gratia:9, valetudo:-9} } },
+  { t:'Retirer les hommes, laisser brûler, reconstruire demain',
+    res:{ r:`Tu décroches proprement. On perd trois jours de terrasse et pas un homme. Le lendemain, elle remonte plus vite qu’elle n’avait monté.`, e:{auctoritas:9, scientia:4, gratia:-4} } },
+  { t:'Monter dans la première vague quand l’assaut vient, sous la pluie',
+    check:{ s:'virtus', dc:62 },
+    ok:{ r:`Le vingt-septième jour, une averse : les gardes se sont abrités. Tu es sur le parapet avant qu’ils comprennent. La récompense est réelle, et la nuit qui suit ne l’est pas moins.`, e:{virtus:9, gratia:8, peculium:400, valetudo:-6} },
+    ko:{ r:`L’échelle bascule. Tu tombes de douze pieds sur des pierres, avec ton bouclier sur la figure.`, e:{valetudo:-12, vulnus:1} } }
+  ]},
+
+{ at:2, t:'Gergovie', lieu:'Plateau arverne', guerre:true,
+  x:`César monte une démonstration pour prendre le camp gaulois du flanc, avec <strong>ordre formel de ne pas aller plus loin</strong>. Le camp est pris presque sans coup férir.<br><br>Puis l’élan emporte tout : trois cohortes continuent de monter vers le mur de la ville.`,
+  vue:{ soldat:'Tu montes dans un chemin creux, courbé, depuis une heure.',
+        sousoff:'Le camp gaulois est devant, presque vide. Et la pente continue.',
+        centurion:'L’ordre est clair : prendre le camp et s’arrêter là.',
+        superieur:'La feinte a marché au-delà du calcul. C’est exactement le moment dangereux.' },
+  nota:`Seule défaite ouverte de César en Gaule : sept cents morts, dont quarante-six centurions. Le centurion Lucius Fabius atteignit le parapet en criant qu’il aurait la couronne murale ; il y monta et n’en redescendit pas. César blâma publiquement l’indiscipline de ses hommes, puis, voyant l’effet, les consola de leur courage.`,
+  o:[
+  { t:'Prendre le camp et t’arrêter, comme ordonné',
+    check:{ s:'disciplina', dc:60 },
+    ok:{ r:`Tu tiens tes hommes sur la ligne exacte que César a désignée pendant que les cohortes voisines montent vers le mur. Demain, on comptera quarante-six centurions morts, et aucun n’est à toi.`, e:{disciplina:10, auctoritas:8, gratia:12} },
+    ko:{ r:`Le camp pris, l’élan emporte tout. Tes hommes sont déjà cinquante pas plus haut quand tu cries de t’arrêter.`, e:{auctoritas:-7, valetudo:-8, gratia:-6} } },
+  { t:'Monter vers le mur avec les autres',
+    note:'Contre les ordres. On monte, on ne redescend pas tous.',
+    res:{ r:`Tu montes. Un centurion atteint le parapet et crie qu’il aura la couronne murale ; il n’en redescendra pas. Toi si, avec une gloire douteuse et le nom dans le mauvais rapport.`, e:{virtus:7, auctoritas:5, gratia:-12, valetudo:-12, vulnus:1} } },
+  { t:'Faire sonner la retraite pour ton secteur avant l’ordre général',
+    p:'centurion',
+    res:{ r:`Les hommes t’en veulent une heure et te bénissent le lendemain. Tu es de ceux qui ramènent leur monde.`, e:{auctoritas:11, scientia:6, gratia:9} } },
+  { t:'Tenir un point d’appui pour couvrir la descente des autres',
+    p:'sousoff',
+    note:'Trois cohortes passeront derrière toi. Tu paieras le passage.',
+    res:{ r:`Tu tiens un rocher avec vingt hommes pendant que trois cohortes refluent derrière toi. Vous en descendez neuf. Ceux qui sont passés savent ce qu’ils te doivent, et le disent — c’est ainsi qu’on devient quelqu’un dans une légion.`, e:{virtus:11, auctoritas:16, gratia:8, valetudo:-14, vulnus:1} } }
+  ]},
+
+{ t:'Après Gergovie', lieu:'Camp arverne',
+  x:`Sept cents morts, dont quarante-six centurions. César rassemble l’armée et fait un discours qui blâme les hommes pour leur indiscipline — puis, voyant l’effet, les console de leur courage.<br><br>Il y a des places vides partout.`,
+  nota:`Le nombre de centurions tombés — quarante-six — dit où se tenaient les centurions dans un assaut romain : au premier rang, à droite. Le taux de pertes des officiers de rang était structurellement supérieur à celui des hommes.`,
+  o:[
+  { t:'Prendre publiquement ta part de la faute',
+    res:{ r:`Tu dis devant les hommes que l’ordre était clair et que tu ne l’as pas fait respecter assez fort. Personne n’attendait cela. C’est le genre de phrase qui fait qu’on te suivra à Alésia.`, e:{auctoritas:12, gratia:6} } },
+  { t:'Te taire et remettre l’unité au travail',
+    res:{ r:`Exercice, fossé, inspection d’armes. Au bout de quatre jours les hommes ont autre chose en tête. C’est la vieille méthode et elle fonctionne.`, e:{disciplina:8, auctoritas:-4, valetudo:-2} } },
+  { t:'Présenter à César trois de tes meilleurs hommes pour les places vides',
+    p:'sousoff',
+    note:'Le moment est cynique et il ne reviendra pas.',
+    res:{ r:`Tu donnes trois noms avec leurs états de service, sans un mot sur toi. César en promeut deux sur-le-champ. Tu viens de te faire deux centurions qui te doivent tout.`, e:{gratia:10, auctoritas:11, scientia:3} } }
+  ]},
+
+{ at:4, t:'Alésia — les lignes', lieu:'Oppidum des Mandubiens', guerre:true,
+  x:`Onze milles de contrevallation vers l’intérieur, quatorze de circonvallation vers l’extérieur. Deux fossés dont l’un noyé. Des <span class="lat">cippi</span>, des <span class="lat">lilia</span>, des <span class="lat">stimuli</span> — pieux ferrés cachés sous la terre battue. Vingt-trois redoutes.<br><br>Quatre-vingt mille hommes enfermés dedans. Une armée de secours qu’on annonce à un quart de million derrière nous. Et nous entre les deux, sur une bande de terre de nos propres mains.`,
+  vue:{ soldat:'Tu creuses depuis cinq semaines. Tes mains ne se ferment plus complètement.',
+        sousoff:'Ta centurie garde vingt pas de rempart, dos à dos.',
+        centurion:'Ta cohorte est étirée sur deux cents pas. Il n’y a pas de réserve.',
+        superieur:'Labienus tient un secteur, Antoine l’autre. La réserve mobile est de six cohortes pour tout le dispositif.' },
+  nota:`Les fouilles de Napoléon III puis les campagnes des années 1990 ont retrouvé les fossés, les trous de <span class="lat">lilia</span> et des <span class="lat">stimuli</span> de fer, confirmant la description de César presque pièce par pièce — un cas rare de texte antique validé par l’archéologie.`,
+  o:[
+  { t:'Creuser, et creuser encore',
+    res:{ r:`Cinq semaines de terrassement pour vingt-cinq milles d’ouvrages. Aucune bataille de l’Antiquité n’a été gagnée à la pelle à ce point.`, e:{disciplina:9, scientia:5, valetudo:-6} } },
+  { t:'Dégarnir la face intérieure pour renforcer l’extérieure',
+    p:'sousoff', need:{ s:'scientia', min:54 },
+    res:{ r:`Tu paries que Vercingétorix mettra une heure à combler ses propres pièges, et tu joues l’heure. Le pari est bon : la face extérieure tient parce que tu l’as doublée.`, e:{scientia:12, auctoritas:8, gratia:10, valetudo:-3} } },
+  { t:'Faire passer de l’eau aux Mandubiens chassés entre les deux lignes',
+    note:'Vercingétorix les a chassés. César refuse de les prendre. Ils meurent entre nous.',
+    res:{ r:`Des outres roulées dans le fossé, la nuit, par deux hommes sûrs. Cela ne sauve personne, en toute rigueur. Tes hommes t’ont vu le faire.`, e:{auctoritas:12, gratia:-7} } },
+  { t:'Déplacer ton secteur de travail hors de vue des Mandubiens',
+    p:'centurion',
+    note:'Ce n’est pas de la pitié. Un homme qui regarde cela dix jours ne se bat pas pareil.',
+    res:{ r:`Tu changes ton chantier de côté. C’est de la conservation d’effectif et personne n’a besoin de savoir que tu y as pensé autrement.`, e:{auctoritas:8, scientia:6, disciplina:3} } }
+  ]},
+
+{ at:5, t:'Le mont Réa', lieu:'Camp nord, Alésia', guerre:true,
+  x:`Ils ont trouvé le point faible : un camp au nord, sur une pente que le terrain empêche d’enfermer proprement. Soixante mille hommes triés y montent à couvert et attaquent à midi.<br><br>La <span class="lat">testudo</span> gauloise avance sous les traits ; ils démantèlent le rempart à mains nues.`,
+  vue:{ soldat:'Le rempart s’écroule à dix pas sur ta gauche.',
+        sousoff:'Les hommes du camp voisin refluent à travers ta position.',
+        centurion:'Le secteur nord va tomber. C’est une question de minutes.',
+        superieur:'César envoie Labienus avec six cohortes et l’ordre de tenir, ou de sortir s’il ne peut plus tenir.' },
+  nota:`César descendit en personne, reconnaissable à son <span class="lat">paludamentum</span> écarlate qu’il portait au combat pour être vu de loin. La cavalerie germaine à sa solde sortit par une porte dérobée et prit l’armée de secours à revers. Soixante-quatorze enseignes gauloises furent ramassées sur le champ.`,
+  o:[
+  { t:'Boucher la brèche avec ce que tu as sous la main',
+    note:'Blessés, valets, toi. Dix minutes de plus que ce n’aurait dû tenir.',
+    res:{ r:`Ça tient dix minutes de plus que cela n’aurait dû, et ces dix minutes-là décident du siège. Tu ne peux plus lever le bras droit quand la relève arrive.`, e:{virtus:12, auctoritas:14, gratia:13, valetudo:-13, vulnus:1} } },
+  { t:'Décrocher du camp et te reformer en rase campagne',
+    p:'centurion', need:{ s:'scientia', min:56 },
+    res:{ r:`Tu abandonnes le camp et tu ramasses en te repliant tout ce qui traîne de cohortes. En rase campagne, avec un front, la légion redevient la légion — et ce sont eux qui sont mal placés. C’est ce que Labienus fait au même moment, avec trente-neuf cohortes.`, e:{scientia:12, auctoritas:10, gratia:12, valetudo:-6} } },
+  { t:'Tenir ta position exacte quoi qu’il arrive à côté',
+    check:{ s:'disciplina', dc:64 },
+    ok:{ r:`Tu ne bouges pas d’un pouce. Le flot passe à côté de toi et te laisse sur une île. Quand la contre-attaque arrive, ton îlot est le point d’appui dont elle avait besoin.`, e:{disciplina:10, virtus:7, gratia:8, valetudo:-7} },
+    ko:{ r:`Tenir sans appui, c’est être enveloppé. Tu combats sur quatre côtés pendant vingt minutes.`, e:{valetudo:-15, vulnus:1, auctoritas:-4} } }
+  ]},
+
+{ t:'La reddition', lieu:'Devant le tribunal de César',
+  x:`Vercingétorix convoque son conseil et dit qu’il n’a pas fait cette guerre pour lui mais pour la liberté commune. Il sort à cheval, en armes de parade, fait le tour du tribunal et met bas ses armes aux pieds de César, sans un mot.<br><br>Chaque légionnaire recevra un captif.`,
+  nota:`Il resta six ans dans une cellule du Tullianum avant d’être étranglé après le triomphe de 46. César rendit les captifs éduens et arvernes sans rançon, pour raison politique : il lui fallait ces deux peuples tranquilles derrière lui.`,
+  o:[
+  { t:'Prendre ta part de captifs et la vendre',
+    res:{ r:`Un homme, un captif. Les marchands qui suivent l’armée achètent au prix du bétail. Ta part est faite.`, e:{peculium:700, auctoritas:-3} } },
+  { t:'Rendre ton captif à son peuple',
+    note:'Aucun avantage. Sept cents deniers perdus.',
+    res:{ r:`Tu le renvoies chez les Mandubiens. Le geste ne coûte qu’à toi, et deux de tes hommes font la même chose sans rien dire.`, e:{auctoritas:11, scientia:3} } },
+  { t:'Demander la garde du captif Vercingétorix jusqu’en Cisalpine',
+    p:'centurion',
+    check:{ s:'gratia', dc:70 },
+    ok:{ r:`Six semaines de route avec un homme qui a failli renvoyer Rome au-delà des Alpes, et qui ne dit presque rien. Tu apprends sur la guerre des choses qu’aucun manuel ne contient.`, e:{scientia:13, gratia:8, auctoritas:5} },
+    ko:{ r:`La mission est donnée à un tribun de meilleure naissance. On te remercie de ta proposition.`, e:{gratia:-3} } }
+  ]}
+]},
+
+/* ===== src2/data-phases-3.js ===== */
+/* ==================== VII. FINIS GALLIAE ==================== */
+{
+id:'finis', n:'Finis Galliae', sub:'La fin de la Gaule, et l’attente', y0:-51, y1:-50, len:5,
+events:[
+
+{ at:0, t:'Uxellodunum', lieu:'Oppidum des Cadurques', guerre:true,
+  x:`Le dernier oppidum qui résiste, sur un roc entouré par une rivière, imprenable d’assaut. César décide de lui couper l’eau : galeries de sappe pour capter la source, tours pour interdire la descente.<br><br>Ce n’est plus de la guerre, c’est de l’hydraulique.`,
+  vue:{ soldat:'Tu es au fond d’une galerie, à la chandelle, à passer des paniers de terre.',
+        sousoff:'Tes hommes travaillent en trois relèves. Ils toussent tous.',
+        centurion:'Tes ouvrages brûlent deux nuits sur trois.',
+        superieur:'Leur source contre notre patience. Le calcul est simple.' },
+  nota:`La source tarit au trentième jour. Les assiégés y virent un signe des dieux et se rendirent — César note que le tarissement fit plus que le bélier. Il fit ensuite couper les mains à tous ceux qui avaient porté les armes, et les renvoya vivants.`,
+  o:[
+  { t:'Pousser les galeries jour et nuit',
+    res:{ r:`La source tarit d’un coup, au trentième jour. Les assiégés y voient un signe des dieux, ce qui est plus efficace qu’un bélier.`, e:{disciplina:7, scientia:7, gratia:7, valetudo:-5} } },
+  { t:'Garder les ouvrages contre les sorties nocturnes',
+    check:{ s:'virtus', dc:60 },
+    ok:{ r:`Trois sorties repoussées en cinq nuits. Les ouvrages tiennent debout et la sappe continue sans perdre un jour.`, e:{virtus:7, disciplina:5, gratia:6, valetudo:-4} },
+    ko:{ r:`Ils enflamment une tour et une galerie dans la même nuit. On repart de deux semaines en arrière.`, e:{gratia:-7, valetudo:-7} } },
+  { t:'Faire épargner les plus jeunes en les déclarant non-combattants',
+    p:'sousoff',
+    note:'Une liste où quarante garçons deviennent porteurs d’eau. Le questeur signera sans lire.',
+    res:{ r:`Il signe sans lire. Personne ne le saura jamais, sauf eux. Ce que tu vois se faire aux autres, ce jour-là, tu ne le raconteras à personne.`, e:{auctoritas:10, scientia:4, gratia:-5, valetudo:-2} } }
+  ]},
+
+{ t:'Deux cents sesterces par homme', lieu:'Quartiers d’hiver, Belgique',
+  x:`Après quarante jours de raid hivernal, César fait distribuer une gratification sur sa cassette personnelle : deux cents sesterces par légionnaire, deux mille par centurion.<br><br>Il paie de sa bourse. Personne n’a l’air de trouver cela étrange.`,
+  nota:`César doubla la solde légionnaire et distribua constamment des primes personnelles. Le Sénat le lui reprochait comme une captation d’armée publique ; c’était exactement cela, et l’armée n’y voyait qu’un général qui payait.`,
+  o:[
+  { t:'Prendre l’argent',
+    res:{ r:`C’est de l’argent. Il vient d’un homme et non de la République, et personne au camp ne fait la différence — ce qui est précisément le sujet.`, e:{peculium:400, gratia:4} } },
+  { t:'Redistribuer ta part à tes hommes au prorata des années de service',
+    p:'sousoff',
+    res:{ r:`Ils ne l’oublieront pas. Tu viens de construire quelque chose qui ne s’achète pas, en l’achetant.`, e:{auctoritas:16, gratia:3, peculium:-400} } },
+  { t:'Placer la somme en terre par ton correspondant d’Italie',
+    res:{ r:`Un lopin près de Capoue, acheté au bon moment. Dans dix ans, il vaudra trois fois cela.`, e:{peculium:250, scientia:4} } }
+  ]},
+
+{ t:'Deux légions rendues', lieu:'Cisalpine, quartiers de Ravenne',
+  x:`Le Sénat a exigé deux légions pour la guerre parthe : une de Pompée, une de César. Pompée a réclamé celle qu’il avait prêtée en 53. César a donc rendu deux légions — et donné à chaque homme deux cent cinquante deniers avant le départ.<br><br>Les deux légions n’ont jamais vu la Parthie. Elles sont en Italie, sous Pompée.`,
+  nota:`Le procédé fut décisif : ces deux légions, interrogées par Pompée, lui assurèrent que les troupes de César l’abandonneraient au premier signal. Elles se trompaient, et Pompée les crut.`,
+  o:[
+  { t:'Regarder partir des hommes que tu connais depuis huit ans',
+    res:{ r:`On se serre le bras sans rien dire. Dans dix-huit mois, certains seront en face, à Ilerda ou en Épire.`, e:{auctoritas:5, valetudo:-2, scientia:4} } },
+  { t:'Te faire une idée précise de qui, dans le camp, penche de quel côté',
+    check:{ s:'scientia', dc:60 },
+    ok:{ r:`Tu dresses mentalement une liste. Elle sera exacte à deux noms près, et elle te servira dans un an.`, e:{scientia:9, gratia:5} },
+    ko:{ r:`Tu te trompes sur les trois quarts. Les gens ne penchent pas où ils le disent.`, e:{scientia:3, gratia:-4} } },
+  { t:'Ne t’occuper que de ton unité et de rien d’autre',
+    res:{ r:`Exercice, comptes, équipement. La politique est le métier des autres, et tu as le tien.`, e:{disciplina:8, auctoritas:6} } }
+  ]},
+
+{ t:'Une armée qui n’a rien à faire', lieu:'Camp de Cisalpine',
+  x:`Neuf mois sans campagne. Les hommes jouent, boivent, s’endettent, se battent. La solde arrive régulièrement, ce qui n’arrange rien.`,
+  nota:`L’oisiveté était tenue pour le pire danger d’une armée romaine. Les manuels recommandaient de faire construire des routes ou creuser des canaux plutôt que de laisser les légions inoccupées.`,
+  o:[
+  { t:'Maintenir l’exercice et la discipline coûte que coûte',
+    res:{ r:`Marche hebdomadaire, inspection d’armes. On te trouve pénible. En janvier, quand il faudra faire soixante milles en trois jours, on ne te trouvera plus pénible.`, e:{disciplina:9, auctoritas:5, valetudo:-3} } },
+  { t:'Tenir les comptes de tes hommes et racheter leurs dettes usuraires',
+    res:{ r:`Tu casses un tripot et rachètes deux créances. Tes hommes sont mous et solidaires, ce qui n’est pas le pire des états.`, e:{auctoritas:13, peculium:-250} } },
+  { t:'Dîner chez les notables des municipes du Pô',
+    res:{ r:`Ils adorent recevoir un officier de César. Tu en tires des créances, une clientèle, et peut-être un mariage.`, e:{gratia:12, peculium:400, disciplina:-4} } }
+  ]},
+
+{ at:4, t:'La nuit de Ravenne', lieu:'Ravenne, janvier',
+  x:`Le sept janvier, le Sénat a voté le <span class="lat">senatus consultum ultimum</span>. Les tribuns Antoine et Cassius ont fui Rome déguisés en esclaves et sont arrivés dans une charrette louée.<br><br>César n’a ici qu’une légion : la tienne. Il donne des jeux, dîne longuement, et sort de table.`,
+  nota:`Suétone rapporte qu’il quitta le banquet en disant qu’il revenait, et partit en voiture louée par des chemins détournés, se perdant même dans la nuit avant de retrouver la route du Rubicon.`,
+  o:[
+  { t:'Préparer ton unité au départ sans poser de question',
+    res:{ r:`Cinq jours de vivres, armes vérifiées, chariots chargés. Tu ne demandes rien à personne. C’est exactement ce qu’on attend de toi cette nuit-là.`, e:{disciplina:8, gratia:9} } },
+  { t:'Sonder les hommes sur ce qu’ils feront s’il faut passer en Italie',
+    check:{ s:'auctoritas', dc:64 },
+    ok:{ r:`Tu prends le pouls, tente par tente. La réponse est unanime et n’a rien de politique : ils suivront César parce qu’ils suivent César. Tu sauras au moins sur quoi tu comptes.`, e:{auctoritas:9, scientia:5} },
+    ko:{ r:`La question elle-même sème le doute. Deux hommes se mettent à parler de désertion, alors qu’ils n’y pensaient pas avant que tu poses la question.`, e:{auctoritas:-9, disciplina:-4} } },
+  { t:'Refaire ton testament et le déposer chez le signifer',
+    res:{ r:`Comme tout légionnaire. Tu le refais ce soir-là plus soigneusement que d’habitude, et tu y penses en le scellant.`, e:{scientia:4, valetudo:4} } }
+  ]}
+]},
+
+/* ==================== VIII. RVBICO ==================== */
+{
+id:'rubico', n:'Rubico', sub:'La guerre civile', y0:-49, y1:-48, len:7,
+events:[
+
+{ at:0, t:'Le Rubicon', lieu:'Frontière de l’Italie', decisif:true,
+  x:`Un ruisseau. On le passe à gué sans se mouiller les genoux. De l’autre côté, ce n’est plus la province : c’est l’Italie, où nul proconsul n’entre en armes.<br><br>Il est resté longtemps sur la rive à ne rien dire. Puis il s’est tourné vers vous : on pouvait encore reculer, mais une fois ce petit pont franchi, tout se réglerait par les armes.<br><br><span class="lat">Alea iacta est.</span> Et il est entré dans l’eau.`,
+  nota:`Franchir en armes le <span class="lat">pomerium</span> provincial était un crime capital pour un proconsul et pour chaque homme qui le suivait. César laissa partir sans représailles ceux qui refusèrent — le geste servait sa cause dans l’opinion autant que sa clémence.`,
+  o:[
+  { t:'Passer le gué derrière lui',
+    res:{ r:`Il n’y a pas eu de délibération : il y a eu un homme qui entre dans l’eau et une légion qui entre derrière lui. Ce que tu es devenu ce jour-là, tu mettras des années à le nommer.`, e:{gratia:14, virtus:4, auctoritas:6}, choix:'caesar' } },
+  { t:'Refuser de porter les armes contre Rome et passer à Pompée',
+    note:'Tu quittes tout : ta légion, tes hommes, ta faveur. Labienus partira le lendemain.',
+    res:{ r:`Tu rends ton baudrier au tribun de service et tu dis pourquoi. On ne te retient pas. Tu gagnes Brindes à pied. Labienus, lui, part le lendemain avec sa maison et son trésor.`, e:{virtus:7, auctoritas:8, gratia:-40}, choix:'pompee' } },
+  { t:'Demander ton congé et rentrer chez toi',
+    note:'La carrière s’arrête ici. Tu es vivant et tu as ta solde.',
+    res:{ r:`Tu invoques tes années de service et tes blessures. Le tribun regarde ton dossier, ne discute pas, et signe. Tu quittes le camp par la porte décumane, à pied. Personne ne te salue et personne ne t’insulte.`, e:{}, choix:'missio' } }
+  ]},
+
+{ t:'Ilerda', lieu:'Sicoris, Hispanie citérieure', guerre:true,
+  x:`<em>« Je vais combattre une armée sans chef, pour aller ensuite combattre un chef sans armée. »</em><br><br>Ce n’est pas une guerre de batailles : c’est une guerre de ponts, de gués et de blé. Une crue emporte nos deux ponts et l’armée est prise entre deux rivières, sans vivres. À Rome, on annonce déjà César perdu.`,
+  vue:{ soldat:'Un modius de blé se vend cinquante deniers. Il n’y en a plus à vendre.',
+        sousoff:'Tes hommes mangent une racine qu’ils font bouillir.',
+        centurion:'Retraverser, ou mourir de faim entre deux fleuves.',
+        superieur:'Un pont à vingt-deux milles en amont, ou des barques de coracle bâties sur le modèle breton.' },
+  nota:`César fit construire des barques d’osier tressé tendu de peaux, sur le modèle breton, transportables sur chariot. Il fit aussi creuser des dérivations pour abaisser le fleuve. Ilerda se termina par une capitulation sans bataille : il licencia les cinq légions pompéiennes sans exiger de serment.`,
+  o:[
+  { t:'Bâtir des barques d’osier et de cuir, à la mode bretonne',
+    need:{ s:'scientia', min:50 },
+    res:{ r:`Coques d’osier tressé tendues de peaux, portables sur chariot. On passe une brigade la nuit, on tient une tête de pont, le pont se bâtit dessus. Six ans de Bretagne servent enfin à quelque chose.`, e:{scientia:11, gratia:10, auctoritas:5} } },
+  { t:'Creuser des dérivations pour abaisser le fleuve',
+    res:{ r:`Trois canaux de trente pieds. Le fleuve baisse assez pour qu’un gué apparaisse. Les Pompéiens regardent une armée déplacer une rivière et commencent à comprendre à qui ils ont affaire.`, e:{disciplina:8, scientia:7, valetudo:-5} } },
+  { t:'Traverser et parler à ceux d’en face',
+    res:{ r:`Tu passes une soirée avec des hommes qui t’ont couvert le flanc à Alésia. Vous convenez qu’aucun de vous ne sait pourquoi il est là. Deux jours plus tard, ils se rendent sans un coup de glaive.`, e:{gratia:9, auctoritas:8, scientia:4} } },
+  { t:'Renvoyer intacts les Pompéiens trouvés dans notre camp',
+    p:'sousoff',
+    res:{ r:`Tu les fais raccompagner avec leurs armes pendant que Petreius égorge les nôtres dans son camp. La différence circule dans les deux armées avant le soir. C’est la seule arme qui compte dans cette guerre.`, e:{gratia:12, auctoritas:10, scientia:5} } }
+  ]},
+
+{ t:'La décimation de Plaisance', lieu:'Placentia, Cisalpine',
+  x:`La Neuvième refuse de marcher. César vient seul devant elle, sans escorte, et annonce qu’il appliquera la lettre du règlement : un homme sur dix, tiré au sort, battu à mort par ses camarades.<br><br>Puis il attend. La légion demande grâce. Il commue en douze exécutions choisies parmi les meneurs.`,
+  nota:`L’un des douze, prouvé absent au moment des faits, fut remplacé par le centurion qui l’avait dénoncé à tort. La <span class="lat">decimatio</span> était déjà archaïque à cette date : la menacer suffisait presque toujours.`,
+  o:[
+  { t:'Soutenir publiquement la sanction',
+    res:{ r:`Tu dis devant tes hommes qu’une armée sans discipline est une bande. C’est impopulaire et c’est exact ; ton unité serre les rangs sans t’aimer davantage.`, e:{disciplina:9, gratia:8, auctoritas:-5} } },
+  { t:'Intercéder pour un homme de ta connaissance',
+    check:{ s:'gratia', dc:64 },
+    ok:{ r:`Tu obtiens qu’un nom sorte de la liste, en échange d’un autre que tu n’as pas choisi. C’est un marché atroce et tu l’as fait.`, e:{auctoritas:11, gratia:-4, valetudo:-3} },
+    ko:{ r:`On te répond que la liste est close. Elle l’était depuis une heure et l’on t’a laissé demander.`, e:{gratia:-6} } },
+  { t:'Te taire',
+    res:{ r:`Tu ne dis rien, ni pour ni contre. Douze hommes meurent et l’armée marche.`, e:{disciplina:4, auctoritas:-3} } }
+  ]},
+
+{ at:3, t:'Dyrrachium', lieu:'Lignes de siège, Épire', guerre:true,
+  x:`Nous assiégeons un adversaire deux fois plus nombreux, ravitaillé par mer, pendant que nous mangeons une racine broyée qu’on appelle <span class="lat">chara</span>. Les Pompéiens en ont jeté des morceaux par-dessus le rempart en riant.<br><br>Deux transfuges ont livré le plan exact de nos lignes et le point de jonction inachevé. Pompée y jette soixante cohortes sur trois faces à la fois.`,
+  vue:{ soldat:'Les traits tombent des trois côtés comme de la pluie.',
+        sousoff:'Le centurion du fortin a un œil crevé et continue de commander.',
+        centurion:'Le fortin est intenable. L’ordre est de tenir.',
+        superieur:'Si ce fortin tombe, la ligne entière est prise à revers.' },
+  nota:`On ramassa cent vingt trous dans le bouclier du centurion Cassius Scaeva et trente mille traits dans le fortin. César lui donna deux cent mille sesterces et le passa primipile ; les survivants reçurent une double solde. Scaeva mourut de vieillesse.`,
+  o:[
+  { t:'Tenir le fortin coûte que coûte',
+    note:'Il tiendra. Tu n’en sortiras pas entier.',
+    res:{ r:`Tu es de ceux qui n’en sont pas sortis en courant. Ton bras gauche restera inutilisable trois mois. César donne une double solde à tous les survivants — toi compris.`, e:{virtus:13, auctoritas:12, gratia:13, peculium:900, valetudo:-14, vulnus:1} } },
+  { t:'Faire décrocher la garnison et rétablir la ligne en arrière',
+    p:'centurion',
+    note:'Militairement juste. Dans une armée, cela porte un nom qu’on t’accolera longtemps.',
+    res:{ r:`Tu sacrifies le fortin et tu sauves la garnison sur une seconde ligne improvisée. Ceux que tu as ramenés le savent. Les autres ne retiendront que le fortin perdu.`, e:{scientia:9, auctoritas:9, gratia:-8, valetudo:-4} } },
+  { t:'Te mettre en travers de la fuite, enseigne en main',
+    check:{ s:'auctoritas', dc:70 },
+    ok:{ r:`Tu plantes l’enseigne et tu cries. Trente hommes s’arrêtent, puis cent. César fera la même chose plus loin et se fera bousculer par ses propres soldats ; toi, on t’écoute.`, e:{auctoritas:15, virtus:8, gratia:11, valetudo:-8} },
+    ko:{ r:`Le flot te renverse et te piétine. On te relève avec trois côtes cassées et l’enseigne perdue.`, e:{valetudo:-13, auctoritas:-8, vulnus:1} } }
+  ]},
+
+{ t:'« S’ils avaient eu quelqu’un pour vaincre »', lieu:'Camp de Dyrrachium',
+  x:`Trente-deux enseignes perdues, mille morts — dont trente-deux tribuns et centurions, la plupart écrasés dans la fuite par les leurs.<br><br>César rassemble l’armée et dit cette phrase que tout le camp répétera : <em>« Aujourd’hui la victoire était à l’ennemi, s’ils avaient eu quelqu’un pour vaincre. »</em> Les légions, humiliées, demandent d’elles-mêmes la décimation. Il refuse.`,
+  nota:`Pompée ne poursuivit pas. Ses officiers le lui reprochèrent longtemps ; il craignait une embuscade et savait qu’une guerre civile gagnée trop vite se paie politiquement. César leva le camp la nuit même vers la Thessalie.`,
+  o:[
+  { t:'Assumer devant César pour tes hommes',
+    check:{ s:'auctoritas', dc:66 },
+    ok:{ r:`Tu dis que la faute est au commandement du secteur, c’est-à-dire à toi. Il te regarde, ne dit rien, et ne te retire rien. Tes hommes ne diront rien non plus, et te suivront à Pharsale comme des chiens.`, e:{auctoritas:14, gratia:6} },
+    ko:{ r:`Tu t’accuses trop bien. On te prend au mot : tu descends d’un cran dans l’ordre des cohortes.`, e:{gratia:-9, auctoritas:-6} } },
+  { t:'Faire jurer à ton unité de ne pas reculer devant Pompée',
+    res:{ r:`Ils jurent devant l’enseigne, à voix basse, sans emphase, comme des gens qui ont l’intention de tenir parole. Ils la tiendront dans trois semaines.`, e:{auctoritas:12, disciplina:6, virtus:4} } },
+  { t:'Désigner les fautifs de ton secteur, comme on te le demande',
+    res:{ r:`Tu donnes trois noms exacts, sans en ajouter ni en retrancher. On les casse de leur grade et l’on te sait juste, ce qui n’est pas la même chose qu’aimé.`, e:{disciplina:7, gratia:6, auctoritas:-4} } }
+  ]},
+
+{ at:5, t:'Pharsale — la quatrième ligne', lieu:'Plaine de l’Énipeus, Thessalie', guerre:true,
+  x:`Vingt-deux mille contre quarante-cinq mille, mille cavaliers contre sept mille. Labienus, qui fut neuf ans le premier légat de César et connaît chacune de nos habitudes, a juré de ne revenir au camp que vainqueur.<br><br>César a vu que toute leur cavalerie est massée face à notre droite. Il retire six cohortes de la troisième ligne, les poste en oblique, cachées, avec un ordre singulier : <strong>ne pas lancer le pilum. Le garder en main comme une pique, et pointer au visage.</strong>`,
+  vue:{ soldat:'On te retire du rang et on te place en arrière, en biais, sans t’expliquer.',
+        sousoff:'Ordre étrange : garder le pilum en main. Viser le visage.',
+        centurion:'Ta cohorte fait partie des six. Sept mille cavaliers vont arriver dessus.',
+        superieur:'Six cohortes contre sept mille chevaux. Toute la bataille tient là-dessus.' },
+  nota:`Ce sont de jeunes nobles romains qui composaient cette cavalerie ; César calcula qu’ils craindraient une cicatrice au visage plus que la mort. Ils tournèrent bride et n’arrêtèrent qu’aux collines. Plutarque rapporte l’ordre presque mot pour mot.`,
+  o:[
+  { t:'Exécuter l’ordre à la lettre : pilum en main, pointer au visage',
+    res:{ r:`Sept mille cavaliers arrivent sur six cohortes qui se lèvent d’un coup et leur portent le fer au visage. Ils tournent bride tous ensemble. La bataille est jouée en quatre minutes, sur une idée.`, e:{disciplina:10, virtus:8, gratia:13, auctoritas:6, valetudo:-5} } },
+  { t:'Lancer les pila comme d’habitude et recevoir la charge',
+    note:'Ce que tu as toujours fait. Contre de la cavalerie, sans pique.',
+    res:{ r:`La volée abat des chevaux, la charge passe quand même, et il faut se battre contre de la cavalerie sans pique. Vous tenez, chèrement, et ce qui devait se briser ne s’est pas brisé.`, e:{virtus:5, gratia:-10, valetudo:-12, vulnus:1} } },
+  { t:'Laisser tes hommes s’arrêter d’eux-mêmes à mi-charge pour reprendre haleine',
+    p:'sousoff',
+    note:'Pompée a ordonné à sa ligne de ne pas bouger. Dix ans de service corrigent son erreur sans qu’on leur parle.',
+    res:{ r:`Tu ne dis rien parce qu’il n’y a rien à dire : ils ont raison. C’est une armée qui n’a plus besoin qu’on lui explique, et tu viens de comprendre ce que tu commandes.`, e:{disciplina:9, auctoritas:8, scientia:6} } }
+  ]},
+
+{ t:'Le camp de Pompée', lieu:'Après la ligne rompue', guerre:true,
+  x:`La troisième ligne fraîche entre au moment où la cavalerie fuit. La ligne pompéienne casse.<br><br>Dans leur camp, on trouve les tentes ornées de myrte, les tables dressées, l’argenterie sortie : ils avaient préparé le banquet de la victoire. Pompée est parti à cheval par la porte arrière.`,
+  vue:{ soldat:'Tu entres dans un camp où le repas est servi.',
+        sousoff:'Tes hommes se jettent sur les tables plutôt que sur les fuyards.',
+        centurion:'Piller le camp, ou poursuivre les légions qui refluent vers la colline.',
+        superieur:'Poursuivre maintenant, c’est finir la guerre aujourd’hui.' },
+  nota:`César fit crier d’épargner les citoyens. Vingt-quatre mille hommes se rendirent le lendemain sur la colline, coupés de l’eau. Il brûla publiquement la correspondance saisie de Pompée sans la lire — geste qui lui gagna plus de sénateurs que Pharsale.`,
+  o:[
+  { t:'Poursuivre sans t’arrêter au camp',
+    res:{ r:`Tu passes devant les tables sans regarder et tu montes sur la colline. Au matin, vingt-quatre mille hommes se rendent. La guerre pouvait durer trois ans ; elle a duré une après-midi.`, e:{disciplina:10, gratia:12, auctoritas:6, valetudo:-4} } },
+  { t:'Piller le camp',
+    note:'Tu ne reverras jamais un butin pareil. Et César saura qui a pillé.',
+    res:{ r:`La vaisselle des sénateurs de Rome, les coffres, les chevaux.`, e:{peculium:1400, gratia:-8, auctoritas:4} } },
+  { t:'Faire épargner et rassembler les prisonniers romains',
+    p:'sousoff',
+    res:{ r:`Tu tiens tes hommes et tu ramasses les rendus par centaines, désarmés, vivants. Beaucoup serviront sous nos enseignes avant six mois. C’est ainsi que César gagne : il ne détruit pas les armées, il les absorbe.`, e:{auctoritas:12, gratia:13, scientia:5} } },
+  { t:'Faire brûler la correspondance saisie sans la lire',
+    p:'centurion',
+    res:{ r:`Tu fais porter les coffres au feu devant témoins, sans qu’un rouleau soit ouvert. Trente sénateurs t’en seront reconnaissants sans jamais te le dire. Cela vaut mieux que trente ennemis.`, e:{gratia:14, scientia:7, auctoritas:6} } }
+  ]}
+]},
+
+/* ==================== IX. VLTIMA ==================== */
+{
+id:'ultima', n:'Ultima', sub:'Alexandrie, l’Afrique, Munda', y0:-47, y1:-45, len:7,
+events:[
+
+{ at:0, t:'Trois mille deux cents hommes', lieu:'Alexandrie, quartier du palais',
+  x:`Pompée est mort sur une plage égyptienne, la tête coupée par ses propres affranchis. On l’a apportée à César dans un linge ; il a détourné les yeux et pleuré, et personne n’a su la part de chaque chose.<br><br>Puis il s’est mêlé d’une succession dynastique avec deux légions à effectif réduit, dans une ville de trois cent mille habitants. Les Alexandrins ont coupé les aqueducs et pompent l’eau de mer dans les citernes.`,
+  nota:`César fit creuser sur toute la longueur du rivage, assurant qu’un sol côtier donne toujours de l’eau douce à faible profondeur. On en trouva à sept pieds. C’est un raisonnement d’ingénieur, appliqué à une panique.`,
+  o:[
+  { t:'Creuser toute la nuit, secteur par secteur',
+    res:{ r:`Une veine d’eau douce à sept pieds, avant l’aube. On boit à genoux dans le sable. Le siège vient de changer de nature parce que quelqu’un a continué de creuser.`, e:{disciplina:8, scientia:6, auctoritas:11, valetudo:-4} } },
+  { t:'Fortifier le quartier maison par maison',
+    need:{ s:'scientia', min:54 },
+    res:{ r:`Carrefours murés, cloisons percées pour circuler sans sortir, terrasses garnies. Une ville se défend comme un camp, à condition de la traiter comme un camp.`, e:{scientia:11, disciplina:6, gratia:9} } },
+  { t:'Mettre la main sur les entrepôts du port avant les Alexandrins',
+    res:{ r:`Un siège se gagne au grenier. Tu réquisitionnes avant que quiconque y pense.`, e:{scientia:6, auctoritas:9, peculium:200} } }
+  ]},
+
+{ t:'Le môle', lieu:'Heptastade, Alexandrie', guerre:true,
+  x:`Il faut prendre le môle qui relie le Phare à la ville. On l’enlève, puis les Alexandrins contre-attaquent et la panique prend nos hommes sur une chaussée de trente pas où l’on ne peut ni fuir ni manœuvrer.<br><br>César lui-même doit sauter d’un navire qui coule et gagner le sien à la nage, sur deux cents pas, en tenant ses papiers d’une main hors de l’eau.`,
+  vue:{ soldat:'Il y a de l’eau des deux côtés et trente pas de largeur.',
+        sousoff:'Les navires qui devaient nous recueillir sont surchargés et coulent.',
+        centurion:'Quatre cents hommes vont se noyer si personne ne tient l’extrémité.',
+        superieur:'Huit cents morts sur une chaussée. Le pire quart d’heure depuis Gergovie.' },
+  nota:`Suétone rapporte que César nagea en tenant ses tablettes hors de l’eau et en tirant son manteau entre les dents pour ne pas le laisser en trophée. Plutarque dit qu’il perdit le manteau.`,
+  o:[
+  { t:'Tenir l’extrémité du môle pour couvrir le rembarquement',
+    note:'Vous serez les derniers à embarquer, à l’eau jusqu’à la ceinture.',
+    res:{ r:`Un bouchon de trente hommes en travers de la chaussée pendant que les autres passent. Vous êtes les derniers à embarquer.`, e:{virtus:11, auctoritas:13, gratia:7, valetudo:-10} } },
+  { t:'Faire jeter les armes lourdes et nager',
+    res:{ r:`Cotte de mailles à la mer, bouclier à la mer, deux cents pas de nage. On perd l’équipement de trois centuries et l’on ramène trois centuries d’hommes.`, e:{scientia:7, auctoritas:10, peculium:-200, valetudo:-5} } },
+  { t:'Refuser d’engager sur une chaussée sans issue, et le dire au conseil',
+    p:'centurion', need:{ s:'scientia', min:58 },
+    res:{ r:`Tu expliques qu’une chaussée de trente pas est un piège quelle que soit la valeur des troupes. On t’écoute à moitié, on engage quand même, mais ta cohorte reste en réserve — et huit cents morts n’en font pas partie.`, e:{scientia:10, auctoritas:11, gratia:4} } }
+  ]},
+
+{ at:2, t:'Quirites', lieu:'Campanie, camp d’embarquement', decisif:true,
+  x:`Les légions vétéranes refusent d’embarquer pour l’Afrique. Elles réclament le congé, les terres et l’argent promis. Elles ont tué deux sénateurs envoyés pour parlementer et marché sur Rome.<br><br>César arrive seul, monte à la tribune, demande ce qu’elles veulent. Elles crient : le congé. Alors il dit un seul mot : <em>« Quirites. »</em><br><br>Citoyens. Pas « camarades ». Pas « soldats ». Des civils — des gens qui ne sont plus rien pour lui.`,
+  nota:`Le mot est rapporté par Suétone, Appien et Dion. La Dixième supplia d’être reprise et de subir la décimation. César refusa la décimation, feignit de céder, et emmena l’armée en Afrique. C’est le sommet documenté de son autorité sur des hommes armés.`,
+  o:[
+  { t:'Être de ceux qui supplient qu’on les reprenne',
+    res:{ r:`Il accepte, en refusant la décimation, et en disant qu’il n’a jamais douté de la Dixième — ce qui est faux et efficace. Tu embarqueras pour l’Afrique.`, e:{auctoritas:8, gratia:12, disciplina:5} } },
+  { t:'Prendre la tête de la revendication et négocier',
+    note:'Tu obtiendras des garanties réelles. Tu seras désormais un homme qu’on surveille.',
+    res:{ r:`Tu formules ce que quinze mille hommes ressentent sans savoir le dire : les terres, les sommes, les délais, par écrit. César traite avec toi parce qu’il vaut mieux traiter avec quelqu’un.`, e:{auctoritas:18, scientia:7, peculium:600, gratia:-14} } },
+  { t:'Prendre ton congé maintenant, avec les terres promises',
+    note:'Quinze ans de service. Tu sors debout, avec des biens.',
+    res:{ r:`Terres en Campanie, prime de démobilisation, quitus. Ce que quatre-vingt-dix hommes sur cent ne font pas.`, e:{peculium:3000}, choix:'missio_riche' } }
+  ]},
+
+{ t:'Ruspina', lieu:'Plaine côtière d’Africa', guerre:true,
+  x:`Trente cohortes en fourrage, sans cavalerie ou presque. Labienus arrive avec des Numides et des archers montés, et fait ce qu’aucune infanterie ne sait combattre : tourner autour, tirer, refuser le choc, recommencer.<br><br>Il s’avance tête nue et interpelle les nôtres : <em>« Alors, bleus de la Deuxième ? Vous êtes bien féroces ! »</em>`,
+  vue:{ soldat:'Tu vois Labienus à quarante pas, sans casque, qui te parle.',
+        sousoff:'Un vétéran de ta centurie sort du rang sans qu’on le lui demande.',
+        centurion:'Ta cohorte est en anneau, dos à dos, et perd un homme toutes les vingt secondes.',
+        superieur:'César fait former un cercle unique et alterner les cohortes face en avant, face en arrière.' },
+  nota:`Le <span class="lat">Bellum Africum</span>, écrit par un officier de César, rapporte la réponse : un vétéran ôta son casque pour être reconnu et lui jeta son pilum, tuant son cheval — « pour t’apprendre que c’est un vétéran de la Dixième qui te parle ». Labienus avait formé ces hommes neuf ans durant.`,
+  o:[
+  { t:'Former le cercle, une file face en avant, une face en arrière',
+    res:{ r:`La cohorte devient une roue hérissée des deux côtés. Les Numides ne trouvent plus de dos à tirer. C’est la seule chose qui marche contre eux, et il a fallu la trouver sous les flèches.`, e:{disciplina:11, scientia:8, gratia:9, valetudo:-6} } },
+  { t:'Répondre à Labienus',
+    check:{ s:'auctoritas', dc:62 },
+    ok:{ r:`Toute la ligne éclate de rire, et le rire vaut trois cohortes. Des hommes qui riaient il y a une seconde se remettent à tenir.`, e:{auctoritas:14, virtus:5, gratia:5, valetudo:-4} },
+    ko:{ r:`Ta réplique tombe dans le sable. Les hommes autour de toi ont l’air plus vieux qu’il y a une minute.`, e:{auctoritas:-8, valetudo:-6} } },
+  { t:'Marcher en carré, blessés au centre, sans accélérer',
+    p:'sousoff',
+    note:'Deux milles au pas sous le harcèlement. Personne n’est laissé.',
+    res:{ r:`Deux milles en carré sans qu’un rang s’ouvre. On rentre avec tous les blessés. Les vieux de Gaule disent que c’est la plus belle chose qu’ils aient faite.`, e:{disciplina:12, auctoritas:15, gratia:7, valetudo:-6} } }
+  ]},
+
+{ t:'Thapsus', lieu:'Isthme entre la mer et la lagune', guerre:true,
+  x:`César a manœuvré jusqu’à les enfermer sur un isthme où leur nombre et leurs soixante éléphants ne servent à rien.<br><br>Il hésite encore quand un trompette de l’aile droite, poussé par les hommes, sonne la charge de sa propre autorité. Toute la ligne part. Les centurions se jettent devant les enseignes pour retenir les rangs et sont emportés.`,
+  vue:{ soldat:'La ligne part sans ordre et tu pars avec.',
+        sousoff:'Ton enseigne est déjà à vingt pas devant toi.',
+        centurion:'Te jeter devant l’enseigne, ou prendre la tête du mouvement.',
+        superieur:'L’armée vient de déclencher elle-même une bataille. Tu peux la conduire ou la subir.' },
+  nota:`La Cinquième légion porta l’éléphant sur ses enseignes après cette bataille : un légionnaire en abattit un qui allait piétiner un valet. Le carnage qui suivit — cinq mille rendus massacrés malgré les ordres — est le premier cas où l’armée de César échappa à son général.`,
+  o:[
+  { t:'Prendre la tête du mouvement et le conduire',
+    res:{ r:`Tu ne peux pas l’arrêter, alors tu le diriges : tu cours devant et tu leur donnes une direction. Une charge conduite vaut cent fois une ruée.`, e:{auctoritas:13, virtus:7, gratia:9, valetudo:-5} } },
+  { t:'Ouvrir les rangs en couloirs pour laisser passer les éléphants',
+    need:{ s:'scientia', min:46 },
+    res:{ r:`Les rangs s’ouvrent, la bête passe dans le vide, et douze pointes lui ouvrent les jarrets au passage. La méthode est vieille comme Zama et elle marche encore.`, e:{scientia:9, virtus:5, auctoritas:7, valetudo:-3} } },
+  { t:'Tenter d’arrêter le massacre des rendus',
+    p:'sousoff',
+    check:{ s:'auctoritas', dc:74 },
+    ok:{ r:`Tu te mets en travers, tu nommes tes hommes un par un, tu leur rappelles Alésia. Ils s’arrêtent. Deux cents hommes vivront parce que ta voix comptait plus que leur fureur.`, e:{auctoritas:17, gratia:12, virtus:4} },
+    ko:{ r:`On te bouscule, on te menace, et un homme de ta propre unité te met la pointe sous le menton avant de te reconnaître. Tu n’oublieras pas cette seconde-là.`, e:{auctoritas:-11, valetudo:-6} } }
+  ]},
+
+{ t:'Quatre triomphes', lieu:'Rome, le Champ de Mars',
+  x:`Gaule, Égypte, Pont, Afrique. Quarante éléphants portant des flambeaux. Vercingétorix, gardé six ans dans une cellule, marche devant le char, puis on l’étrangle le soir même selon l’usage.<br><br>Chaque légionnaire reçoit cinq mille deniers — vingt ans de solde. Les hommes chantent derrière le char des vers si obscènes que le triomphateur les écoute en souriant, parce que c’est le droit du soldat ce jour-là.`,
+  nota:`Vingt-deux mille tables de banquet furent dressées dans la ville. Les tableaux représentant la mort de Caton déplurent au peuple : on pouvait triompher d’étrangers, pas de citoyens. César dut retirer certaines images.`,
+  o:[
+  { t:'Défiler et prendre l’argent',
+    res:{ r:`Tu défiles sur la Voie sacrée, entre des gens qui ne savent rien de la Sambre ni d’Alésia et qui t’acclament quand même. Puis tu touches plus d’argent que ton père n’en a vu dans sa vie.`, e:{peculium:5000, valetudo:8, auctoritas:3} } },
+  { t:'Investir immédiatement en terres autour de Capoue',
+    res:{ r:`Tu achètes de la terre pendant que les autres achètent du vin. Dans quinze ans tu seras décurion municipal et tes fils seront des gens qu’on salue.`, e:{peculium:2500, scientia:6, gratia:5} } },
+  { t:'Chercher les familles de tes morts et leur porter leur part',
+    note:'Onze maisons. Dans chacune on te fera asseoir et l’on voudra savoir comment il est mort.',
+    res:{ r:`Tu passes ta permission à faire le tour de l’Italie avec une bourse et une liste. Tu racontes onze fois. Tu rentres vidé et entier.`, e:{peculium:-1500, auctoritas:20, gratia:4, valetudo:-3} } }
+  ]},
+
+{ at:6, t:'Munda', lieu:'Bétique, sous la colline', guerre:true,
+  x:`<em>« J’ai souvent combattu pour la victoire ; aujourd’hui, j’ai combattu pour ma vie. »</em><br><br>Ce ne sont pas des recrues en face : des légions romaines de vétérans, des transfuges, des proscrits qui savent qu’il n’y a pour eux ni pardon ni exil. Ils tiennent la hauteur. Ils n’ont nulle part où aller.<br><br>Les deux armées restent face à face une heure sans qu’un homme bouge. Puis la ligne monte, et s’arrête à mi-pente sans reculer ni avancer. Cela dure des heures.`,
+  vue:{ soldat:'Tu pousses depuis deux heures contre un homme qui pousse aussi.',
+        sousoff:'Personne ne recule. Personne n’avance. Il n’y a plus de manœuvre.',
+        centurion:'Ce n’est plus une bataille, c’est une épreuve de force.',
+        superieur:'La Dixième gagne du terrain à droite. Ils y envoient une légion prise à leur droite.' },
+  nota:`César mit pied à terre et entra dans le rang avec un bouclier. Trente mille morts, dont Labienus. Sur treize aigles pompéiennes, treize furent prises. Ce fut la dernière bataille de sa vie ; il fut assassiné onze mois plus tard.`,
+  o:[
+  { t:'Pousser, et tenir, et pousser encore',
+    res:{ r:`C’est tout ce que la journée demande et c’est presque plus qu’un homme peut donner. Le rang gagne trois pas en une heure.`, e:{virtus:10, disciplina:8, valetudo:-9} } },
+  { t:'Saisir une enseigne et la porter de trois pas en avant',
+    note:'Trois pas. La centurie suivra son enseigne. Tu paieras les trois pas.',
+    res:{ r:`La centurie suit l’enseigne parce qu’une centurie suit toujours son enseigne, et la ligne entière se décale avec elle. César, qui a mis pied à terre et est entré dans le rang, voit qui a fait cela.`, e:{virtus:12, auctoritas:16, gratia:15, valetudo:-13, vulnus:1} } },
+  { t:'Faire relever la première ligne par la deuxième, section par section',
+    p:'centurion', need:{ s:'scientia', min:60 },
+    res:{ r:`Tu fais tourner les rangs comme une meule : les hommes de devant reculent par les intervalles, les frais prennent leur place. Sur une bataille de poussée, c’est ce qui décide, et presque personne ne sait le faire sous le contact.`, e:{scientia:13, auctoritas:11, gratia:12, valetudo:-7} } },
+  { t:'Crier que l’ennemi fuit quand ils déplacent une légion',
+    p:'sousoff',
+    check:{ s:'auctoritas', dc:70 },
+    ok:{ r:`Le cri court des deux côtés de la ligne avec des effets exactement inverses. Leur front, qui tenait depuis huit heures, se persuade en trente secondes qu’il est abandonné — et casse.`, e:{auctoritas:16, gratia:14, scientia:6, valetudo:-6} },
+    ko:{ r:`Ton cri est couvert par le bruit. La manœuvre s’achève proprement de leur côté et rien ne change.`, e:{valetudo:-10, auctoritas:-5} } }
+  ]}
+]}
+
+];
+
+/* ===== src2/data-communs.js ===== */
+/* ============================================================
+   RÉSERVE — événements de camp, utilisables dans plusieurs chapitres.
+   `ch` : chapitres où l'événement peut tomber.
+   ============================================================ */
+const COMMUNS = [
+
+{ ch:['helvetii','belgae','oceanus','atuatuca'], t:'Les dés sous la tente', lieu:'Tente huit, après l’extinction',
+  x:`Le jeu est interdit par le règlement et pratiqué chaque soir. Ce soir la partie est grosse : un vétéran joue trois mois de solde contre un marchand syrien qui suit l’armée et qui n’a pas l’air de perdre souvent.`,
+  nota:`Les dés étaient formellement interdits aux légionnaires, sauf pendant les Saturnales. Les graffiti et les dés plombés retrouvés dans les camps montrent l’exacte portée de cette interdiction.`,
+  o:[
+  { t:'Jouer',
+    check:{ s:'gratia', dc:54 },
+    ok:{ r:`Tu sors avec le double de ta mise et la réputation de savoir t’arrêter.`, e:{peculium:250, auctoritas:4} },
+    ko:{ r:`Tu perds. Puis tu perds encore en essayant de te refaire, ce qui est la partie la plus prévisible de la soirée.`, e:{peculium:-300} } },
+  { t:'Repérer comment triche le Syrien',
+    need:{ s:'scientia', min:40 },
+    res:{ r:`Dés pipés au mercure. Tu le dis à voix haute. Le marchand quitte le camp cette nuit-là sans son chariot, et l’argent revient à qui de droit.`, e:{scientia:6, auctoritas:11} } },
+  { t:'Faire cesser la partie et verser les mises à la caisse funéraire',
+    p:'sousoff',
+    res:{ r:`Tu ramasses les dés et l’argent. Personne ne discute et deux hommes te remercient le lendemain, discrètement.`, e:{disciplina:7, auctoritas:6, gratia:3} } }
+  ]},
+
+{ ch:['belgae','oceanus','atuatuca','vercingetorix','finis'], t:'Le convoi de blé', lieu:'Quarante milles en pays mal tenu',
+  x:`On te charge d’escorter deux cents chariots sur quarante milles. Une cavalerie ennemie rôde et sait exactement où passer.`,
+  nota:`Le ravitaillement fut la contrainte permanente des campagnes de César : il n’engageait presque jamais sans une base de vivres à portée. Les convois étaient la cible privilégiée des Gaulois, qui refusaient la bataille rangée.`,
+  o:[
+  { t:'Marcher lentement, en formation serrée autour des chariots',
+    res:{ r:`Trois jours au lieu de deux, et deux cents chariots à l’arrivée. Le camp mange.`, e:{disciplina:7, gratia:6, valetudo:-3} } },
+  { t:'Envoyer des éclaireurs loin devant et adapter l’itinéraire',
+    check:{ s:'scientia', dc:52 },
+    ok:{ r:`Tes éclaireurs signalent un rassemblement au gué prévu. Tu passes douze milles plus au nord par un chemin de bergers. Rien ne se passe, ce qui est le meilleur rapport d’escorte possible.`, e:{scientia:8, gratia:7} },
+    ko:{ r:`L’itinéraire de contournement est impraticable pour des chariots. Tu perds une journée et tu reviens sur le gué.`, e:{valetudo:-4, gratia:-4} } },
+  { t:'Acheter le renseignement à un marchand de sel qui passe chaque semaine',
+    res:{ r:`Deux cents deniers à un homme qui sait tout et ne risque rien. Son information est meilleure que celle qu’on paie en sang.`, e:{scientia:6, gratia:5, peculium:-200} } }
+  ]},
+
+{ ch:['helvetii','belgae','oceanus','atuatuca','vercingetorix'], t:'Le vieux primipile', lieu:'Sous la tente du premier centurion',
+  x:`T. Balventius, primipile, vingt-huit ans de service, deux fois décoré. Il te fait venir sous sa tente et te fait asseoir, ce qui n’arrive jamais.`,
+  nota:`Balventius est un personnage réel : César le cite comme <span class="lat">primipilus</span> de l’année précédente, gravement blessé à Atuatuca en 54. Les primipilaires formaient l’ossature technique de l’armée et transmettaient un savoir qui n’était écrit nulle part.`,
+  o:[
+  { t:'L’écouter jusqu’au bout',
+    res:{ r:`Il parle deux heures de choses très concrètes : où placer un homme qui a peur, comment reconnaître qu’une ligne va céder trois minutes avant qu’elle cède, pourquoi on ne court jamais devant ses propres hommes sauf une fois par carrière.`, e:{scientia:11, auctoritas:6, gratia:5} } },
+  { t:'Lui demander comment on tient quand on a peur',
+    res:{ r:`Il répond que personne ne tient : on fait les gestes, et les gestes tiennent l’homme. Puis il te montre lesquels, lentement, deux fois.`, e:{virtus:10, scientia:5, auctoritas:4} } },
+  { t:'Lui demander de te faire entrer dans la première cohorte',
+    check:{ s:'gratia', dc:58 },
+    ok:{ r:`Il te regarde longtemps. « Je verrai. » Deux mois plus tard, ton nom est sur une liste où il n’aurait pas dû être.`, e:{gratia:13, auctoritas:4} },
+    ko:{ r:`« Demande-le encore dans trois ans. » Il ne se fâche pas, ce qui est pire.`, e:{gratia:-6} } }
+  ]},
+
+{ ch:['belgae','oceanus','atuatuca','vercingetorix','finis','rubico'], t:'Deux hommes se sont battus', lieu:'Devant ta tente',
+  x:`Coups portés au camp, ce qui est un délit grave. L’un est un vétéran indiscipliné mais excellent au combat ; l’autre une jeune recrue qui a raison sur le fond. Le règlement prévoit la bastonnade pour les deux.`,
+  nota:`Polybe décrit la <span class="lat">fustuarium</span> : le condamné était battu par ses propres camarades. La discipline romaine reposait sur ce principe — la punition venait du groupe, pas seulement du chef.`,
+  o:[
+  { t:'Appliquer le règlement aux deux, également',
+    res:{ r:`Bastonnade publique. La justice aveugle est impopulaire et tient une unité mieux que la justice clairvoyante.`, e:{disciplina:8, auctoritas:5, gratia:4} } },
+  { t:'Les mettre au même contubernium et à la même corvée pendant un mois',
+    res:{ r:`Un mois de latrines à deux. Au bout de trois semaines ils se couvrent mutuellement devant toi. C’est la plus vieille méthode de l’armée romaine et elle marche encore.`, e:{auctoritas:12, scientia:4} } },
+  { t:'Fermer les yeux',
+    check:{ s:'auctoritas', dc:58 },
+    ok:{ r:`Tu n’as rien vu. Ils règlent cela entre eux et l’affaire meurt. Un officier qui voit tout ne commande rien.`, e:{auctoritas:8, disciplina:-3} },
+    ko:{ r:`Le tribun de service, lui, a vu. C’est toi qu’on interroge sur ta manière de tenir ton monde.`, e:{gratia:-9, auctoritas:-5} } }
+  ]},
+
+{ ch:['helvetii','belgae','oceanus','atuatuca','vercingetorix','finis'], t:'Une lettre d’Italie', lieu:'Arrivée du courrier',
+  x:`Le courrier a mis quatre mois. Il y a une lettre pour toi, écrite par un scribe public au nom de quelqu’un qui ne sait pas écrire.`,
+  nota:`Les tablettes de Vindolanda, en Bretagne, ont conservé ce type de correspondance : nouvelles de famille, demandes de chaussettes et de sous-vêtements, invitations d’anniversaire. La vie ordinaire d’une armée d’occupation.`,
+  o:[
+  { t:'La lire tout de suite',
+    check:{ s:'valetudo', dc:40 },
+    ok:{ r:`Des nouvelles ordinaires : la récolte, un mariage, un procès de voisinage. Tu la relis trois fois et tu la ranges dans ton coffre. Cela suffit à tenir un hiver.`, e:{valetudo:10, auctoritas:3} },
+    ko:{ r:`Une mort. Vieille de quatre mois, à laquelle tu ne peux rien, et dont personne ici ne peut parler avec toi.`, e:{valetudo:-7} } },
+  { t:'Envoyer la moitié de ta solde avec le prochain convoi du questeur',
+    res:{ r:`Le convoi prend une commission et arrive à peu près sûrement. Chez toi, cela change tout.`, e:{peculium:-300, valetudo:7, auctoritas:3} } },
+  { t:'Écrire les lettres des illettrés de ta centurie pendant trois soirs',
+    need:{ s:'scientia', min:38 },
+    res:{ r:`Vingt-deux lettres. Tu apprends sur ces hommes en trois soirs ce que six ans de rang ne t’avaient pas appris.`, e:{auctoritas:12, scientia:4} } }
+  ]},
+
+{ ch:['oceanus','atuatuca','vercingetorix','finis','rubico','ultima'], t:'Le contractant', lieu:'Magasin du camp',
+  x:`Un fournisseur de l’armée — blé, cuir, ferraille — te propose une commission régulière contre des réceptions complaisantes. La somme est sérieuse. Le procédé est universel et sanctionné de mort quand il est découvert, ce qui n’arrive presque jamais.`,
+  nota:`Les <span class="lat">publicani</span> adjudicataires des marchés militaires formaient une puissance financière considérable, avec des protections jusqu’au Sénat. Corrompre l’officier de réception était la pratique normale, pas l’exception.`,
+  o:[
+  { t:'Accepter',
+    res:{ r:`L’arrangement dure des années et ne se voit jamais. Tu deviens un homme aisé, avec des cuirs un peu minces sur les épaules de tes hommes.`, e:{peculium:2200, auctoritas:-9, gratia:4} } },
+  { t:'Refuser et le dénoncer au questeur',
+    res:{ r:`Il est chassé, ses stocks confisqués et redistribués. Trois officiers supérieurs qui étaient dans l’arrangement savent maintenant ton nom.`, e:{virtus:5, auctoritas:11, gratia:-11} } },
+  { t:'Refuser sans faire d’histoire',
+    res:{ r:`Tu dis non, poliment, et l’affaire s’arrête là. Il ira voir le centurion d’à côté, qui dira oui.`, e:{disciplina:5, scientia:3} } }
+  ]},
+
+{ ch:['helvetii','belgae','oceanus','vercingetorix','finis'], t:'Le valetudinarium', lieu:'Infirmerie du camp',
+  x:`L’hôpital du camp est plein : dysenterie, fièvres, blessures anciennes. Le médecin manque de vinaigre, de bandes et d’un homme pour tenir les registres.`,
+  nota:`Les <span class="lat">valetudinaria</span> légionnaires sont les premiers hôpitaux militaires organisés connus : pavillons à chambres, salle d’opération, égout. L’armée romaine perdait davantage d’hommes par maladie que par le fer, et le savait.`,
+  o:[
+  { t:'Fournir sur ta bourse ce qui manque',
+    res:{ r:`Vinaigre, toile, miel, et un scribe payé un mois. Les morts de fièvre baissent d’un tiers ce trimestre. Personne ne fait le lien, sauf le médecin.`, e:{peculium:-300, auctoritas:13} } },
+  { t:'Démontrer que les fièvres viennent du site et faire déplacer le camp',
+    need:{ s:'scientia', min:48 },
+    res:{ r:`Chiffres à l’appui, tu obtiens un déplacement d’un demi-mille sur un versant sec. C’est de la médecine sans médecine, et cela sauve plus d’hommes qu’une victoire.`, e:{scientia:11, gratia:8, auctoritas:9} } },
+  { t:'Prendre ton tour de garde auprès des mourants',
+    res:{ r:`Trois nuits. On ne fait rien d’autre que rester là, et c’est apparemment tout ce qu’on demande.`, e:{auctoritas:9, valetudo:-3} } }
+  ]},
+
+{ ch:['belgae','oceanus','atuatuca','vercingetorix','finis','rubico','ultima'], t:'Vingt milles avant midi', lieu:'Colonne de marche',
+  x:`Marche forcée. Trente kilos par homme. César marche parfois plus vite que ses propres nouvelles, et c’est ce qui l’a fait gagner plus souvent que ses batailles.`,
+  nota:`La vitesse de marche fut son arme principale : il fit soixante-dix milles en trois jours pour atteindre le camp de Cicéron, et surprit Pompée à Brindes en couvrant l’Italie plus vite qu’aucune nouvelle.`,
+  o:[
+  { t:'Marcher en tête avec ton paquetage complet',
+    res:{ r:`Un officier qui porte ce que portent ses hommes n’a pas besoin de leur parler.`, e:{disciplina:7, auctoritas:12, valetudo:-5} } },
+  { t:'Fermer la colonne et ramasser les traînards',
+    res:{ r:`Personne ne se perd, personne ne reste. Le poste de serre-file est le moins glorieux et le plus utile de la colonne.`, e:{auctoritas:10, disciplina:5, valetudo:-3} } },
+  { t:'Faire charger meules et pieux sur les mulets, contre le règlement',
+    p:'sousoff',
+    check:{ s:'scientia', dc:56 },
+    ok:{ r:`Ton unité arrive fraîche et personne ne pose de question puisque cela a marché.`, e:{scientia:7, auctoritas:9, valetudo:3} },
+    ko:{ r:`Le convoi de mulets prend du retard et ton unité arrive après les autres, sans son matériel de fortification.`, e:{gratia:-8, auctoritas:-4} } }
+  ]},
+
+{ ch:['helvetii','belgae','oceanus','atuatuca','vercingetorix'], t:'Un présage', lieu:'Devant l’autel du camp',
+  x:`Les poulets sacrés refusent de manger avant le départ, ce qui est un présage détestable. Le camp le sait avant midi.`,
+  nota:`Un ancêtre de Claudius Pulcher, dont les poulets refusaient l’augure avant une bataille navale, les fit jeter à la mer : « qu’ils boivent, puisqu’ils ne veulent pas manger ». Il perdit la bataille, et Rome ne l’oublia jamais.`,
+  o:[
+  { t:'Payer un second sacrifice de ta bourse',
+    res:{ r:`Tu obtiens un présage favorable au second essai. C’est du théâtre, tes hommes le savent, et cela marche parce que c’est du théâtre partagé.`, e:{auctoritas:9, gratia:3, peculium:-120} } },
+  { t:'Manger toi-même la ration des poulets devant la centurie',
+    check:{ s:'auctoritas', dc:56 },
+    ok:{ r:`On rit et l’on n’en parle plus.`, e:{auctoritas:11, virtus:4} },
+    ko:{ r:`Personne ne rit. Il y a des jours où l’armée romaine est très pieuse, et tu viens d’en trouver un.`, e:{auctoritas:-9, gratia:-4} } },
+  { t:'Prendre le présage au sérieux et faire vérifier le terrain',
+    res:{ r:`Tu traites l’angoisse comme un renseignement : si les hommes sentent quelque chose, c’est peut-être qu’il y a quelque chose. Tu fais reconnaître deux milles de plus.`, e:{scientia:7, disciplina:4} } }
+  ]},
+
+{ ch:['atuatuca','vercingetorix','finis','rubico','ultima'], t:'Le jour de la solde', lieu:'Devant les enseignes',
+  x:`Trois fois l’an, le questeur paie devant les enseignes. On retient la nourriture, l’équipement, les vêtements, la caisse funéraire, et une part obligatoire déposée à l’enseigne.`,
+  nota:`Le dépôt obligatoire aux enseignes servait autant d’épargne que de garantie contre la désertion : un homme qui partait perdait tout ce qu’il avait accumulé.`,
+  o:[
+  { t:'Vérifier les retenues ligne par ligne pour ton unité',
+    need:{ s:'scientia', min:44 },
+    res:{ r:`Tu trouves deux erreurs et une retenue indue sur des bottes jamais livrées. Le questeur corrige de mauvaise grâce. Tes hommes touchent onze deniers de plus, ce qui est énorme.`, e:{scientia:6, auctoritas:14, gratia:-4} } },
+  { t:'Déposer ta propre solde à l’enseigne plutôt que la dépenser',
+    res:{ r:`L’argent qui dort à l’enseigne est celui qu’on retrouve à la démobilisation. Peu d’hommes ont la patience de le faire.`, e:{disciplina:5, peculium:200} } },
+  { t:'La dépenser comme les autres',
+    res:{ r:`Le vin est bon et le lendemain la bourse est vide. Tes hommes t’ont vu boire avec eux, ce qui compte davantage que tu ne le crois.`, e:{auctoritas:8, valetudo:4, peculium:-150} } }
+  ]}
+];
+
+/* ---- branche pompéienne : deux événements, puis la fin ---- */
+const POMPEE = {
+id:'victis', n:'Victis', sub:'Du côté du Sénat', y0:-48, y1:-48, len:2,
+events:[
+{ at:0, t:'Pharsale, aile pompéienne', lieu:'Plaine de l’Énipeus', guerre:true,
+  x:`Tu es du côté du Sénat, des consulaires et des sept mille cavaliers. En face, il y a les hommes avec qui tu as pris Alésia.<br><br>Toute votre cavalerie doit tourner leur droite. Elle part, superbe — et se heurte à six cohortes surgies de nulle part qui, au lieu de lancer leurs pila, les pointent au visage.`,
+  vue:{ soldat:'Tu vois la cavalerie revenir. Pas se replier : revenir en désordre.',
+        sousoff:'Vos archers sont découverts. Ils vont être massacrés.',
+        centurion:'La droite ennemie n’a pas été tournée. Tout le plan reposait là-dessus.',
+        superieur:'Pompée quitte la ligne et rentre à sa tente. Devant tout le monde.' },
+  nota:`Pompée se retira sous sa tente et resta assis sans parler jusqu’à ce que les Césariens forcent le camp. César perdit deux cents hommes ; l’armée sénatoriale, six mille, dont la plupart après la rupture de la ligne.`,
+  o:[
+  { t:'Tenir le flanc découvert avec ce que tu as',
+    res:{ r:`Tu refuses le flanc et tu tiens assez pour que l’aile ne soit pas roulée d’un coup. Cela ne sauvera pas la bataille ; cela sauve ta cohorte.`, e:{virtus:9, auctoritas:10, valetudo:-10} } },
+  { t:'Décrocher tout de suite vers le camp',
+    res:{ r:`Tu sors du piège avant qu’il se referme. Tu es de ceux qui rentreront au camp en ordre, et le camp tombera quand même.`, e:{scientia:6, valetudo:-4, auctoritas:-4} } }
+  ]},
+{ t:'Le choix du vaincu', lieu:'Colline au-dessus du champ',
+  x:`Le camp est pris avec ses tables dressées. Vingt-quatre mille hommes se rendent. César a fait crier qu’il épargne tous les citoyens et qu’il ne veut aucune vengeance.<br><br>Certains le croient. D’autres passent en Afrique pour continuer trois ans encore.`,
+  nota:`La <span class="lat">clementia Caesaris</span> fut une politique délibérée et efficace : beaucoup de pardonnés servirent ensuite sous ses enseignes. Quatorze des sénateurs qu’il épargna à Pharsale se trouvaient parmi ses assassins aux ides de mars.`,
+  o:[
+  { t:'Te rendre et accepter la clémence',
+    res:{ r:`Tu déposes les armes. On ne t’insulte pas, on ne te fouille même pas. César t’accueille, te rend un grade — un cran plus bas — et ne mentionnera plus jamais l’affaire. C’est cela qui est difficile à supporter.`, e:{gratia:6, auctoritas:-8}, choix:'venia' } },
+  { t:'Passer en Afrique et continuer la guerre',
+    note:'Trois ans encore. Il n’y aura au bout ni Caton, ni Labienus, ni camp.',
+    res:{ r:`Tu embarques à Corcyre avec Labienus. Il reste l’Afrique puis l’Espagne, et à la fin de ces trois ans il n’y aura plus rien de ce pour quoi tu es parti.`, e:{virtus:8, auctoritas:6, valetudo:-8}, choix:'afrique' } }
+  ]}
+]};
+
+/* ===== src2/app.js ===== */
+/* ============================================================
+   MOTEUR + INTERFACE
+   ============================================================ */
+const $=(id)=>document.getElementById(id);
+const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
+const rnd=(n)=>Math.floor(Math.random()*n);
+const pick=(a)=>a[Math.floor(Math.random()*a.length)];
+const esc=(s)=>String(s).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+const CLE='cvrsvs_v3';
+
+let S=null;
+let V={ nota:false, res:null, promo:null, onglet:'castra' };
+
+function melange(a){ const x=[...a]; for(let i=x.length-1;i>0;i--){ const j=rnd(i+1); [x[i],x[j]]=[x[j],x[i]]; } return x; }
+function romain(n){ if(n<=0) return '—';
+  const t=[[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
+  let r=''; for(const [v,s] of t){ while(n>=v){ r+=s; n-=v; } } return r; }
+function lapid(s){ return s.toUpperCase().replace(/U/g,'V').split(' ').join('&nbsp;·&nbsp;'); }
+
+function facteurProgres(v){
+  if(v<40) return 1; if(v<55) return .70; if(v<68) return .46;
+  if(v<78) return .28; if(v<86) return .16; return .07;
+}
+function attenuer(v,n){ const b=n*facteurProgres(v), e=Math.floor(b); return e+(Math.random()<(b-e)?1:0); }
+
+/* ---------- séquence ---------- */
+function construireSeq(ph){
+  const fixes=ph.events.filter(e=>e.at!==undefined);
+  const libres=melange(ph.events.filter(e=>e.at===undefined));
+  const reserve=melange(COMMUNS.filter(e=>e.ch.includes(ph.id) && !S.vus.includes(e.t)));
+  const seq=new Array(ph.len).fill(null);
+  fixes.forEach(e=>{ let i=Math.min(e.at,ph.len-1),g=0;
+    while(seq[i]&&g<ph.len){ i=(i+1)%ph.len; g++; } seq[i]=e; });
+  const pool=[...libres,...reserve]; let pi=0;
+  for(let i=0;i<ph.len;i++) if(!seq[i]&&pi<pool.length) seq[i]=pool[pi++];
+  return seq.filter(Boolean);
+}
+function chapitre(){ return S.pompee?POMPEE:PHASES[S.ch]; }
+function evenement(){ return S.seq[S.t]; }
+function annee(){ const p=chapitre(); return p.y0+Math.round((S.t/Math.max(1,p.len-1))*(p.y1-p.y0)); }
+function portee(){ return RANKS[S.rank].p; }
+function totalEv(){ return PHASES.reduce((a,p)=>a+p.len,0); }
+function faitEv(){ let n=0; for(let i=0;i<S.ch;i++) n+=PHASES[i].len; return n+S.t; }
+
+/* ---------- création ---------- */
+function nouvelle(o){
+  S={ nom:nomRomain(), orig:o.n, s:{...o.s}, peculium:o.p, rank:1, ch:0, seq:[], t:0,
+      vulnera:[], dona:[], log:[], notas:[], liens:{}, vus:[], fin:null, pompee:false, finPromo:null };
+  S.seq=construireSeq(PHASES[0]);
+  S.log.push({ y:PHASES[0].y0, t:`Sacramentum — ${o.n}` });
+  V={ nota:false, res:null, promo:null, onglet:'castra' };
+  sauver(); rendre();
+}
+
+/* ---------- options ---------- */
+function etatOption(o){
+  const pi=PORTEE.indexOf(portee()), oi=PORTEE.indexOf(o.p||'soldat');
+  if(oi>pi+1) return {cache:true};
+  if(oi>pi) return {verrou:PORTEE_N[o.p].n+' requis'};
+  if(o.need){ const st=STATS.find(x=>x.k===o.need.s);
+    if((S.s[o.need.s]||0)<o.need.min) return {verrou:`${st.n} ${o.need.min}`}; }
+  return {};
+}
+function proba(c){ return Math.round(clamp((S.s[c.s]+25-c.dc+1)/26,0,1)*100); }
+
+/* Aperçu d'une option : on annonce le PRIX, jamais la récompense.
+   Un homme sait d'avance si une chose est dangereuse, coûteuse ou sans retour.
+   Il ne sait pas qu'elle lui vaudra onze points de courage : cela, il faut le
+   lire dans ce qu'on lui décrit — et le découvrir après. */
+function apercu(o){
+  const out=[];
+  const a=(o.res&&o.res.e)||{}, b=(o.ok&&o.ok.e)||{}, c=(o.ko&&o.ko.e)||{};
+  const val=Math.min(a.valetudo||0, b.valetudo||0, c.valetudo||0);
+  const pec=(a.peculium||0)+(b.peculium||0);
+  const blessure=a.vulnus||b.vulnus||c.vulnus;
+
+  if(o.check){
+    const p=proba(o.check);
+    const mot = p>=78?'tu t’en crois capable' : p>=55?'c’est jouable'
+              : p>=32?'c’est incertain'      : 'c’est au-delà de toi';
+    out.push({c:'pari', i:'clepsydra', t:mot});
+  }
+  if(blessure)      out.push({c:'perte', i:'gladius', t:'blessure certaine'});
+  else if(val<=-15) out.push({c:'perte', i:'gladius', t:'tu peux y rester'});
+  else if(val<=-8)  out.push({c:'perte', i:'gladius', t:'sanglant'});
+  else if(val<=-3)  out.push({c:'perte', i:'gladius', t:'rude'});
+
+  if((a.valetudo||0)>0 || (o.res&&o.res.soin)) out.push({c:'gain', i:'caduceus', t:'tu y reprendras des forces'});
+  if(pec>0)  out.push({c:'gain',  i:'nummus', t:'cela rapporte'});
+  if(pec<0)  out.push({c:'perte', i:'nummus', t:'cela coûte'});
+  if(o.res&&o.res.choix) out.push({c:'pari', i:'libra', t:'sans retour'});
+  if(!out.length) out.push({c:'verrou', i:'signum', t:'sans danger'});
+  return out;
+}
+
+/* L'emblème dit la NATURE de l'acte, la teinte dit son PRIX.
+   Ni l'un ni l'autre ne révèle ce que l'action rapporte. */
+const ACTES=[
+  /* argent et marchandise */
+  [/pay|achet|rachet|vend|bours|deniers|solde|prix|commission|spécul|butin|part|investi|redistribu|lot/i,'nummus'],
+  /* écrit, calcul, savoir */
+  [/écri|lettre|registre|compt|rédig|consign|list|grec|vérifi|apprend|étudi|instrui|nager|lire|testament|croquis|carte/i,'volumen'],
+  /* parole */
+  [/dis|dire|parl|répond|expliq|discours|plaid|object|propos|demand|négoci|trait|sond|serment|signal|crier|cri|rameut|interpell|convainc|prêt|écout|répliqu|suppli/i,'signum'],
+  /* justice, décision, commandement formel */
+  [/juge|arbitr|tranch|partag|règl|sanction|interdi|ordonn|appliqu|exécut|désign|refus|accept|décid|congé|rendre|assum|couvrir dans/i,'libra'],
+  /* tenir, protéger, encadrer */
+  [/tenir|tiens|rang|serr|gard|couvr|form|carré|cercle|rempart|poste|attend|investir|rester|maintien|reformer|rassembl|relev|protég|épargn|sauv/i,'scutum'],
+  /* agir au fer */
+  [/charg|sort|aller|cherch|mont|saut|franch|pouss|frapp|attaqu|assaut|porter l|lanc|jeter|forcer|décal|face|flanc|enfonc|poursuiv|corrig|abord|abattre|prendre la tête|first/i,'gladius'],
+  /* génie et travail */
+  [/creus|bâti|pont|terrass|fortif|galerie|ouvrag|répar|équip|barqu|dériv|mine|sappe|travail|doubl|exercice|palissad|camp/i,'templum'],
+  /* soin et repos */
+  [/soign|repos|panse|blessé|médec|dormir|fournir|eau|malade|hiver/i,'caduceus'],
+  /* mouvement et reconnaissance */
+  [/march|colonn|convoi|escort|reconna|éclaireur|itinérair|embarqu|passer|travers|rentr|suivre|partir|fuir|décroch/i,'vexillum'],
+  /* faveur et présence */
+  [/voir des officiers|faire voir|dîner|présent|se fondre|ne rien|se taire|fermer les yeux|laisser|mêler/i,'laurea']
+];
+function emblemeActe(t){
+  for(const [re,ic] of ACTES) if(re.test(t)) return ic;
+  return 'laurea';
+}
+function styleChoix(o){
+  const a=(o.res&&o.res.e)||{}, b=(o.ok&&o.ok.e)||{}, c=(o.ko&&o.ko.e)||{};
+  const val=Math.min(a.valetudo||0, b.valetudo||0, c.valetudo||0);
+  const blessure=a.vulnus||b.vulnus||c.vulnus;
+  let cls='vert';
+  if(blessure||val<=-12) cls='rouge';
+  else if(val<=-3||o.check) cls='bleu';
+  return { cls, ic: (o.res&&o.res.choix) ? 'libra' : emblemeActe(o.t) };
+}
+
+/* ---------- résolution ---------- */
+function choisir(i){
+  const ev=evenement(), o=ev.o[i], et=etatOption(o);
+  if(et.cache||et.verrou) return;
+  let res=o.res, ok=true, parie=false;
+  if(o.check){ parie=true; ok=(S.s[o.check.s]+rnd(26))>=o.check.dc; res=ok?o.ok:o.ko; }
+  appliquer(ev, o.t, res, parie, ok);
+}
+/* applique un résultat à la carrière — commun aux choix et aux batailles jouées en temps réel */
+function appliquer(ev, libelle, res, parie, ok){
+  const e=res.e||{}, notes=[], avant={...S.s};
+  STATS.forEach(st=>{ if(!e[st.k]) return;
+    let d=e[st.k]; if(d>0&&st.k!=='valetudo') d=attenuer(S.s[st.k],d);
+    S.s[st.k]=clamp(S.s[st.k]+d); });
+  if(e.peculium) S.peculium=Math.max(0,S.peculium+e.peculium);
+  if(e.vulnus){ const v=blesser(); if(v) notes.push({c:'perte', i:'gladius', t:v.n}); }
+  if(res.soin&&S.vulnera.length){ const v=S.vulnera.shift();
+    for(const k in v.e) S.s[k]=clamp(S.s[k]-v.e[k]); notes.push({c:'gain', i:'caduceus', t:'Cicatrisé : '+v.n}); }
+  if(e.dona&&!S.dona.includes(e.dona)){ S.dona.push(e.dona); notes.push({c:'gain', i:'laurea', t:e.dona}); }
+  if(res.lien) for(const k in res.lien) S.liens[k]=(S.liens[k]||0)+res.lien[k];
+
+  const eff=[];
+  STATS.forEach(st=>{ const d=S.s[st.k]-avant[st.k];
+    if(d) eff.push({c:d>0?'gain':'perte', i:st.i, t:`${d>0?'+':''}${d} ${st.n}`}); });
+  if(e.peculium) eff.push({c:e.peculium>0?'gain':'perte', i:'nummus', t:`${e.peculium>0?'+':''}${e.peculium} deniers`});
+  eff.push(...notes);
+
+  S.log.push({ y:annee(), t:`${ev.t} — ${libelle}` });
+  if(!S.vus.includes(ev.t)) S.vus.push(ev.t);
+  if(ev.nota && !S.notas.some(n=>n.t===ev.t)) S.notas.push({ t:ev.t, x:ev.nota, y:annee() });
+
+  V.res={ x:res.r, eff, parie, ok, nota:ev.nota, mort:S.s.valetudo<=0, choix:res.choix||null };
+  V.nota=false; sauver(); rendre();
+}
+function blesser(){
+  const libres=VULNERA.filter(v=>!S.vulnera.some(x=>x.n===v.n));
+  if(!libres.length){ S.s.valetudo=clamp(S.s.valetudo-10); return null; }
+  const v=pick(libres); S.vulnera.push(v);
+  for(const k in v.e) S.s[k]=clamp(S.s[k]+v.e[k]);
+  return v;
+}
+
+/* ---------- suite ---------- */
+function suite(){
+  const r=V.res;
+  if(r.mort){ finir('mort'); return; }
+  if(r.choix){
+    if(r.choix==='missio'||r.choix==='missio_riche'){ finir(r.choix); return; }
+    if(r.choix==='afrique'){ finir('victis'); return; }
+    if(r.choix==='pompee'){ S.pompee=true; S.seq=construireSeq(POMPEE); S.t=0; V.res=null; sauver(); rendre(); return; }
+    if(r.choix==='venia'){
+      S.pompee=false; S.rank=Math.max(1,S.rank-1);
+      S.ch=PHASES.length-1; S.seq=construireSeq(PHASES[S.ch]); S.t=0;
+      S.log.push({ y:-48, t:'Rendu et pardonné — grade réduit' });
+      V.res=null; sauver(); rendre(); return; }
+  }
+  V.res=null;
+  if(S.t+1<S.seq.length){
+    S.t++;
+    S.peculium=Math.max(0, S.peculium + Math.round(RANKS[S.rank].pay/3) - (S.rank<4?55:25));
+    sauver(); rendre(); return;
+  }
+  let r2=S.rank;
+  while(r2<RANKS.length-1){ const g=PROMO.find(p=>p.to===r2+1); if(g&&g.req(S.s)) r2++; else break; }
+
+  /* Dernier chapitre : la carrière s'arrête ici. Un grade dont les conditions
+     sont réunies après la dernière décision ne s'exerce jamais — on le
+     mentionne à la démobilisation, on ne l'attribue pas. */
+  if(S.pompee || S.ch+1>=PHASES.length){
+    S.finPromo = r2>S.rank ? r2 : null;
+    finir(S.pompee?'victis':'carriere'); return;
+  }
+
+  const promu=r2>S.rank, de=S.rank;
+  if(promu) S.log.push({ y:annee(), t:`Promotion : ${RANKS[r2].n}` });
+  S.rank=r2;
+  V.promo={ promu, de, a:r2, suivant:PHASES[S.ch+1] };
+  sauver(); rendre();
+}
+function chapitreSuivant(){
+  S.ch++; S.seq=construireSeq(PHASES[S.ch]); S.t=0;
+  S.s.valetudo=clamp(S.s.valetudo + 8 + Math.round((S.s.disciplina||0)/14));
+  V.promo=null; V.onglet='castra'; sauver(); rendre();
+}
+function finir(type){ S.fin={ type, an:annee() }; sauver(); rendre(); }
+function onglet(o){ V.onglet=o; rendre(); window.scrollTo(0,0); }
+
+function sauver(){ try{ localStorage.setItem(CLE,JSON.stringify(S)); }catch(e){} }
+function charger(){ try{ const r=localStorage.getItem(CLE); return r?JSON.parse(r):null; }catch(e){ return null; } }
+function effacer(){ try{ localStorage.removeItem(CLE); }catch(e){} }
+function recommencer(){ effacer(); S=null; V={nota:false,res:null,promo:null,onglet:'castra'}; rendre(); }
+
+/* ============================================================
+   RENDU
+   ============================================================ */
+function rendre(){
+  if(!S) return coque(ecranIntro(), false);
+  if(S.fin) return coque(ecranFin(), false);
+  if(V.promo) return coque(ecranPromo(), false);
+  const ec = { castra:ecranCastra, campagne:ecranCampagne, acta:ecranActa,
+               nota:ecranNota, cursus:ecranCursus }[V.onglet] || ecranCastra;
+  coque(ec(), true);
+}
+
+function coque(html, nav){
+  const ph = S && !S.fin ? chapitre() : null;
+  $('app').innerHTML=`
+  <div class="app">
+    <div class="banniere">
+      <div class="aigle">${icone('aquila')}</div>
+      <div class="titre">LEGIO X EQVESTRIS</div>
+      <div class="sous-titre">Gaule &amp; guerre civile · 58–45</div>
+      ${ph?`<div class="banniere-legende">${esc(ph.n)} · ${esc(ph.sub)}</div>`:
+           `<div class="banniere-legende">De la recrue au primipile</div>`}
+    </div>
+    ${html}
+    ${nav?barreNav():''}
+  </div>`;
+}
+
+const ONGLETS=[
+  {id:'castra',   n:'Castra',   i:'templum'},
+  {id:'campagne', n:'Campagne', i:'volumen'},
+  {id:'acta',     n:'Acta',     i:'libra'},
+  {id:'nota',     n:'Nota',     i:'signum'},
+  {id:'cursus',   n:'Cursus',   i:'capita'}
+];
+function barreNav(){
+  return `<div class="nav">${ONGLETS.map(o=>`
+    <button class="nav-b ${V.onglet===o.id?'on':''}" onclick="onglet('${o.id}')">
+      ${icone(o.i)}<span>${o.n}</span>
+    </button>`).join('')}</div>`;
+}
+
+/* ---------- bandeaux communs ---------- */
+function barrePerso(){
+  const R=RANKS[S.rank], pct=Math.round(faitEv()/totalEv()*100);
+  return `<div class="cadre"><div class="perso">
+    <div class="portrait">${icone('capita')}<div class="grade-ecu">${romain(S.rank)}</div></div>
+    <div class="perso-c">
+      <div class="perso-n">${esc(S.nom||S.orig)}</div>
+      <div class="perso-g">${icone('laurea')}${esc(R.n)}</div>
+      <div class="xp">
+        <div class="xp-b"><i style="width:${pct}%"></i></div>
+        <div class="xp-n">${faitEv()} / ${totalEv()}</div>
+      </div>
+    </div>
+    <div class="vexille">
+      <div class="vexille-t">LEG·X</div>${icone('aquila')}
+      <div class="vexille-n">EQVEST</div>
+    </div>
+  </div></div>`;
+}
+function bandeauAttrs(){
+  return `<div class="attrs">${STATS.map(st=>{
+    const v=S.s[st.k], bas=(st.k==='valetudo'&&v<35), haut=v>=75;
+    return `<div class="at ${bas?'bas':''} ${haut?'haut':''}">
+      ${icone(st.i)}
+      <div class="at-n">${st.n}</div>
+      <div class="at-v">${v}</div>
+    </div>`;
+  }).join('')}</div>
+  <div class="cadre"><div class="perso" style="padding:9px 14px;gap:10px;">
+    <div style="display:flex;align-items:center;gap:7px;flex:1;">
+      ${icone('nummus')}<span style="font-family:var(--data);font-size:13px;color:var(--or-vif);">${S.peculium.toLocaleString('fr-FR')}</span>
+      <span style="font-family:var(--caps);font-size:9px;letter-spacing:.16em;color:var(--gris-2);">DENIERS</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px;">
+      ${icone('scutum')}<span style="font-family:var(--caps);font-size:10px;letter-spacing:.13em;color:var(--or);">${PORTEE_N[portee()].n}</span>
+    </div>
+  </div></div>`;
+}
+
+/* ---------- CASTRA : l'événement ---------- */
+function ecranCastra(){
+  const ev=evenement(), r=V.res, ph=chapitre();
+  return `
+  ${barrePerso()}
+  ${bandeauAttrs()}
+  <div class="cadre ${ev.guerre?'guerre':''}">
+    <div class="cadre-t">${ev.guerre?'Acies':'Castra'} · ${romain(S.t+1)} / ${romain(S.seq.length)}</div>
+    <div class="cadre-b">
+      <div class="grav">
+        ${scene(ev.guerre?'acies':'castra')}
+        <div class="grav-l">${esc(ev.lieu||ph.sub)}</div>
+      </div>
+      <div class="ev-t">${ev.t}</div>
+      <div class="ev-l">${Math.abs(annee())} av. J.-C.</div>
+      <div class="ev-x">${ev.x}</div>
+      ${ev.vue&&ev.vue[portee()]?`<div class="vue">
+        <b>${icone('scutum')}Ce que tu vois — ${PORTEE_N[portee()].n}</b>
+        <span>${esc(ev.vue[portee()])}</span></div>`:''}
+      ${r?blocResultat(r):(ACIES[ev.t]?blocAcies(ev):'')+blocChoix(ev)}
+    </div>
+  </div>`;
+}
+/* batailles jouables en temps réel (bataille.html) */
+const ACIES={ 'Bibracte':'bibracte', 'Pharsale — la quatrième ligne':'pharsale', 'Munda':'munda' };
+function blocAcies(ev){
+  return `<button class="acies-b" onclick="sauver();location.href='bataille.html?b=${ACIES[ev.t]}&camp=1'">
+    <div class="medaille">${icone('gladius')}</div>
+    <div class="ch-c"><div class="ch-t">Combattre en temps réel</div>
+      <div class="ch-note">Entre dans la bataille en 3D, à ta place de ${esc(RANKS[S.rank].n)} : ${esc(PORTEE_N[portee()].vue)}.</div>
+      <div class="puces"><span class="puce perte">${icone('gladius')}on peut y mourir</span></div></div>
+    <div class="ch-fl">›</div></button>
+    <div class="acies-ou">ou décider en un geste</div>`;
+}
+function retourAcies(){
+  let r=null; try{ r=JSON.parse(localStorage.getItem('legio_acies_res')); localStorage.removeItem('legio_acies_res'); }catch(e){}
+  if(!r||!S||S.fin||V.res) return;
+  const ev=evenement(); if(!ev||ev.t!==r.ev) return;
+  appliquer(ev, `Combattu en ligne — ${r.issue}`, { r:r.recit, e:r.e }, false, true);
+}
+function blocChoix(ev){
+  return `<div class="choix">${ev.o.map((o,i)=>{
+    const et=etatOption(o); if(et.cache) return '';
+    const st=styleChoix(o), ap=apercu(o);
+    return `<button class="ch ${et.verrou?'':st.cls}" ${et.verrou?'disabled':''} onclick="choisir(${i})">
+      <div class="medaille">${icone(et.verrou?'sera':st.ic)}</div>
+      <div class="ch-c">
+        <div class="ch-t">${esc(o.t)}</div>
+        ${o.note?`<div class="ch-note">${esc(o.note)}</div>`:''}
+        <div class="puces">${et.verrou
+          ? `<span class="puce verrou">${icone('sera')}${esc(et.verrou)}</span>`
+          : ap.map(a=>`<span class="puce ${a.c}">${icone(a.i)}${esc(a.t)}</span>`).join('')}</div>
+      </div>
+      <div class="ch-fl">›</div>
+    </button>`;
+  }).join('')}</div>`;
+}
+function blocResultat(r){
+  return `<div class="res">
+    ${r.parie?`<div class="verdict ${r.ok?'ok':'ko'}">${icone(r.ok?'check':'gladius')}${r.ok?'Réussi':'Manqué'}</div>`:''}
+    <div class="res-x">${r.x}</div>
+    ${r.eff.length?`<div class="res-e">${r.eff.map(e=>`<span class="puce ${e.c}">${icone(e.i)}${esc(e.t)}</span>`).join('')}</div>`:''}
+    ${r.nota?`<div class="nota">
+      <button class="nota-b" onclick="V.nota=!V.nota;rendre()">${icone('nota_i')}${V.nota?'Masquer la nota':'Nota historica'}</button>
+      ${V.nota?`<div class="nota-x">${r.nota}</div>`:''}
+    </div>`:''}
+    <div class="cta-w">${icone('laurea')}
+      <button class="cta" onclick="suite()">${r.mort?'Voir la pierre':'Poursuivre'}</button>
+      ${icone('laurea')}</div>
+  </div>`;
+}
+
+/* ---------- CAMPAGNE ---------- */
+function ecranCampagne(){
+  return `${barrePerso()}
+  <div class="cadre"><div class="cadre-t">Carte de campagne</div><div class="cadre-b">
+    ${PHASES.map((p,i)=>{
+      const etat = i<S.ch?'fait' : i===S.ch?'ici' : 'suiv';
+      const ic = i<S.ch?'check' : i===S.ch?'vexillum' : 'sera';
+      return `<div class="rail-l ${etat}">
+        <div class="rail-p">${icone(ic)}</div>
+        <div class="rail-c">
+          <div class="rail-t">${esc(p.n)}</div>
+          <div class="rail-d">${i===S.ch?`En cours · ${romain(S.t+1)}/${romain(p.len)}`:esc(p.sub)}</div>
+          ${i===S.ch?`<div style="margin-top:6px;"><div class="exig-b"><i style="width:${Math.round((S.t+1)/p.len*100)}%"></i></div></div>`:''}
+        </div>
+        <div class="ligne-v">${Math.abs(p.y0)}${p.y1!==p.y0?'–'+Math.abs(p.y1):''}</div>
+      </div>`;
+    }).join('')}
+  </div></div>`;
+}
+
+/* ---------- ACTA ---------- */
+function ecranActa(){
+  return `${barrePerso()}
+  <div class="cadre"><div class="cadre-t">Acta diurna · ${S.log.length} entrées</div><div class="cadre-b">
+    <div class="log">${[...S.log].reverse().map(l=>
+      `<div><span class="y">${Math.abs(l.y)} av. J.-C.</span> — ${esc(l.t)}</div>`).join('')}</div>
+  </div></div>`;
+}
+
+/* ---------- NOTA ---------- */
+function ecranNota(){
+  return `${barrePerso()}
+  <div class="cadre"><div class="cadre-t">Nota historica · ${S.notas.length}</div><div class="cadre-b">
+    ${S.notas.length? [...S.notas].reverse().map(n=>`
+      <div style="padding:11px 0;border-bottom:1px solid rgba(122,96,49,.2);">
+        <div class="ligne-t" style="display:flex;align-items:center;gap:8px;">${icone('signum')}${esc(n.t)}</div>
+        <div class="nota-x" style="margin-top:7px;">${n.x}</div>
+      </div>`).join('')
+      : `<div class="vide">Les notes s’accumulent au fil des décisions.</div>`}
+  </div></div>`;
+}
+
+/* ---------- CURSUS ---------- */
+function ecranCursus(){
+  const suiv=S.rank+1<RANKS.length?PROMO.find(p=>p.to===S.rank+1):null;
+  let jeu=null, manque=[];
+  if(suiv){
+    jeu = suiv.seuils.map(j=>({j, n:Object.keys(j).filter(k=>(S.s[k]||0)<j[k]).length}))
+           .sort((a,b)=>a.n-b.n)[0].j;
+    manque=Object.entries(jeu);
+  }
+  return `${barrePerso()}
+  <div class="cadre"><div class="cadre-t">Cursus honorum</div><div class="cadre-b">
+    ${RANKS.map((R,i)=>{
+      const etat=i<S.rank?'fait':i===S.rank?'ici':i===S.rank+1?'suiv':'';
+      if(i>S.rank+2) return '';
+      return `<div class="rail-l ${etat}">
+        <div class="rail-p">${icone(i<S.rank?'check':i===S.rank?'laurea':i===S.rank+1?'chevron':'sera')}</div>
+        <div class="rail-c">
+          <div class="rail-t">${esc(R.n)}</div>
+          <div class="rail-d">${i===S.rank?'Grade actuel':(i===S.rank+1?'Grade suivant':esc(R.fr))}</div>
+        </div>
+        <div class="ligne-v">${R.pay?R.pay.toLocaleString('fr-FR')+' d.':''}</div>
+      </div>`;
+    }).join('')}
+  </div></div>
+
+  ${suiv?`<div class="cadre"><div class="cadre-t">Pour devenir ${esc(RANKS[S.rank+1].n)}</div><div class="cadre-b">
+    <p class="ev-x" style="font-size:16px;margin-bottom:12px;font-style:italic;color:var(--gris);">${esc(suiv.why)}</p>
+    ${manque.map(([k,seuil])=>{
+      const st=STATS.find(x=>x.k===k), v=S.s[k]||0, ok=v>=seuil;
+      return `<div class="exig">
+        <div class="exig-t">${icone(st.i)}<span class="exig-n">Atteindre ${st.n} ${seuil}</span>
+          <span class="exig-v ${ok?'ok':''}"><b>${v}</b> / ${seuil}</span></div>
+        <div class="exig-b ${ok?'ok':''}"><i style="width:${Math.min(100,Math.round(v/seuil*100))}%"></i></div>
+      </div>`;
+    }).join('')}
+    ${suiv.seuils.length>1?`<p class="hint" style="margin-top:12px;text-align:left;">Une autre voie existe : ${suiv.seuils.filter(j=>j!==jeu).map(j=>Object.entries(j).map(([k,v])=>STATS.find(x=>x.k===k).n+' '+v).join(' + ')).join(' · ')}</p>`:''}
+  </div></div>`:''}
+
+  <div class="cadre"><div class="cadre-t">Attributs</div><div class="cadre-b">
+    ${STATS.map(st=>`<div class="exig">
+      <div class="exig-t">${icone(st.i)}<span class="exig-n">${st.n}<span style="color:var(--gris-2);font-style:italic;font-size:13.5px;"> — ${st.d}</span></span>
+        <span class="exig-v"><b>${S.s[st.k]}</b></span></div>
+      <div class="exig-b"><i style="width:${clamp(S.s[st.k])}%"></i></div>
+    </div>`).join('')}
+  </div></div>
+
+  ${(S.dona.length||S.vulnera.length)?`<div class="cadre"><div class="cadre-t">Corps et honneurs</div><div class="cadre-b">
+    ${S.dona.map(d=>`<div class="ligne">${icone('laurea')}<div class="ligne-c"><div class="ligne-t">${esc(d)}</div>
+      <div class="ligne-d">Dona militaria</div></div></div>`).join('')}
+    ${S.vulnera.map(v=>`<div class="ligne">${icone('gladius')}<div class="ligne-c"><div class="ligne-t" style="color:var(--rouge);">${esc(v.n)}</div>
+      <div class="ligne-d">${esc(v.d)}</div></div></div>`).join('')}
+  </div></div>`:''}`;
+}
+
+/* ---------- PROMOTION ---------- */
+function ecranPromo(){
+  const p=V.promo, g=PROMO.find(x=>x.to===p.a);
+  return `
+  ${barrePerso()}
+  <div class="cadre"><div class="promo">
+    ${p.promu?`
+      ${icone('chevron','gros')}
+      <div class="promo-de">${esc(RANKS[p.de].n)} devient</div>
+      <div class="promo-a">${lapid(RANKS[p.a].n)}</div>
+      <div class="promo-w">${esc(g?g.why:'')}</div>
+      <div class="promo-w" style="margin-top:14px;color:var(--or);font-style:normal;font-size:15px;">
+        Ta vue passe à <b>${PORTEE_N[RANKS[p.a].p].n}</b> — tu vois désormais ${esc(PORTEE_N[RANKS[p.a].p].vue)}.
+      </div>`
+    :`
+      ${icone('laurea','gros')}
+      <div class="promo-de">Tu restes</div>
+      <div class="promo-a" style="background:linear-gradient(180deg,#9C8C6E,#6E6249);-webkit-background-clip:text;background-clip:text;">${lapid(RANKS[S.rank].n)}</div>
+      <div class="promo-w">Le camp n’a pas encore vu ce qu’il attend. Consulte le <b style="color:var(--or);">Cursus</b> pour savoir ce qui manque.</div>`}
+  </div></div>
+  <div class="cadre"><div class="cadre-t">Quartiers d’hiver</div><div class="cadre-b">
+    <p class="ev-x" style="font-size:16px;font-style:italic;color:var(--gris);">On recoud ce qui avait été recousu vite. Le chapitre suivant s’ouvre : <b style="color:var(--or-vif);font-style:normal;">${esc(p.suivant.n)}</b> — ${esc(p.suivant.sub)}.</p>
+    <div class="cta-w" style="margin-left:0;margin-right:0;">${icone('laurea')}
+      <button class="cta" onclick="chapitreSuivant()">Reprendre la marche</button>${icone('laurea')}</div>
+  </div></div>`;
+}
+
+/* ---------- ACCUEIL ---------- */
+function ecranIntro(){
+  const sv=charger();
+  return `
+  <div class="cadre"><div class="cadre-b" style="padding-top:15px;">
+    <p class="ev-x">Tu t’engages pour seize ans dans la dixième légion, sous un proconsul de quarante-deux ans qui vient d’obtenir la Gaule et qui a des dettes considérables. Il s’appelle Caius Iulius Caesar.</p>
+    <p class="ev-x">Une décision par écran, cinquante-quatre en tout — et <strong>ce que tu vois du champ dépend de ton grade</strong>. Un légionnaire voit vingt pas de poussière ; un primipile voit la ligne entière.</p>
+    <p class="ev-x" style="color:var(--gris-2);font-style:italic;">Le prix d’une décision t’est annoncé ; jamais ce qu’elle te rapporte. Il faut lire pour le savoir. On peut mourir.</p>
+  </div></div>
+  <div class="cadre"><div class="cadre-t">Ton origine</div><div class="cadre-b">
+    ${ORIGINES.map((o,i)=>`
+      <button class="orig-l" onclick="nouvelle(ORIGINES[${i}])">
+        <div class="medaille">${icone(['galea','volumen','manus','signum','laurea'][i]||'signum')}</div>
+        <div style="flex:1;">
+          <div class="orig-n">${esc(o.n)}</div>
+          <div class="orig-d">${esc(o.d)}</div>
+          <div class="orig-e">${STATS.filter(s=>s.k!=='valetudo').map(s=>s.n.slice(0,4).toUpperCase()+' '+o.s[s.k]).join(' · ')}</div>
+        </div>
+        <div class="ch-fl">›</div>
+      </button>`).join('')}
+    ${sv&&!sv.fin?`<div class="cta-w" style="margin-left:0;margin-right:0;">
+      <button class="cta sombre" onclick="S=charger();V.onglet='castra';rendre()">Reprendre la partie en cours</button></div>`:''}
+    <p class="hint" style="margin-top:14px;">La partie se sauvegarde dans ce navigateur.</p>
+  </div></div>
+  <div class="cadre guerre"><div class="cadre-t">Acies</div><div class="cadre-b">
+    <p class="ev-x" style="margin-top:0;">Une bataille en temps réel, en trois dimensions : des milliers d’hommes sur le terrain. Légionnaire, tu combats au premier rang ; centurion, ta cohorte manœuvre à ta voix ; primipile, tu disposes de la légion.</p>
+    <div class="cta-w" style="margin-left:0;margin-right:0;">${icone('gladius')}<button class="cta" onclick="location.href='bataille.html'">Entrer dans une bataille</button>${icone('gladius')}</div>
+  </div></div>`;
+}
+
+/* ---------- FIN ---------- */
+function ecranFin(){
+  const t=S.fin.type, R=RANKS[S.rank];
+  let titre, texte;
+  if(t==='mort'){ titre='D&nbsp;&nbsp;&nbsp;&nbsp;M';
+    texte=`Mort en service, l’an ${Math.abs(S.fin.an)} avant l’ère, sous les enseignes de la Dixième.`; }
+  else if(t==='missio'){ titre='MISSIO';
+    texte=`Tu as quitté l’armée au Rubicon, avec ta solde et sans ta part des guerres civiles. Douze ans plus tard, quand on parlera de César dans ta ville, tu diras que tu as servi en Gaule et l’on ne te croira qu’à moitié.`; }
+  else if(t==='missio_riche'){ titre='MISSIO&nbsp;·&nbsp;HONESTA';
+    texte=`Congé régulier obtenu en Campanie, avec les terres et la prime. Tu as vu la Sambre, Alésia et Pharsale, et tu es sorti debout avec des biens — ce que quatre-vingt-dix hommes sur cent n’ont pas fait.`; }
+  else if(t==='victis'){ titre='VICTIS';
+    texte=`Tu es resté du côté du Sénat. Il n’y a plus de Sénat qui commande des armées, plus de Caton, plus de Labienus. On ne t’a pas proscrit : on t’a oublié, ce qui prend plus longtemps.`; }
+  else { titre='MISSIO&nbsp;·&nbsp;HONESTA';
+    const o=S.rank;
+    const h = o>=7?'Le primipilat achevé, tu passes dans l’ordre équestre. Ton fils portera l’anneau d’or sans avoir marché.'
+      : o>=5?'Le centurionat te vaut une terre, une clientèle et le droit qu’on te salue dans ta ville.'
+      : o>=4?'Le grade de principal double ta prime et te vaut un lot correct.'
+      : 'Le lot ordinaire du légionnaire : de la terre, et de la terre qu’il faut défricher.';
+    texte=`Mars 45 : Munda est la dernière bataille. Devant la table des questeurs, on lit ton dossier à voix haute.<br><br>${h}<br><br>Dans onze mois, aux ides de mars, l’homme que tu as suivi treize ans sera tué au pied de la statue de Pompée par soixante sénateurs, dont quatorze qu’il avait épargnés à Pharsale. Tu l’apprendras par un colporteur, en labourant.`; }
+  const ans=Math.max(1,58-Math.abs(S.fin.an)+1);
+  return `
+  <div class="stone">
+    <div class="st-l dm">${titre}</div>
+    <div class="st-l big">${lapid(S.nom||R.n)}</div>
+    <div class="st-l">${lapid(R.n)}</div>
+    <div class="st-l">LEG&nbsp;·&nbsp;X&nbsp;·&nbsp;EQVESTRIS</div>
+    <div class="st-l">STIPENDIORVM&nbsp;·&nbsp;${romain(ans)}</div>
+    ${S.dona.length?`<div class="st-l">${S.dona.map(d=>lapid(d)).join('&nbsp;&nbsp;')}</div>`:''}
+    <div class="st-l">${t==='mort'?'H&nbsp;·&nbsp;S&nbsp;·&nbsp;E':'V&nbsp;·&nbsp;S&nbsp;·&nbsp;L&nbsp;·&nbsp;M'}</div>
+    <div class="st-f">${texte}</div>
+  </div>
+  ${bandeauAttrs()}
+  <div class="cadre"><div class="cadre-t">États de service</div><div class="cadre-b">
+    ${S.finPromo?`<div class="ligne">${icone('chevron')}<div class="ligne-c">
+      <div class="ligne-t" style="color:var(--or-vif);">${esc(RANKS[S.finPromo].n)}</div>
+      <div class="ligne-d">Tu en remplissais les conditions à ta démobilisation. Le grade a été porté sur ton dossier ; tu ne l’auras jamais exercé.</div>
+    </div></div>`:''}
+    <div class="ligne">${icone('capita')}<div class="ligne-c"><div class="ligne-t">${esc(S.orig)}</div>
+      <div class="ligne-d">Origine</div></div></div>
+    <div class="ligne">${icone('nummus')}<div class="ligne-c"><div class="ligne-t">${S.peculium.toLocaleString('fr-FR')} deniers</div>
+      <div class="ligne-d">Peculium à la démobilisation</div></div></div>
+    ${S.vulnera.map(v=>`<div class="ligne">${icone('gladius')}<div class="ligne-c">
+      <div class="ligne-t" style="color:var(--rouge);">${esc(v.n)}</div><div class="ligne-d">${esc(v.d)}</div></div></div>`).join('')}
+  </div></div>
+  <div class="cadre"><div class="cadre-t">Nota recueillies · ${S.notas.length}</div><div class="cadre-b">
+    <div class="log">${S.notas.map(n=>`<div><span class="y">${Math.abs(n.y)}</span> — ${esc(n.t)}</div>`).join('')||'—'}</div>
+  </div></div>
+  <div class="cta-w">${icone('laurea')}<button class="cta" onclick="recommencer()">Une autre carrière</button>${icone('laurea')}</div>`;
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const s=charger(); if(s&&!s.fin) S=s;
+  if(S) retourAcies();
+  rendre();
+});
+
+</script>
